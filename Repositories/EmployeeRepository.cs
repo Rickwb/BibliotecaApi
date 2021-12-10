@@ -2,8 +2,7 @@
 
 namespace BibliotecaApi.Repositories
 {
-    public class ClientRepository:BaseRepository<Client>
+    public class EmployeeRepository:BaseRepository<Employee>
     {
-
     }
 }

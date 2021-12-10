@@ -1,3 +1,5 @@
+using BibliotecaApi.Repositories;
+using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -30,10 +32,10 @@ namespace BibliotecaApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "BibliotecaApi", Version = "v1" });
-            });
+            //services.AddSwaggerGen(c =>
+            //{
+            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BibliotecaApi", Version = "v1" });
+            //});
 
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("ApiSecret"));
@@ -55,6 +57,19 @@ namespace BibliotecaApi
                     IssuerSigningKey = new SymmetricSecurityKey(key),
                 };
             });
+
+            services.AddSingleton<UserRepository>();
+            services.AddTransient<UserService>();
+
+            services.AddSingleton<CustomerRepository>();
+            services.AddTransient<CustomerService>();
+
+            services.AddSingleton<EmployeeRepository>();
+            services.AddTransient<EmployeeService>();
+
+            services.AddTransient<TokenService>();
+
+            services.AddTransient<CepService>();
 
 
             services.AddControllers();
@@ -90,7 +105,7 @@ namespace BibliotecaApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,UserRepository userRepository)
         {
             if (env.IsDevelopment())
             {
@@ -109,6 +124,14 @@ namespace BibliotecaApi
             {
                 endpoints.MapControllers();
             });
+
+            userRepository.Add(new Entities.User(
+                username:"admin1",
+                password:"string",
+                role:"admin"
+                ));
+
+            
         }
     }
 }

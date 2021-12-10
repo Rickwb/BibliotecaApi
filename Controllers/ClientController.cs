@@ -7,73 +7,92 @@ using System;
 
 namespace BibliotecaApi.Controllers
 {
-    [ApiController,Authorize]
-    public class ClientController : BaseControl<CreateClientDTO, User>
+    [ApiController, Authorize, Route("controller")]
+    public class ClientController : BaseControl<CreateCustomerDTO, User>
     {
-        private readonly UserService _userService;
-        public ClientController(UserService userService) 
+        private readonly CustomerService _clientService;
+        public ClientController(CustomerService clientService)
         {
-            _userService = userService;
+            _clientService = clientService;
         }
-        [HttpPost,AllowAnonymous,Route("/users")]
-        public override IActionResult Add(CreateClientDTO userDto)
+        [HttpPost, AllowAnonymous, Route("/createClient")]
+        public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
         {
-            userDto.Valid();
-            if (!userDto.IsValid)
-                return BadRequest("Não foi possivel adicionar");
+            createClientDto.Valid();
+            if (!createClientDto.IsValid)
+                return BadRequest("Não foi possivel adicionar o seu cadastro");
 
-            var userAdd = new User(
-                username: userDto.Username,
-                password: userDto.Password,
-                role: userDto.Role
+            var customerAdd = new User(
+                username: createClientDto.Username,
+                password: createClientDto.Password,
+                role: createClientDto.Role
+                )
+            {
+                Role = "costumer",
+            };
+
+            var clientAdd = new Customer(
+                name: createClientDto.Name,
+                document: createClientDto.Document,
+                cep: createClientDto.Cep,
+                userId: customerAdd.Id
                 );
 
-            return Ok(_userService.AddUser(userAdd));
+            return Ok(_clientService.AddClient(clientAdd, customerAdd));
         }
-        [HttpGet,Authorize,Route("clients/{id}")]
+        [HttpGet, Authorize, Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {
-            return Ok(_userService.GetUserById(id)); 
+            return Ok(_clientService.GetUserById(id));
         }
 
-        public override IActionResult GetAll()
-        {
-            throw new NotImplementedException();
-        }
-        public IActionResult GetLoggedUser()
-        {
-            throw new NotImplementedException();
-        }
+    
 
-        [HttpGet,Authorize,Route("clients")]
-        public IActionResult GetAllByParams([FromQuery]string Name,[FromQuery]string  document,[FromQuery]DateTime Birthdate, [FromQuery]int page, [FromQuery]int items )
+        [HttpGet, Authorize, Route("clients")]
+        public IActionResult GetAllByParams([FromQuery] string Name, [FromQuery] string document, [FromQuery] DateTime Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
-            return Ok(_userService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
+            return Ok(_clientService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
+      
 
-        public override IActionResult Remove(CreateClientDTO t)
+      
+        [HttpPut, Authorize, Route("/clientUpdate/{id}")]
+        public  override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
         {
-            throw new NotImplementedException();
-        }
+            clientDTO.Valid();
+            if (!clientDTO.IsValid)
+                return BadRequest("Não foi possivel atualizar o seu cadastro");
 
-        public override IActionResult RemoveById(Guid id)
-        {
-            throw new NotImplementedException();
-        }
-        [HttpPut,Authorize,Route("/users/{id}")]
-        public override IActionResult Update(Guid id,[FromBody] CreateClientDTO userDto)
-        {
-            userDto.Valid();
-            if (!userDto.IsValid)
-                return BadRequest("Não foi possivel adicionar");
 
-            var userUp = new User(
-                username: userDto.Username,
-                password: userDto.Password,
-                role: userDto.Role
+            var customerAdd = new Customer(
+                name: clientDTO.Name,
+                document: clientDTO.Document,
+                cep: clientDTO.Cep
                 );
 
-            return Ok(_userService.UpdateUser(id,userUp));
+
+            return Ok(_clientService.UpdateClient(id, customerAdd));
         }
+
+        [HttpPut, Authorize, Route("/clientsUserUpdate/{id}")]
+        public IActionResult UpdateUserFromClient(Guid idClient, [FromBody] CreateUserDTO userDTO)
+        {
+            userDTO.Valid();
+            if (!userDTO.IsValid)
+                return BadRequest("Não foi possivel atualizar o seu cadastro");
+
+            var user = new User(
+                username: userDTO.Username,
+                password: userDTO.Password,
+                role: "customer"
+                );
+
+            return Ok(_clientService.UpdateUserFromClient(idClient, user));
+        }
+
+       
+      
+
     }
 }
+

@@ -1,59 +1,50 @@
-﻿using BibliotecaApi.Entities;
+﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace BibliotecaApi.Services
 {
-    public class UserService 
+    public class UserService
     {
         private readonly UserRepository _userRepository;
-        private readonly ClientRepository _clientRepository;
-        public UserService(BaseRepository<User> repository) 
+        private readonly TokenService _tokenService;
+        public UserService(UserRepository userRepository,TokenService tokenService)
         {
-            _userRepository = (UserRepository)repository;
-            
+            _tokenService = tokenService;
+            _userRepository = userRepository;
         }
 
-        public User AddUser(User user)
+        public LoginResultDTO Login(string username, string password)
         {
-            return _userRepository.Add(user);
-        }
-        public IEnumerable<User> GetAllUsersWithParams(string? Name ,string? document, DateTime? Birthdate, int page,int items)
-        {
-            var clients = _clientRepository.GetAll();
-            if (Name is not null)
-                clients = clients.Where(x => x.Name == Name).ToList();
-            if (document is not null)
-                clients = clients.Where(x => x.Document == document).ToList();
-            if (document is not null)
-                clients = clients.Where(x => x.BirthDate == Birthdate).ToList();
-            if (page !=0 && items !=0)
-                clients = clients.Skip((page - 1) * items).Take(items).ToList();
+            var loginResult = _userRepository.Login(username, password);
 
-            var users = clients.Select(x => x.User);
+            if (loginResult.Error)
+            {
+                return new LoginResultDTO
+                {
+                    Success = false,
+                    Errors = new string[] { $"Ocorreu um erro ao autenticar: {loginResult.Exception?.Message}" }
+                };
+            }
 
-            return users;
-        }
-        //public User GetLoggedUser()
-        //{
+            var token = _tokenService.GenerateToken(loginResult.User);
 
-        //}
-
-        
-
-        public User GetUserById(Guid id)
-        {
-            return _userRepository.GetById(id);
+            return new LoginResultDTO
+            {
+                Success = true,
+                User = new UserLoginResultDTO
+                {
+                    Token = token,
+                    Id = loginResult.User.Id,
+                    Role = loginResult.User.Role,
+                    Username = loginResult.User.Username
+                }
+            };
         }
 
-        public User UpdateUser(Guid id,User user)
+        public bool ResetPassword(string username, string oldPassword, string newPassword)
         {
-            return _userRepository.Update(id, user);
+            return _userRepository.ResetPassword(username, oldPassword, newPassword);
         }
-
-
-
     }
 }
