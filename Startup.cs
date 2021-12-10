@@ -32,8 +32,6 @@ namespace BibliotecaApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-          
-
             services.AddSingleton<UserRepository>();
             services.AddTransient<UserService>();
 
@@ -110,6 +108,8 @@ namespace BibliotecaApi
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "BibliotecaApi v1"));
             }
+
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 
