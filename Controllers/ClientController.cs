@@ -7,7 +7,7 @@ using System;
 
 namespace BibliotecaApi.Controllers
 {
-    [ApiController, Authorize, Route("controller")]
+    [ApiController, Authorize, Route("[controller]")]
     public class ClientController : BaseControl<CreateCustomerDTO, User>
     {
         private readonly CustomerService _clientService;
@@ -15,7 +15,7 @@ namespace BibliotecaApi.Controllers
         {
             _clientService = clientService;
         }
-        [HttpPost, AllowAnonymous, Route("/createClient")]
+        [HttpPost, AllowAnonymous, Route("createClient")]
         public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
         {
             createClientDto.Valid();
@@ -56,7 +56,7 @@ namespace BibliotecaApi.Controllers
       
 
       
-        [HttpPut, Authorize, Route("/clientUpdate/{id}")]
+        [HttpPut, Authorize, Route("clientUpdate/{id}")]
         public  override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
         {
             clientDTO.Valid();
@@ -74,7 +74,7 @@ namespace BibliotecaApi.Controllers
             return Ok(_clientService.UpdateClient(id, customerAdd));
         }
 
-        [HttpPut, Authorize, Route("/clientsUserUpdate/{id}")]
+        [HttpPut, Authorize, Route("clientsUserUpdate/{id}")]
         public IActionResult UpdateUserFromClient(Guid idClient, [FromBody] CreateUserDTO userDTO)
         {
             userDTO.Valid();

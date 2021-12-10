@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace BibliotecaApi.Controllers
 {
-    [ApiController,Route("controller")]
+    [ApiController,Route("[controller]")]
     public class UserController:ControllerBase
     {
         private readonly UserService _userService;

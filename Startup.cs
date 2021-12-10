@@ -32,11 +32,20 @@ namespace BibliotecaApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            //services.AddSwaggerGen(c =>
-            //{
-            //    c.SwaggerDoc("v1", new OpenApiInfo { Title = "BibliotecaApi", Version = "v1" });
-            //});
+          
 
+            services.AddSingleton<UserRepository>();
+            services.AddTransient<UserService>();
+
+            services.AddSingleton<CustomerRepository>();
+            services.AddTransient<CustomerService>();
+
+            services.AddSingleton<EmployeeRepository>();
+            services.AddTransient<EmployeeService>();
+
+            services.AddTransient<TokenService>();
+
+            services.AddTransient<CepService>();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("ApiSecret"));
 
@@ -58,18 +67,6 @@ namespace BibliotecaApi
                 };
             });
 
-            services.AddSingleton<UserRepository>();
-            services.AddTransient<UserService>();
-
-            services.AddSingleton<CustomerRepository>();
-            services.AddTransient<CustomerService>();
-
-            services.AddSingleton<EmployeeRepository>();
-            services.AddTransient<EmployeeService>();
-
-            services.AddTransient<TokenService>();
-
-            services.AddTransient<CepService>();
 
 
             services.AddControllers();
