@@ -17,7 +17,7 @@ namespace BibliotecaApi.Repositories
             try
             {
                 var allUsers = GetAll();
-                var user = GetAll().Find(x => x.Username == username && x.Password == password);
+                var user = GetAll().Where(x => x.Username == username && x.Password == password).SingleOrDefault();
 
                 if (user != null)
                 {

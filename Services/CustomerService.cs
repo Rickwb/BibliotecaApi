@@ -10,8 +10,8 @@ namespace BibliotecaApi.Services
     {
         private readonly UserRepository _userRepository;
         private readonly CustomerRepository _clientRepository;
-        private readonly CepService _cepService; 
-        public CustomerService(UserRepository userRepository,CustomerRepository clientRepository,CepService cepService)
+        private readonly CepService _cepService;
+        public CustomerService(UserRepository userRepository, CustomerRepository clientRepository, CepService cepService)
         {
             _userRepository = userRepository;
             _clientRepository = clientRepository;
@@ -26,20 +26,9 @@ namespace BibliotecaApi.Services
             return _clientRepository.Add(customer);
         }
 
-        public IEnumerable<Customer> GetAllUsersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items)
+        public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page, int items)
         {
-            var clients = _clientRepository.GetAll();
-
-            if (Name is not null)
-                clients = clients.Where(x => x.Name == Name).ToList();
-            if (document is not null)
-                clients = clients.Where(x => x.Document == document).ToList();
-            if (document is not null)
-                clients = clients.Where(x => x.BirthDate == Birthdate).ToList();
-            if (page != 0 && items != 0)
-                clients = clients.Skip((page - 1) * items).Take(items).ToList();
-
-            return clients;
+            return _clientRepository.GetAllCustomersWithParams(Name, document, Birthdate, page, items);
         }
 
         //public User GetLoggedUser()

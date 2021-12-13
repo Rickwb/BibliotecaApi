@@ -7,7 +7,7 @@
 
         public override void Valid()
         {
-            throw new System.NotImplementedException();
+            IsValid = true;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BibliotecaApi.Repositories
 {
     public abstract class BaseRepository<T>  where T: BaseEntity
     {
-        private readonly List<T> _repository;
+        protected readonly List<T> _repository;
 
         public BaseRepository()
         {
@@ -20,7 +20,7 @@ namespace BibliotecaApi.Repositories
             return variavel;
         }
 
-        public List<T> GetAll()
+        public IEnumerable<T> GetAll()
         {
             return _repository;
         }
@@ -50,6 +50,7 @@ namespace BibliotecaApi.Repositories
             return newT;
 
         }
-        
+
+       
     }
 }

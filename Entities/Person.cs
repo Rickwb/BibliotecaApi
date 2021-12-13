@@ -6,6 +6,7 @@ namespace BibliotecaApi.Entities
     {
         public string Name { get; set; }
         public string Document { get; set; }
+        public int Age { get; set; }
         public DateTime BirthDate { get; set; }
         public Guid UserId { get;  set; }
         public string Cep { get; set; }

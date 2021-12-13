@@ -12,7 +12,7 @@ namespace BibliotecaApi.Services
         private readonly EmployeeRepository _employeeRepository;
         private readonly CepService _cepService;
 
-        public EmployeeService(UserRepository userRepository,EmployeeRepository employeeRepository,CepService cepService)
+        public EmployeeService(UserRepository userRepository, EmployeeRepository employeeRepository, CepService cepService)
         {
             _userRepository = userRepository;
             _employeeRepository = employeeRepository;
@@ -29,18 +29,7 @@ namespace BibliotecaApi.Services
 
         public IEnumerable<Employee> GetAllUsersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items)
         {
-            var employee = _employeeRepository.GetAll();
-
-            if (Name is not null)
-                employee = employee.Where(x => x.Name == Name).ToList();
-            if (document is not null)
-                employee = employee.Where(x => x.Document == document).ToList();
-            if (document is not null)
-                employee = employee.Where(x => x.BirthDate == Birthdate).ToList();
-            if (page != 0 && items != 0)
-                employee = employee.Skip((page - 1) * items).Take(items).ToList();
-
-            return employee;
+            return _employeeRepository.GetAllEmployeesWithParams(Name, document, Birthdate, page, items);
         }
 
         //public User GetLoggedUser()

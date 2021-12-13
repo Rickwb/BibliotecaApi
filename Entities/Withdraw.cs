@@ -10,7 +10,8 @@ namespace BibliotecaApi.Entities
         }
         public Customer Customer { get; set; }
         public Reservation Reservation { get; set; }
-        public DateTime
-        
-    }
+        public DateTime WithdrawDate { get; set; }
+        public DateTime ReturnDate { get; set; }
+        public bool IsOpen { get; set; }
+    } 
 }

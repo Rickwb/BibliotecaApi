@@ -4,12 +4,14 @@ namespace BibliotecaApi.Entities
 {
     public class Book:BaseEntity
     {
-        public Book(Authors author,string title,int numCopies)
+        public Book(Authors author,string title,int numCopies,int realeaseYear)
         {
             Id= Guid.NewGuid();
             Author = author;
             Title = title;
             NumCopies = numCopies;
+            NumCopiesAvailable = numCopies;
+            RealeaseYear = realeaseYear;
 
         }
 
@@ -18,6 +20,7 @@ namespace BibliotecaApi.Entities
         public string Description { get; set; }
         public int RealeaseYear { get; set; }
         public int NumCopies { get; set; }
+        public int NumCopiesAvailable { get; set; }
 
 
 

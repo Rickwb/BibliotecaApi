@@ -8,7 +8,7 @@ namespace BibliotecaApi.DTOs
 {
     public class CreateBookDTO:BaseDTO
     {
-        public Authors Author { get; set; }
+        public Guid  IdAuthor { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public int RealeaseYear { get; set; }
@@ -16,7 +16,7 @@ namespace BibliotecaApi.DTOs
 
         public override void Valid()
         {
-            throw new NotImplementedException();
+            IsValid = true;
         }
     }
 }
