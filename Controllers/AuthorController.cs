@@ -20,7 +20,7 @@ namespace BibliotecaApi.Controllers
             _bookAuthorService = bookAuthorService;
         }
 
-        [HttpPost, Route("addAuthor")]
+        [HttpPost, Route("addAuthor"),Authorize(Roles ="admin,employee")]
         public override IActionResult Add([FromBody] CreateAuthorDTO dtoAuthor)
         {
             dtoAuthor.Valid();
@@ -33,10 +33,11 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_bookAuthorService.AddAuthors(author));
         }
-        [HttpGet,Route("getAuthor/{id}")]
+
+        [HttpGet, Route("getAuthor/{id}")]
         public override IActionResult Get(Guid id) => Ok(_bookAuthorService.GetAuthorById(id));
 
-        [HttpPut,Route("update/{id}")]
+        [HttpPut,Route("update/{id}"),Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid id,[FromBody]CreateAuthorDTO dtoAuthor)
         {
             dtoAuthor.Valid();
@@ -50,7 +51,7 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_bookAuthorService.UpdateAuthors(id, author));
         }
-        [HttpDelete,Route("deleteAuthor/{id}")]
+        [HttpDelete,Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteAuthor(Guid idAuthor)
         {
             bool deletado = _bookAuthorService.DeleteAuthor(idAuthor);

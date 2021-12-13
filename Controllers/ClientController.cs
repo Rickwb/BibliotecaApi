@@ -40,7 +40,7 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_clientService.AddClient(clientAdd, customerAdd));
         }
-        [HttpGet, Authorize, Route("clients/{id}")]
+        [HttpGet, Authorize(Roles ="admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_clientService.GetUserById(id));
@@ -48,7 +48,7 @@ namespace BibliotecaApi.Controllers
 
     
 
-        [HttpGet, Authorize, Route("clients")]
+        [HttpGet, Authorize(Roles = "admin,employee"), Route("clients")]
         public IActionResult GetAllByParams([FromQuery] string Name, [FromQuery] string document, [FromQuery] DateTime Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_clientService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
@@ -56,7 +56,7 @@ namespace BibliotecaApi.Controllers
       
 
       
-        [HttpPut, Authorize, Route("clientUpdate/{id}")]
+        [HttpPut, Authorize(Roles = "admin,employee"), Route("clientUpdate/{id}")]
         public  override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
         {
             clientDTO.Valid();
@@ -74,7 +74,7 @@ namespace BibliotecaApi.Controllers
             return Ok(_clientService.UpdateClient(id, customerAdd));
         }
 
-        [HttpPut, Authorize, Route("clientsUserUpdate/{id}")]
+        [HttpPut, Authorize(Roles = "admin,employee"), Route("clientsUserUpdate/{id}")]
         public IActionResult UpdateUserFromClient(Guid idClient, [FromBody] CreateUserDTO userDTO)
         {
             userDTO.Valid();

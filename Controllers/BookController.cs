@@ -21,7 +21,7 @@ namespace BibliotecaApi.Controllers
         [HttpGet, Route("getBook/{id}")]
         public override IActionResult Get(Guid idBook) => Ok(_bookAuthorService.GetBookById(idBook));
 
-        [HttpPut, Route("updateBook/{id}")]
+        [HttpPut, Route("updateBook/{id}"), Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid idBook, [FromBody] CreateBookDTO createBookDTO)
         {
             createBookDTO.Valid();
@@ -37,7 +37,7 @@ namespace BibliotecaApi.Controllers
                 );
             return Ok(_bookAuthorService.UpdateBook(idBook, book));
         }
-        [HttpPost, Route("addBook")]
+        [HttpPost, Route("addBook"), Authorize(Roles = "admin,employee")]
         public override IActionResult Add([FromBody] CreateBookDTO dto)
         {
             dto.Valid();
@@ -55,7 +55,7 @@ namespace BibliotecaApi.Controllers
             return Ok(_bookAuthorService.AddBook(book));
 
         }
-        [HttpDelete, Route("deleteBook/{id}")]
+        [HttpDelete, Route("deleteBook/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteBook(Guid idBook)
         {
             bool deletado = _bookAuthorService.DeleteBook(idBook);
