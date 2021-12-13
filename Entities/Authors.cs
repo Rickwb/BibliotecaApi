@@ -8,6 +8,8 @@ namespace BibliotecaApi.Entities
         public Authors(string name)
         {
             Id = Guid.NewGuid();
+            Name = name;
+            AuthorBooks ??= new List<Book>();
         }
 
         public string Name { get; set; }

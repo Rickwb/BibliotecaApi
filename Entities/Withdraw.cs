@@ -8,5 +8,9 @@ namespace BibliotecaApi.Entities
         {
             Id = Guid.NewGuid();
         }
+        public Customer Customer { get; set; }
+        public Reservation Reservation { get; set; }
+        public DateTime
+        
     }
 }
