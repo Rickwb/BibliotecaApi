@@ -7,10 +7,10 @@ namespace BibliotecaApi.Repositories
 {
     public class WithdrawRepository : BaseRepository<Withdraw>
     {
-        public List<Withdraw> GetAllBooksWithParams(bool? isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page=1, int items=5)
+        public List<Withdraw> GetAllBooksWithParams(bool? isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page = 1, int items = 5)
         {
             var withdraws = (IEnumerable<Withdraw>)_repository;
-            
+
             if (startDate is not null)
                 withdraws = withdraws.WhereIfNotNull(startDate, x => x.WithdrawDate.ToString("dd/MM/yyyy") == startDate?.ToString("dd/MM/yyyy"));
             if (endDate is not null)
@@ -18,7 +18,7 @@ namespace BibliotecaApi.Repositories
             if (author is not null)
                 withdraws = withdraws.Where(x => !x.Reservation.Books.Any(y => y.Author == author));
             if (bookName is not null)
-                withdraws = withdraws.WhereIfNotNull(bookName, x => !x.Reservation.Books.Any(y=>y.Title==bookName));
+                withdraws = withdraws.WhereIfNotNull(bookName, x => !x.Reservation.Books.Any(y => y.Title == bookName));
             if (isOpen is not null)
                 withdraws = withdraws.WhereIfNotNull(isOpen, x => x.IsOpen);
             if (page != 0 && items != 0)
@@ -28,13 +28,19 @@ namespace BibliotecaApi.Repositories
         }
 
 
-        public bool FinalizaWidthdraw(Guid idWith)
+        public bool FinalizaWidthdraw(Guid idWith, out List<Book> booksCopies)
         {
             var withdraw = GetById(idWith);
+            booksCopies = new List<Book>();
             if (withdraw is not null)
             {
-                withdraw.IsOpen= false;
+                withdraw.IsOpen = false;
                 withdraw.ReturnDate = DateTime.Now;
+                foreach (var b in withdraw.Books)
+                {
+                    b.ControNumberOfAvailableCopies(false, 1);
+                    booksCopies.Add(b);
+                }
                 Update(idWith, withdraw);
                 return true;
             }

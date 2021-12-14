@@ -11,6 +11,7 @@ namespace BibliotecaApi.Services
     {
         private readonly WithdrawRepository _withdrawRepository;
         private readonly ReservationRepository _reservationRepository;
+        private readonly BookRepository _bookRepository;
         public WithdrawService(WithdrawRepository withdrawRepository,ReservationRepository reservationRepository)
         {
             _withdrawRepository = withdrawRepository;
@@ -40,7 +41,13 @@ namespace BibliotecaApi.Services
 
         public bool FinalizarWithdraw(Guid id)
         {
-            return _withdrawRepository.FinalizaWidthdraw(id);
+            List<Book> books;
+             if(!_withdrawRepository.FinalizaWidthdraw(id,out books)) return false;
+
+            books.ForEach(b => _bookRepository.Update(b.Id, b));
+
+            return true;
+            
         }
 
         public bool ValidWithdraw(Withdraw withdraw)

@@ -11,17 +11,19 @@ namespace BibliotecaApi.Services
 
         private readonly ReservationRepository _reservationRepository;
         private readonly WithdrawService _withdrawService;
+        private readonly BookRepository _bookRepository;
 
-        public ReservationService(ReservationRepository reservationRepository,WithdrawService withdrawService)
+        public ReservationService(ReservationRepository reservationRepository, WithdrawService withdrawService,BookRepository bookRepository)
         {
             _reservationRepository = reservationRepository;
             _withdrawService = withdrawService;
+            _bookRepository = bookRepository;
         }
 
         public Reservation AddReservation(Reservation reservation)
         {
             ValidarReserva(reservation);
-            foreach(var b in reservation.Books)
+            foreach (var b in reservation.Books)
             {
                 b.ControNumberOfAvailableCopies(true, 1);
             }
@@ -35,22 +37,24 @@ namespace BibliotecaApi.Services
         }
         public bool CancelReservation(Guid idReservation)
         {
-            var reservation =_reservationRepository.GetById(idReservation);
-            foreach (var b in reservation.Books)
-            {
-                b.ControNumberOfAvailableCopies(retirada:false,1);
-            }
-            return _reservationRepository.CancelarReserva(idReservation);
+            var reservation = _reservationRepository.GetById(idReservation);
+            List<Book> books;
+            if (_reservationRepository.CancelarReserva(idReservation,out books)) return false;
+
+            books.ForEach(book => _bookRepository.Update(book.Id, book));
+
+            return true;
+
         }
         public bool FinalizeReserva(Guid idReservation)
         {
-            var reserv=_reservationRepository.GetById(idReservation);
-           
+            var reserv = _reservationRepository.GetById(idReservation);
+
             var withdraw = new Withdraw(reserv.Client
                 , reservation: reserv);
             if (!_withdrawService.ValidWithdraw(withdraw)) return false;
-           
-           _withdrawService.AddWithdraw(withdraw);
+
+            _withdrawService.AddWithdraw(withdraw);
 
 
             return _reservationRepository.FinalizarReserva(idReservation);
@@ -78,7 +82,7 @@ namespace BibliotecaApi.Services
                     return false;
                 }
             }
-            
+
             return true;
 
 
@@ -94,7 +98,7 @@ namespace BibliotecaApi.Services
 
         public IEnumerable<Reservation> GetReservationsByParams(DateTime? startDate, DateTime? endDate, Authors? author, string? bookName, int page, int items)
         {
-           return  _reservationRepository.GetReservationsWithParams(startDate, endDate, author, bookName, page, items);
+            return _reservationRepository.GetReservationsWithParams(startDate, endDate, author, bookName, page, items);
         }
 
     }
