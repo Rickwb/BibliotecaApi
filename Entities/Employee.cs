@@ -4,8 +4,9 @@ namespace BibliotecaApi.Entities
 {
     public class Employee:Person
     {
-        public Employee(string name, string document, string cep,string role,Guid userId)
+        public Employee(Guid id,string name, string document, string cep,string role,Guid userId)
         {
+            Id = id;
             Name = name;
             Document = document;
             Cep = cep;
@@ -13,8 +14,9 @@ namespace BibliotecaApi.Entities
             UserId = userId;
         }
 
-        public Employee(string name, string document, string cep, string role)
+        public Employee(Guid id,string name, string document, string cep, string role)
         {
+            Id=id;
             Name = name;
             Document = document;
             Cep = cep;

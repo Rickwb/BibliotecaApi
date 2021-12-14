@@ -4,9 +4,9 @@ namespace BibliotecaApi.Entities
 {
     public class Book : BaseEntity
     {
-        public Book(Authors author, string title, int numCopies, int realeaseYear)
+        public Book(Guid id,Authors author, string title, int numCopies, int realeaseYear)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Author = author;
             Title = title;
             NumCopies = numCopies;
@@ -25,7 +25,7 @@ namespace BibliotecaApi.Entities
 
         public void ControNumberOfAvailableCopies(bool retirada, int qtdCopies)
         {
-            if (qtdCopies < NumCopiesAvailable)
+            if (qtdCopies <= NumCopiesAvailable)
             {
                 if (retirada)
                     NumCopiesAvailable -= qtdCopies;

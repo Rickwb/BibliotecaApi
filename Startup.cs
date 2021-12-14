@@ -119,7 +119,8 @@ namespace BibliotecaApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,UserRepository userRepository)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,UserRepository userRepository,CustomerRepository customerRepository,BookRepository bookRepository,AuthorRepository authorRepository,
+            ReservationRepository reservationRepository,WithdrawRepository withdrawRepository)
         {
             if (env.IsDevelopment())
             {
@@ -147,7 +148,19 @@ namespace BibliotecaApi
                 password:"string",
                 role:"admin"
                 ));
-
+            customerRepository.Add(new Entities.Customer(
+                id: Guid.NewGuid(),
+                name: "Rick",
+                document: "string",
+                cep: "89110110"));
+            authorRepository.Add(new Entities.Authors(
+                id: Guid.NewGuid(),
+                name: "Machado",
+                nacionality: "Brasileira",
+                age: 21
+                ));
+            
+                
             
         }
     }

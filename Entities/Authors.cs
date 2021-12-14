@@ -5,17 +5,17 @@ namespace BibliotecaApi.Entities
 {
     public class Authors : Person
     {
-        public Authors(string name, string nacionality,int age)
+        public Authors(Guid id ,string name, string nacionality,int age)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Name = name;
             Nacionality = nacionality;
             Age = age;
             AuthorBooks ??= new List<Book>();
         }
-        public Authors(string name,string nacionality,int age,List<Book> books)
+        public Authors(Guid id, string name,string nacionality,int age,List<Book> books)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Name = name;
             Nacionality = nacionality;
             Age=age;

@@ -14,7 +14,7 @@ namespace BibliotecaApi.Repositories
             var clients = (IEnumerable<Customer>)_repository
             .WhereIfNotNull(Name, x => x.Name == Name)
             .WhereIfNotNull(document,x => x.Document == document)
-            .WhereIfNotNull(Birthdate,x => x.BirthDate == Birthdate)
+            .WhereIfNotNull(Birthdate,x => x.BirthDate.ToString("dd/MM/yyyy") == Birthdate?.ToString("dd/MM/yyyy"))
             .Skip((page - 1) * items).Take(items);
 
             return clients.ToList();

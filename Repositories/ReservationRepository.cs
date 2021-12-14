@@ -7,11 +7,11 @@ namespace BibliotecaApi.Repositories
 {
     public class ReservationRepository : BaseRepository<Reservation>
     {
-        public List<Reservation> GetReservationsWithParams(DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page=1, int items=5)
+        public List<Reservation> GetReservationsWithParams(DateTime? startDate, DateTime? endDate, Authors? author, string? bookName, int page=1, int items=5)
         {
             var reservations = (IEnumerable<Reservation>)_repository
-                .WhereIfNotNull(startDate, x => x.StartDate == startDate)
-                .WhereIfNotNull(endDate, x => x.EndDate == endDate)
+                .WhereIfNotNull(startDate, x => x.StartDate.ToString("dd/MM/yyyy") == startDate?.ToString("dd/MM/yyyy"))
+                .WhereIfNotNull(endDate, x => x.EndDate.ToString("dd/MM/yyyy") == endDate?.ToString("dd/MM/yyyy"))
                 .WhereIfNotNull(author, x => !x.Books.Any(y => y.Author == author))
                 .WhereIfNotNull(bookName, x => x.Books.Any(y => y.Title == bookName))
                 .Skip((page - 1) * items).Take(items);

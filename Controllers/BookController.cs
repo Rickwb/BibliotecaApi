@@ -19,10 +19,10 @@ namespace BibliotecaApi.Controllers
             _bookAuthorService = bookAuthorService;
         }
         [HttpGet, Route("getBook/{id}")]
-        public override IActionResult Get(Guid idBook) => Ok(_bookAuthorService.GetBookById(idBook));
+        public override IActionResult Get(Guid id) => Ok(_bookAuthorService.GetBookById(id));
 
         [HttpPut, Route("updateBook/{id}"), Authorize(Roles = "admin,employee")]
-        public override IActionResult Update(Guid idBook, [FromBody] CreateBookDTO createBookDTO)
+        public override IActionResult Update(Guid id, [FromBody] CreateBookDTO createBookDTO)
         {
             createBookDTO.Valid();
             if (!createBookDTO.IsValid)
@@ -30,12 +30,14 @@ namespace BibliotecaApi.Controllers
             var author = _bookAuthorService.GetAuthorById(createBookDTO.IdAuthor);
 
             var book = new Book(
+                id: id,
                 author: author,
                 title: createBookDTO.Title,
                 numCopies: createBookDTO.NumCopies,
                 realeaseYear: createBookDTO.RealeaseYear
                 );
-            return Ok(_bookAuthorService.UpdateBook(idBook, book));
+           
+            return Ok(_bookAuthorService.UpdateBook(id, book));
         }
         [HttpPost, Route("addBook"), Authorize(Roles = "admin,employee")]
         public override IActionResult Add([FromBody] CreateBookDTO dto)
@@ -47,6 +49,7 @@ namespace BibliotecaApi.Controllers
             var author = _bookAuthorService.GetAuthorById(dto.IdAuthor);
 
             var book = new Book(
+                id:Guid.NewGuid(),
                 author: author,
                 title: dto.Title,
                 numCopies: dto.NumCopies,
@@ -56,16 +59,16 @@ namespace BibliotecaApi.Controllers
 
         }
         [HttpDelete, Route("deleteBook/{id}"), Authorize(Roles = "admin,employee")]
-        public IActionResult DeleteBook(Guid idBook)
+        public IActionResult DeleteBook(Guid id)
         {
-            bool deletado = _bookAuthorService.DeleteBook(idBook);
+            bool deletado = _bookAuthorService.DeleteBook(id);
             if (!deletado) return BadRequest();
 
             return NotFound(deletado);
 
         }
         [HttpGet, Route("GetBooksFiltered")]
-        public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string name, [FromQuery] int realeaseYear, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page, [FromQuery] int items)
         {
             var book = _bookAuthorService.GetBookById(idBook);
             return Ok(_bookAuthorService.GetBookByParams(book, name, realeaseYear, page, items));

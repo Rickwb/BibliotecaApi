@@ -43,9 +43,9 @@ namespace BibliotecaApi.Repositories
 
         public T Update(Guid id,T newT)
         {
-            var Index= _repository.IndexOf( GetById(id));
-
-            _repository.Insert(Index, newT);
+            var oldT= GetById(id);
+            if (oldT!=null)
+                oldT = newT;
 
             return newT;
 

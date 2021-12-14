@@ -9,9 +9,9 @@ namespace BibliotecaApi.Entities
         private List<Withdraw> _withdraws;
 
         //Create Constructor
-        public Customer(string name, string document, string cep, Guid userId)
+        public Customer(Guid id,string name, string document, string cep, Guid userId)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             UserId = userId;
             _reservations ??= new List<Reservation>();
             _withdraws ??= new List<Withdraw>();
@@ -20,8 +20,9 @@ namespace BibliotecaApi.Entities
             Cep = cep;
         }
         //Update Constructor
-        public Customer(string name, string document, string cep)
+        public Customer(Guid id,string name, string document, string cep)
         {
+            Id=id;
             Name = name;
             Document = document;
             Cep = cep;

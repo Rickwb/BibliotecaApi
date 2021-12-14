@@ -63,7 +63,7 @@ namespace BibliotecaApi.Controllers
             var author=_bookAuthorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));
         }
-        [HttpPut]
+        [HttpPut,Route("/{id}")]
         public override IActionResult Update(Guid id, CreateWithdrawDTO dto)
         {
             throw new NotImplementedException();

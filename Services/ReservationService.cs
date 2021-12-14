@@ -92,7 +92,7 @@ namespace BibliotecaApi.Services
             return _reservationRepository.GetById(id);
         }
 
-        public IEnumerable<Reservation> GetReservationsByParams(DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page, int items)
+        public IEnumerable<Reservation> GetReservationsByParams(DateTime? startDate, DateTime? endDate, Authors? author, string? bookName, int page, int items)
         {
            return  _reservationRepository.GetReservationsWithParams(startDate, endDate, author, bookName, page, items);
         }

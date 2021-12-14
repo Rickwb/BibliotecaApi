@@ -32,6 +32,7 @@ namespace BibliotecaApi.Controllers
             };
 
             var clientAdd = new Customer(
+                id:Guid.NewGuid(),
                 name: createClientDto.Name,
                 document: createClientDto.Document,
                 cep: createClientDto.Cep,
@@ -49,7 +50,7 @@ namespace BibliotecaApi.Controllers
     
 
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients")]
-        public IActionResult GetAllByParams([FromQuery] string Name, [FromQuery] string document, [FromQuery] DateTime Birthdate, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_clientService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
@@ -65,10 +66,12 @@ namespace BibliotecaApi.Controllers
 
 
             var customerAdd = new Customer(
+                id:id,
                 name: clientDTO.Name,
                 document: clientDTO.Document,
                 cep: clientDTO.Cep
                 );
+            
 
 
             return Ok(_clientService.UpdateClient(id, customerAdd));

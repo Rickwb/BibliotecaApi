@@ -5,9 +5,9 @@ namespace BibliotecaApi.Entities
 {
     public class Reservation : BaseEntity
     {
-        public Reservation(Customer client, DateTime startDate, DateTime endDate, List<Book> books)
+        public Reservation(Guid id,Customer client, DateTime startDate, DateTime endDate, List<Book> books)
         {
-            Id = Guid.NewGuid();
+            Id = id;
             Client= client;
             StartDate= startDate;
             EndDate= endDate;

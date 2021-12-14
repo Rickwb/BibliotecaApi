@@ -60,7 +60,7 @@ namespace BibliotecaApi.Services
         {
             return _authorRepository.RemoveById(idAuthor);
         }
-        public IEnumerable<Authors> GetAuthorsByParams(string name,string nacionality,int age,int page,int items)
+        public IEnumerable<Authors> GetAuthorsByParams(string? name,string? nacionality,int? age,int page,int items)
         {
            return _authorRepository.GetAllAuthorsWithParams(name, nacionality, age, page, items);
         }

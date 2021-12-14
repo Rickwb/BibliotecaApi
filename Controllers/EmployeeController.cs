@@ -33,6 +33,7 @@ namespace BibliotecaApi.Controllers
 
             var employee = new Employee
                 (
+                id:Guid.NewGuid(),
                 name: createEmplDto.Name,
                 document: createEmplDto.Document,
                 cep: createEmplDto.Cep,
@@ -44,7 +45,7 @@ namespace BibliotecaApi.Controllers
         }
 
     
-        [HttpGet,Route("employee")]
+        [HttpGet,Route("employee/{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_employeeService.GetUserById(id));
@@ -52,25 +53,28 @@ namespace BibliotecaApi.Controllers
 
      
         [HttpGet,  Route("GetEmployeesByParams")]
-        public IActionResult GetAllByParams([FromQuery] string Name, [FromQuery] string document, [FromQuery] DateTime Birthdate, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_employeeService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
 
       
 
-        [HttpPut]
+        [HttpPut,Route("{id}")]
         public override IActionResult Update(Guid id, CreateEmployeeDTO dto)
         {
             dto.Valid();
             if (dto.IsValid) return BadRequest();
 
             var employee = new Employee(
+                id:id,
                 name: dto.Name,
                 document: dto.Document,
                 cep: dto.Cep,
                 role: dto.Role
                 );
+            
+
             return Ok(_employeeService.UpdateEmployee(id,employee)) ;
         }
         [HttpPut,Route("UpdateUserfromEmplyee")]

@@ -27,6 +27,7 @@ namespace BibliotecaApi.Controllers
             if (!dtoAuthor.IsValid) return BadRequest();
 
             var author = new Authors(
+                id:Guid.NewGuid(),
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age);
@@ -44,23 +45,25 @@ namespace BibliotecaApi.Controllers
             if (!dtoAuthor.IsValid) return BadRequest();
 
             var author = new Authors(
+                id:id,
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age,
                 books: dtoAuthor.AuthorBooks);
+            
 
             return Ok(_bookAuthorService.UpdateAuthors(id, author));
         }
         [HttpDelete,Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]
-        public IActionResult DeleteAuthor(Guid idAuthor)
+        public IActionResult DeleteAuthor(Guid id)
         {
-            bool deletado = _bookAuthorService.DeleteAuthor(idAuthor);
+            bool deletado = _bookAuthorService.DeleteAuthor(id);
             if (!deletado) return BadRequest();
 
             return NoContent();
         }
         [HttpGet,Route("authors")]
-        public IActionResult GetAuthorsByParams([FromQuery] string name, [FromQuery] string nacionality, [FromQuery]int age, [FromQuery]int page, [FromQuery]int items)
+        public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery]int? age, [FromQuery]int page, [FromQuery]int items)
         {
             return Ok(_bookAuthorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList());
         }

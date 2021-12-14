@@ -12,9 +12,9 @@ namespace BibliotecaApi.Repositories
             var withdraws = (IEnumerable<Withdraw>)_repository;
             
             if (startDate is not null)
-                withdraws = withdraws.WhereIfNotNull(startDate, x => x.WithdrawDate == startDate);
+                withdraws = withdraws.WhereIfNotNull(startDate, x => x.WithdrawDate.ToString("dd/MM/yyyy") == startDate?.ToString("dd/MM/yyyy"));
             if (endDate is not null)
-                withdraws = withdraws.WhereIfNotNull(endDate, x => x.ReturnDate == endDate);
+                withdraws = withdraws.WhereIfNotNull(endDate, x => x.ReturnDate.ToString("dd/MM/yyyy") == endDate?.ToString("dd/MM/yyyy"));
             if (author is not null)
                 withdraws = withdraws.Where(x => !x.Reservation.Books.Any(y => y.Author == author));
             if (bookName is not null)
