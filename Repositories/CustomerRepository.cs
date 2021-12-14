@@ -11,15 +11,11 @@ namespace BibliotecaApi.Repositories
 
         public List<Customer> GetAllCustomersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items = 50)
         {
-            var clients = (IEnumerable<Customer>)_repository;
-            if (String.IsNullOrEmpty(Name))
-                clients = clients.WhereIfNotNull(Name, x => x.Name == Name);
-            if (String.IsNullOrEmpty(document))
-                clients = clients.WhereIfNotNull(document,x => x.Document == document);
-            if (document is not null)
-                clients = clients.WhereIfNotNull(Birthdate,x => x.BirthDate == Birthdate);
-            if (page != 0 && items != 0)
-                clients = clients.Skip((page - 1) * items).Take(items);
+            var clients = (IEnumerable<Customer>)_repository
+            .WhereIfNotNull(Name, x => x.Name == Name)
+            .WhereIfNotNull(document,x => x.Document == document)
+            .WhereIfNotNull(Birthdate,x => x.BirthDate == Birthdate)
+            .Skip((page - 1) * items).Take(items);
 
             return clients.ToList();
         }

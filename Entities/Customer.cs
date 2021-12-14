@@ -33,5 +33,8 @@ namespace BibliotecaApi.Entities
 
         public decimal Multa { get; set; }
         public Adress Adress { get; set; }
+
+
+        
     }
 }

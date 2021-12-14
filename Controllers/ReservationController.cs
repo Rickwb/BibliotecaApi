@@ -11,10 +11,15 @@ namespace BibliotecaApi.Controllers
     public class ReservationController : BaseControl<CreateReservationDTO, Reservation>
     {
         private readonly ReservationService _reservationService;
+        private readonly CustomerService _customerService;
+        private readonly BookAuthorService _authorService;
 
-        public ReservationController(ReservationService reservationService)
+        public ReservationController(ReservationService reservationService,CustomerService customerService,BookAuthorService bookAuthorService)
         {
             _reservationService = reservationService;
+            _customerService = customerService;
+            _authorService = bookAuthorService;
+            
         }
 
         [HttpPost]
@@ -22,36 +27,54 @@ namespace BibliotecaApi.Controllers
         {
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
-            
+            var customer = _customerService.GetUserById(dto.idCustumer);
+            var reservation = new Reservation(
+                client: customer,
+                startDate: dto.StartDate,
+                endDate: dto.EndDate,
+                books: dto.Books
+                );
 
-            _reservationService.AddReservation();
+           return Created("", _reservationService.AddReservation(reservation));
         }
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalzeReservation(Guid id)
         {
-            
+            return Ok(_reservationService.FinalizeReserva(id));
         }
         [HttpPost, Route("cancel/{id}")]
         public IActionResult CancelReservation(Guid id)
         {
-            
+            return Ok(_reservationService.CancelReservation(id));
         }
 
 
         [HttpGet,Route("{id}")]
         public override IActionResult Get(Guid id)
         {
-            throw new NotImplementedException();
+            return Ok(_reservationService.GetReservationById(id));
         }
         [HttpGet,Route("params")]
-        public IActionResult GetReservationByParams([FromQuery]DateTime? startDate, [FromQuery] DateTime? endDate,[FromQuery] Guid? idAuthor,
-            [FromQuery]string? bookName, [FromQuery] int? page, [FromQuery] int? items)
+        public IActionResult GetReservationByParams([FromQuery]DateTime? startDate, [FromQuery] DateTime? endDate,[FromQuery] Guid idAuthor,
+            [FromQuery]string? bookName, [FromQuery] int page, [FromQuery] int items)
         {
-            return 
+            var author = _authorService.GetAuthorById(idAuthor);
+            return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
+        [HttpPut]
         public override IActionResult Update(Guid id, CreateReservationDTO dto)
         {
-            throw new NotImplementedException();
+            dto.Valid();
+            if (!dto.IsValid) return BadRequest();
+            var customer=_customerService.GetUserById(dto.idCustumer);
+            var reservation = new Reservation(
+                client: customer,
+                startDate: dto.StartDate,
+                endDate: dto.EndDate,
+                books: dto.Books
+                );
+
+            return Ok(_reservationService.UpdateReservation(id, reservation));
         }
     }
 }

@@ -7,7 +7,7 @@ namespace BibliotecaApi.Repositories
 {
     public class WithdrawRepository : BaseRepository<Withdraw>
     {
-        public List<Withdraw> GetAllBooksWithParams(bool? isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int? page, int? items)
+        public List<Withdraw> GetAllBooksWithParams(bool? isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page=1, int items=5)
         {
             var withdraws = (IEnumerable<Withdraw>)_repository;
             

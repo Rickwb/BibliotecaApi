@@ -9,15 +9,11 @@ namespace BibliotecaApi.Repositories
     {
         public List<Employee> GetAllEmployeesWithParams(string? name, string? document, DateTime? Birthdate, int page, int items)
         {
-            var employee = (IEnumerable<Employee>)_repository;
-            if (name is not null)
-                employee = employee.WhereIfNotNull(name, x => x.Name == name);
-            if (document is not null)
-                employee = employee.WhereIfNotNull(document,x => x.Document == document);
-            if (document is not null)
-                employee = employee.WhereIfNotNull(Birthdate,x => x.BirthDate == Birthdate);
-            if (page != 0 && items != 0)
-                employee = employee.Skip((page - 1) * items).Take(items);
+            var employee = (IEnumerable<Employee>)_repository
+               .WhereIfNotNull(name, x => x.Name == name)
+               .WhereIfNotNull(document,x => x.Document == document)
+               .WhereIfNotNull(Birthdate,x => x.BirthDate == Birthdate)
+               .Skip((page - 1) * items).Take(items);
 
             return employee.ToList();
         }

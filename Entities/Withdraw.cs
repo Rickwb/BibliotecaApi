@@ -9,7 +9,7 @@ namespace BibliotecaApi.Entities
         {
             Id = Guid.NewGuid();
             Customer = customer;
-            Reservation = reservation;
+            Books = reservation.Books;
             WithdrawDate = DateTime.Now;
             ExpireDate = DateTime.Now.AddDays(5);
             IsOpen = true;
@@ -20,7 +20,7 @@ namespace BibliotecaApi.Entities
         {
             Id = Guid.NewGuid();
             Customer = customer;
-            BooksNoReservation = books;
+            Books = books;
             WithdrawDate = DateTime.Now;
             ExpireDate = DateTime.Now.AddDays(5);
             IsOpen = true;
@@ -31,6 +31,6 @@ namespace BibliotecaApi.Entities
         public DateTime ReturnDate { get; set; }
         public DateTime ExpireDate { get; set; }
         public bool IsOpen { get; set; }
-        public List<Book> BooksNoReservation { get; set; }
+        public List<Book> Books { get; set; }
     } 
 }

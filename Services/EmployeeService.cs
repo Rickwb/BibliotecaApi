@@ -32,17 +32,12 @@ namespace BibliotecaApi.Services
             return _employeeRepository.GetAllEmployeesWithParams(Name, document, Birthdate, page, items);
         }
 
-        //public User GetLoggedUser()
-        //{
-
-        //}
-
         public Employee GetUserById(Guid id)
         {
             return _employeeRepository.GetById(id);
         }
 
-        public Employee UpdateClient(Guid idEmployee, Employee employee)
+        public Employee UpdateEmployee(Guid idEmployee, Employee employee)
         {
             return _employeeRepository.Update(idEmployee, employee);
         }

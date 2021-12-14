@@ -15,13 +15,7 @@ namespace BibliotecaApi.DTOs
 
         public override void Valid()
         {
-            foreach (var item in Books)
-            {
-                if (item.NumCopies)
-                {
-
-                }
-            }
+            IsValid= true;
         }
     }
 }

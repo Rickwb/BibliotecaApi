@@ -16,6 +16,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace BibliotecaApi
 {
@@ -31,6 +33,9 @@ namespace BibliotecaApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddMvc()
+              .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+              .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddSingleton<UserRepository>();
             services.AddTransient<UserService>();
@@ -44,6 +49,12 @@ namespace BibliotecaApi
             services.AddSingleton<BookRepository>();
             services.AddSingleton<AuthorRepository>();
             services.AddTransient<BookAuthorService>();
+
+            services.AddSingleton<ReservationRepository>();
+            services.AddTransient<ReservationService>();
+
+            services.AddSingleton<WithdrawRepository>();
+            services.AddTransient<WithdrawService>();
 
             services.AddTransient<TokenService>();
 
@@ -71,7 +82,11 @@ namespace BibliotecaApi
 
 
 
+
             services.AddControllers();
+
+          
+
 
             services.AddSwaggerGen(c =>
             {
@@ -120,6 +135,7 @@ namespace BibliotecaApi
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

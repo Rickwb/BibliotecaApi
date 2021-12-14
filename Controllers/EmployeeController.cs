@@ -62,7 +62,16 @@ namespace BibliotecaApi.Controllers
         [HttpPut]
         public override IActionResult Update(Guid id, CreateEmployeeDTO dto)
         {
-            throw new NotImplementedException();
+            dto.Valid();
+            if (dto.IsValid) return BadRequest();
+
+            var employee = new Employee(
+                name: dto.Name,
+                document: dto.Document,
+                cep: dto.Cep,
+                role: dto.Role
+                );
+            return Ok(_employeeService.UpdateEmployee(id,employee)) ;
         }
         [HttpPut,Route("UpdateUserfromEmplyee")]
         public  IActionResult UpdateUserFromEmployee(Guid id, CreateEmployeeDTO dto)

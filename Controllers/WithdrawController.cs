@@ -12,13 +12,16 @@ namespace BibliotecaApi.Controllers
     {
         private readonly WithdrawService _withdrawService;
         private readonly ReservationService _reservationService;
+        private readonly BookAuthorService _bookAuthorService;
         private readonly CustomerService _customerService;
-        public WithdrawController(WithdrawService withdrawService,CustomerService customerService,ReservationService reservationService)
+        public WithdrawController(WithdrawService withdrawService,CustomerService customerService,ReservationService reservationService,BookAuthorService bookAuthorService)
         {
             _withdrawService = withdrawService;
             _customerService = customerService;
             _reservationService = reservationService;
+            _bookAuthorService = bookAuthorService;
         }
+        [HttpPost]
         public override IActionResult Add(CreateWithdrawDTO dto)
         {
             dto.Valid();
@@ -54,11 +57,13 @@ namespace BibliotecaApi.Controllers
             return Ok(_withdrawService.FinalizarWithdraw(id));
         }
 
-
-        public IActionResult GetWithdrawByParams([FromQuery]bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Authors author, [FromQuery] string bookName, [FromQuery] int page, [FromQuery] int items)
+        [HttpGet]
+        public IActionResult GetWithdrawByParams([FromQuery]bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page, [FromQuery] int items)
         {
+            var author=_bookAuthorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));
         }
+        [HttpPut]
         public override IActionResult Update(Guid id, CreateWithdrawDTO dto)
         {
             throw new NotImplementedException();

@@ -5,21 +5,16 @@ using System.Linq;
 
 namespace BibliotecaApi.Repositories
 {
-    public class ReservationRepository:BaseRepository<Reservation>
+    public class ReservationRepository : BaseRepository<Reservation>
     {
-        public List<Reservation> GetAllBooksWithParams(DateTime? startDate,DateTime? endDate, Authors author, string? bookName,int page, int items)
+        public List<Reservation> GetReservationsWithParams(DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page=1, int items=5)
         {
-            var reservations = (IEnumerable<Reservation>)_repository;
-            if (startDate is not null)
-                reservations = reservations.WhereIfNotNull(startDate, x => x.StartDate == startDate);
-            if (endDate is not null)
-                reservations = reservations.WhereIfNotNull(endDate, x => x.EndDate == endDate);
-            if (author is not null)
-                reservations = reservations.WhereIfNotNull(author, x => !x.Books.Any(y => y.Author == author));
-            if (bookName is not null)
-                reservations = reservations.WhereIfNotNull(bookName, x => x.Books.Any(y=>y.Title==bookName));
-            if (page != 0 && items != 0)
-                reservations = reservations.Skip((page - 1) * items).Take(items);
+            var reservations = (IEnumerable<Reservation>)_repository
+                .WhereIfNotNull(startDate, x => x.StartDate == startDate)
+                .WhereIfNotNull(endDate, x => x.EndDate == endDate)
+                .WhereIfNotNull(author, x => !x.Books.Any(y => y.Author == author))
+                .WhereIfNotNull(bookName, x => x.Books.Any(y => y.Title == bookName))
+                .Skip((page - 1) * items).Take(items);
 
             return reservations.ToList();
         }
@@ -31,9 +26,21 @@ namespace BibliotecaApi.Repositories
 
             reservation.CancelarReserva();
 
-            Update(id, reservation);
+            var reserv = Update(id, reservation);
 
-            return true;
+            return reserv != null ? true : false;
+
+        }
+        public bool FinalizarReserva(Guid id)
+        {
+            var reservation = GetById(id);
+            if (reservation == null) return false;
+
+            reservation.FinalizarReserva();
+
+            var reserv = Update(id, reservation);
+
+            return reserv != null ? true : false;
 
         }
     }

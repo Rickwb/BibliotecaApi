@@ -11,15 +11,11 @@ namespace BibliotecaApi.Repositories
 
         public List<Book> GetAllBooksWithParams(Book author, string? name, int? releaseYear, int page, int items)
         {
-            var books = (IEnumerable<Book>)_repository;
-            if (name is not null)
-                books = books.WhereIfNotNull(name, x => x.Title == name);
-            if (releaseYear is not null)
-                books = books.WhereIfNotNull(releaseYear, x => x.RealeaseYear == releaseYear);
-            if (author is not null)
-                books = books.WhereIfNotNull(author, x => x.Author.Equals(author));
-            if (page != 0 && items != 0)
-                books = books.Skip((page - 1) * items).Take(items);
+            var books = (IEnumerable<Book>)_repository
+              .WhereIfNotNull(name, x => x.Title == name)
+              .WhereIfNotNull(releaseYear, x => x.RealeaseYear == releaseYear)
+              .WhereIfNotNull(author, x => x.Author.Equals(author))
+              .Skip((page - 1) * items).Take(items);
 
             return books.ToList();
         }

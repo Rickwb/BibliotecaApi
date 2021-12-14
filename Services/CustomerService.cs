@@ -43,7 +43,11 @@ namespace BibliotecaApi.Services
 
         public Customer UpdateClient(Guid id, Customer client)
         {
-            return _clientRepository.Update(id, client);
+            var customer=_clientRepository.GetById(id);
+            customer.Name= client.Name;
+            customer.Document= client.Document;
+            customer.Cep= client.Cep;
+            return _clientRepository.Update(id, customer);
         }
 
         public User UpdateUserFromClient(Guid id, User user)

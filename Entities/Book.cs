@@ -2,11 +2,11 @@
 
 namespace BibliotecaApi.Entities
 {
-    public class Book:BaseEntity
+    public class Book : BaseEntity
     {
-        public Book(Authors author,string title,int numCopies,int realeaseYear)
+        public Book(Authors author, string title, int numCopies, int realeaseYear)
         {
-            Id= Guid.NewGuid();
+            Id = Guid.NewGuid();
             Author = author;
             Title = title;
             NumCopies = numCopies;
@@ -21,6 +21,23 @@ namespace BibliotecaApi.Entities
         public int RealeaseYear { get; set; }
         public int NumCopies { get; set; }
         public int NumCopiesAvailable { get; set; }
+
+
+        public void ControNumberOfAvailableCopies(bool retirada, int qtdCopies)
+        {
+            if (qtdCopies < NumCopiesAvailable)
+            {
+                if (retirada)
+                    NumCopiesAvailable -= qtdCopies;
+                else
+                    NumCopiesAvailable += qtdCopies;
+            }
+            else
+            {
+                throw new Exception("Não foi possivel pois foi execido o numero de copies");
+            }
+
+        }
 
 
 
