@@ -11,7 +11,7 @@ namespace BibliotecaApi.DTOs
         public Guid idCustumer { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public List<Book> Books { get; set; }
+        public List<Guid> IdBooks { get; set; }
 
         public override void Valid()
         {

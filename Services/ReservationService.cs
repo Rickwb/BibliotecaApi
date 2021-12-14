@@ -23,10 +23,7 @@ namespace BibliotecaApi.Services
         public Reservation AddReservation(Reservation reservation)
         {
             ValidarReserva(reservation);
-            foreach (var b in reservation.Books)
-            {
-                b.ControNumberOfAvailableCopies(true, 1);
-            }
+           
             return _reservationRepository.Add(reservation);
         }
 
@@ -67,14 +64,14 @@ namespace BibliotecaApi.Services
             IEnumerable<Withdraw> withdraws;
             foreach (var b in books)
             {
-                reservations = GetReservationsByParams(startDate: reservation.StartDate, endDate: reservation.EndDate, null, null, 0, 100).Where(x => x.Books.All(y => y.Id == b.Id));
+                reservations = GetReservationsByParams(startDate: reservation.StartDate, endDate: null, null, null, 1, 10).Where(x => x.Books.All(y => y.Id == b.Id));
                 withdraws = _withdrawService.GetWithdrawByParams(isOpen: true,
                    startDate: reservation.StartDate,
-                   endDate: reservation.EndDate,
+                   endDate: null,
                    null,
                    null,
                    1,
-                   100
+                   10
                    ).Where(x => x.Books.All(y => y.Id == b.Id));
 
                 if (reservations.Count() + withdraws.Count() > b.NumCopies)

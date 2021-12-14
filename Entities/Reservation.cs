@@ -36,6 +36,11 @@ namespace BibliotecaApi.Entities
             Completed = true;
         }
 
+        public void GetBooks()
+        {
+
+        }
+
 
     }
 }

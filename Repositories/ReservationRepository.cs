@@ -10,7 +10,7 @@ namespace BibliotecaApi.Repositories
         public List<Reservation> GetReservationsWithParams(DateTime? startDate, DateTime? endDate, Authors? author, string? bookName, int page=1, int items=5)
         {
             var reservations = (IEnumerable<Reservation>)_repository
-                .WhereIfNotNull(startDate, x => x.StartDate.ToString("dd/MM/yyyy") == startDate?.ToString("dd/MM/yyyy"))
+                .WhereIfNotNull(startDate, x => x.StartDate.Date == startDate?.Date)
                 .WhereIfNotNull(endDate, x => x.EndDate.ToString("dd/MM/yyyy") == endDate?.ToString("dd/MM/yyyy"))
                 .WhereIfNotNull(author, x => !x.Books.Any(y => y.Author == author))
                 .WhereIfNotNull(bookName, x => x.Books.Any(y => y.Title == bookName))
@@ -40,7 +40,6 @@ namespace BibliotecaApi.Repositories
         {
             var reservation = GetById(id);
             if (reservation == null) return false;
-
         
 
             reservation.FinalizarReserva();

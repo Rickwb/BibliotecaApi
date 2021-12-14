@@ -4,6 +4,7 @@ using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace BibliotecaApi.Controllers
 {
@@ -12,13 +13,13 @@ namespace BibliotecaApi.Controllers
     {
         private readonly ReservationService _reservationService;
         private readonly CustomerService _customerService;
-        private readonly BookAuthorService _authorService;
+        private readonly BookAuthorService _bookauthorService;
 
         public ReservationController(ReservationService reservationService, CustomerService customerService, BookAuthorService bookAuthorService)
         {
             _reservationService = reservationService;
             _customerService = customerService;
-            _authorService = bookAuthorService;
+            _bookauthorService = bookAuthorService;
 
         }
 
@@ -28,12 +29,16 @@ namespace BibliotecaApi.Controllers
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
             var customer = _customerService.GetUserById(dto.idCustumer);
+
+            List<Book> Books= new List<Book>();
+            dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
+
             var reservation = new Reservation(
                 id: Guid.NewGuid(),
                 client: customer,
                 startDate: dto.StartDate,
                 endDate: dto.EndDate,
-                books: dto.Books
+                books: Books
                 );
 
             return Created("", _reservationService.AddReservation(reservation));
@@ -59,7 +64,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
             [FromQuery] string? bookName, [FromQuery] int page, [FromQuery] int items)
         {
-            var author = _authorService.GetAuthorById(idAuthor);
+            var author = _bookauthorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
         [HttpPut,Route("{id}")]
@@ -68,12 +73,16 @@ namespace BibliotecaApi.Controllers
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
             var customer=_customerService.GetUserById(dto.idCustumer);
+
+            List<Book> Books = new List<Book>();
+            dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
+
             var reservation = new Reservation(
                 id: id,
                 client: customer,
                 startDate: dto.StartDate,
                 endDate: dto.EndDate,
-                books: dto.Books
+                books: Books
                 );
            
 

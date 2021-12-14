@@ -45,7 +45,7 @@ namespace BibliotecaApi
 
             services.AddSingleton<EmployeeRepository>();
             services.AddTransient<EmployeeService>();
-            
+
             services.AddSingleton<BookRepository>();
             services.AddSingleton<AuthorRepository>();
             services.AddTransient<BookAuthorService>();
@@ -85,7 +85,7 @@ namespace BibliotecaApi
 
             services.AddControllers();
 
-          
+
 
 
             services.AddSwaggerGen(c =>
@@ -119,8 +119,8 @@ namespace BibliotecaApi
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env,UserRepository userRepository,CustomerRepository customerRepository,BookRepository bookRepository,AuthorRepository authorRepository,
-            ReservationRepository reservationRepository,WithdrawRepository withdrawRepository)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, UserRepository userRepository, CustomerRepository customerRepository, BookRepository bookRepository, AuthorRepository authorRepository,
+            ReservationRepository reservationRepository, WithdrawRepository withdrawRepository)
         {
             if (env.IsDevelopment())
             {
@@ -144,24 +144,51 @@ namespace BibliotecaApi
             });
 
             userRepository.Add(new Entities.User(
-                username:"admin1",
-                password:"string",
-                role:"admin"
+                username: "admin1",
+                password: "string",
+                role: "admin"
                 ));
-            customerRepository.Add(new Entities.Customer(
+            var customer=customerRepository.Add(new Entities.Customer(
                 id: Guid.NewGuid(),
                 name: "Rick",
                 document: "string",
                 cep: "89110110"));
-            authorRepository.Add(new Entities.Authors(
+            var author = authorRepository.Add(new Entities.Authors(
                 id: Guid.NewGuid(),
                 name: "Machado",
                 nacionality: "Brasileira",
                 age: 21
                 ));
-            
-                
-            
+            var book = bookRepository.Add(new Entities.Book(
+                id: Guid.NewGuid(),
+                author,
+                title: "Meditações",
+                numCopies: 1,
+                realeaseYear: 2020));
+            var book2 = bookRepository.Add(new Entities.Book(
+                id: Guid.NewGuid(),
+                author,
+                title: "C# programming",
+                numCopies: 1,
+                realeaseYear: 2020));
+            var reservation = reservationRepository.Add(new Entities.Reservation(
+                id: Guid.NewGuid(),
+                client: customer,
+                startDate: DateTime.Now,
+                endDate: DateTime.Now.AddDays(5),
+                books: new List<Entities.Book> { book, book2 }
+                ));
+            var reservation2 = reservationRepository.Add(new Entities.Reservation(
+                id: Guid.NewGuid(),
+                client: customer,
+                startDate: DateTime.Now,
+                endDate: DateTime.Now.AddDays(5),
+                books: new List<Entities.Book> { book, book2 }
+                ));
+
+
+
+
         }
     }
 }

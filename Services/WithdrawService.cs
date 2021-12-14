@@ -12,10 +12,11 @@ namespace BibliotecaApi.Services
         private readonly WithdrawRepository _withdrawRepository;
         private readonly ReservationRepository _reservationRepository;
         private readonly BookRepository _bookRepository;
-        public WithdrawService(WithdrawRepository withdrawRepository,ReservationRepository reservationRepository)
+        public WithdrawService(WithdrawRepository withdrawRepository,ReservationRepository reservationRepository,BookRepository bookRepository)
         {
             _withdrawRepository = withdrawRepository;
             _reservationRepository = reservationRepository;
+            _bookRepository = bookRepository;
 
         }
 
