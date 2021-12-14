@@ -1,23 +1,26 @@
 ﻿using BibliotecaApi.Entities;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BibliotecaApi.Repositories
 {
     public class WithdrawRepository : BaseRepository<Withdraw>
     {
-        public List<Reservation> GetAllBooksWithParams(bool isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int page, int items)
+        public List<Withdraw> GetAllBooksWithParams(bool? isOpen, DateTime? startDate, DateTime? endDate, Authors author, string? bookName, int? page, int? items)
         {
-            var withdraws = (IEnumerable<Reservation>)_repository;
+            var withdraws = (IEnumerable<Withdraw>)_repository;
+            
             if (startDate is not null)
-                withdraws = withdraws.WhereIfNotNull(startDate, x => x.StartDate == startDate);
+                withdraws = withdraws.WhereIfNotNull(startDate, x => x.WithdrawDate == startDate);
             if (endDate is not null)
-                withdraws = withdraws.WhereIfNotNull(endDate, x => x.EndDate == endDate);
+                withdraws = withdraws.WhereIfNotNull(endDate, x => x.ReturnDate == endDate);
             if (author is not null)
-                withdraws = withdraws.WhereIfNotNull(author, x => x.Books.);
+                withdraws = withdraws.Where(x => !x.Reservation.Books.Any(y => y.Author == author));
             if (bookName is not null)
-                withdraws = withdraws.WhereIfNotNull(bookName, x => x.Books);
-
+                withdraws = withdraws.WhereIfNotNull(bookName, x => !x.Reservation.Books.Any(y=>y.Title==bookName));
+            if (isOpen is not null)
+                withdraws = withdraws.WhereIfNotNull(isOpen, x => x.IsOpen);
             if (page != 0 && items != 0)
                 withdraws = withdraws.Skip((page - 1) * items).Take(items);
 

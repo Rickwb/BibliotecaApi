@@ -15,13 +15,9 @@ namespace BibliotecaApi.Repositories
             if (endDate is not null)
                 reservations = reservations.WhereIfNotNull(endDate, x => x.EndDate == endDate);
             if (author is not null)
-            {
-                var authorinBooks=reservations.Where(x=>x.Books.ForEach(i=>i.Author)==author)
-                reservations = reservations.WhereIfNotNull(author, x => x.Books == author);
-            }
+                reservations = reservations.WhereIfNotNull(author, x => !x.Books.Any(y => y.Author == author));
             if (bookName is not null)
-                reservations = reservations.WhereIfNotNull(bookName, x => x.Books);
-
+                reservations = reservations.WhereIfNotNull(bookName, x => x.Books.Any(y=>y.Title==bookName));
             if (page != 0 && items != 0)
                 reservations = reservations.Skip((page - 1) * items).Take(items);
 

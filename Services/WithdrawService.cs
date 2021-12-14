@@ -17,9 +17,9 @@ namespace BibliotecaApi.Services
 
         public Withdraw GetWidtdrawById(Guid id) => _withdrawRepository.GetById(id);
         
-        public IEnumerable<Withdraw> GetWithdrawByParams(bool isOpen,DateTime startDate, DateTime endDate, Authors author, string bookName, int page, int items)
+        public IEnumerable<Withdraw> GetWithdrawByParams(bool? isOpen,DateTime? startDate, DateTime? endDate, Authors? author, string? bookName, int? page, int? items)
         {
-            return 
+            return _withdrawRepository.GetAllBooksWithParams(isOpen, startDate, endDate, author, bookName, page, items);
         }
         public Withdraw AddWithdraw(Withdraw withdraw)
         {
