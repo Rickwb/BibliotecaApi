@@ -31,6 +31,7 @@ namespace BibliotecaApi.Repositories
             if (withdraw is not null)
             {
                 withdraw.IsOpen= false;
+                withdraw.ReturnDate = DateTime.Now;
                 Update(idWith, withdraw);
                 return true;
             }

@@ -1,11 +1,13 @@
 ﻿using BibliotecaApi.DTOs;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
 namespace BibliotecaApi.Controllers
 {
+    [ApiController,Authorize,Route("[controller]")]
     public class WithdrawController : BaseControl<CreateWithdrawDTO, Withdraw>
     {
         private readonly WithdrawService _withdrawService;
@@ -23,25 +25,34 @@ namespace BibliotecaApi.Controllers
             if (!dto.IsValid) return BadRequest();
 
             var customer = _customerService.GetUserById(dto.IdCustomer);
-
+            Withdraw withdraw;
             if (dto.IdReservation== Guid.Empty)
             {
-                var withdraw = new Withdraw(
+                    withdraw = new Withdraw(
                     customer: customer,
                     books: dto.BooksNoReservation);
             }
             else
             {
-                var reservation = _reservationService.
+                var reservation = _reservationService.GetReservationById(dto.IdReservation);
+                    withdraw = new Withdraw(
+                    customer: customer,
+                    reservation: reservation);
             }
 
-        }
+            return Created(_withdrawService.AddWithdraw(withdraw));
 
+        }
+        [HttpGet,Route("{id}")]
         public override IActionResult Get(Guid id)
         {
-            throw new NotImplementedException();
+            return Ok(_withdrawService.GetWidtdrawById(id));
         }
+        [HttpPost,Route("finalize/{id}")]
+        public IActionResult FinalizeWithdraw(Guid id)
+        {
 
+        }
         public override IActionResult Update(Guid id, CreateWithdrawDTO dto)
         {
             throw new NotImplementedException();
