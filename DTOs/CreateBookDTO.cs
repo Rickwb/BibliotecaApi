@@ -16,6 +16,10 @@ namespace BibliotecaApi.DTOs
 
         public override void Valid()
         {
+            if (IdAuthor==Guid.Empty) IsValid= false;
+
+            if (String.IsNullOrEmpty(Title) || NumCopies == 0) IsValid=false;
+
             IsValid = true;
         }
     }

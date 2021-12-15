@@ -7,7 +7,9 @@
 
         public override void Valid()
         {
-            IsValid = true;
+            if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password)) IsValid=false;
+            
+            IsValid=true;
         }
     }
 }

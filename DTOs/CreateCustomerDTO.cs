@@ -1,4 +1,6 @@
-﻿namespace BibliotecaApi.DTOs
+﻿using System;
+
+namespace BibliotecaApi.DTOs
 {
     public class CreateCustomerDTO : BaseDTO
     {
@@ -10,6 +12,8 @@
         public string Role { get; set; }
         public override void Valid()
         {
+            if(String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document) || String.IsNullOrEmpty(Cep)) IsValid = false;
+
             IsValid = true;
         }
     }

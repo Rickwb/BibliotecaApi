@@ -14,6 +14,9 @@ namespace BibliotecaApi.DTOs
         public List<Book> AuthorBooks { get; set; }
         public override void Valid()
         {
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty("Nacionality"))
+                IsValid = false;
+
             IsValid = true;
         }
     }
