@@ -32,7 +32,7 @@ namespace BibliotecaApi.Controllers
             };
 
             var clientAdd = new Customer(
-                id:Guid.NewGuid(),
+                id: Guid.NewGuid(),
                 name: createClientDto.Name,
                 document: createClientDto.Document,
                 cep: createClientDto.Cep,
@@ -41,24 +41,20 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_clientService.AddClient(clientAdd, customerAdd));
         }
-        [HttpGet, Authorize(Roles ="admin,employee"), Route("clients/{id}")]
+        [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_clientService.GetUserById(id));
         }
-
-    
 
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients")]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_clientService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
-      
 
-      
         [HttpPut, Authorize(Roles = "admin,employee"), Route("clientUpdate/{id}")]
-        public  override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
+        public override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
         {
             clientDTO.Valid();
             if (!clientDTO.IsValid)
@@ -66,12 +62,12 @@ namespace BibliotecaApi.Controllers
 
 
             var customerAdd = new Customer(
-                id:id,
+                id: id,
                 name: clientDTO.Name,
                 document: clientDTO.Document,
                 cep: clientDTO.Cep
                 );
-            
+
 
 
             return Ok(_clientService.UpdateClient(id, customerAdd));
@@ -92,9 +88,6 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_clientService.UpdateUserFromClient(idClient, user));
         }
-
-       
-      
 
     }
 }

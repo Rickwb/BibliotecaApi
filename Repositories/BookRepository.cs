@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BibliotecaApi.Repositories
 {
-    public class BookRepository:BaseRepository<Book>
+    public class BookRepository : BaseRepository<Book>
     {
-
         public List<Book> GetAllBooksWithParams(Book author, string? name, int? releaseYear, int page, int items)
         {
             var books = (IEnumerable<Book>)_repository

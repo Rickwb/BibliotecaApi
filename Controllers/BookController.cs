@@ -36,7 +36,7 @@ namespace BibliotecaApi.Controllers
                 numCopies: createBookDTO.NumCopies,
                 realeaseYear: createBookDTO.RealeaseYear
                 );
-           
+
             return Ok(_bookAuthorService.UpdateBook(id, book));
         }
         [HttpPost, Route("addBook"), Authorize(Roles = "admin,employee")]
@@ -49,7 +49,7 @@ namespace BibliotecaApi.Controllers
             var author = _bookAuthorService.GetAuthorById(dto.IdAuthor);
 
             var book = new Book(
-                id:Guid.NewGuid(),
+                id: Guid.NewGuid(),
                 author: author,
                 title: dto.Title,
                 numCopies: dto.NumCopies,

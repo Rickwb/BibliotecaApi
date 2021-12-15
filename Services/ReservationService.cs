@@ -25,8 +25,8 @@ namespace BibliotecaApi.Services
             if (ValidarReserva(reservation))
             {
                 return _reservationRepository.Add(reservation);
-
             };
+            
             return null;
         }
 
@@ -35,16 +35,14 @@ namespace BibliotecaApi.Services
             ValidarReserva(reservation);
             return _reservationRepository.Update(idReservation, reservation);
         }
+
         public bool CancelReservation(Guid idReservation)
         {
             var reservation = _reservationRepository.GetById(idReservation);
             List<Book> books;
             if (_reservationRepository.CancelarReserva(idReservation, out books)) return false;
 
-
-
             return true;
-
         }
         public bool FinalizeReserva(Guid idReservation)
         {
@@ -81,9 +79,8 @@ namespace BibliotecaApi.Services
             }
 
             return true;
-
-
         }
+
         public IEnumerable<Reservation> GetReservationsLoggedUser()
         {
             return _reservationRepository.GetAll();
@@ -97,6 +94,5 @@ namespace BibliotecaApi.Services
         {
             return _reservationRepository.GetReservationsWithParams(startDate, endDate, author, bookName, page, items);
         }
-
     }
 }

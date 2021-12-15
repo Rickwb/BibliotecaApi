@@ -12,19 +12,18 @@ namespace BibliotecaApi.Services
         private readonly BookRepository _bookRepository;
         private readonly AuthorRepository _authorRepository;
 
-        public BookAuthorService(AuthorRepository authorRepository,BookRepository bookRepository)
+        public BookAuthorService(AuthorRepository authorRepository, BookRepository bookRepository)
         {
             _authorRepository = authorRepository;
             _bookRepository = bookRepository;
         }
-
 
         public Book AddBook(Book book)
         {
             return _bookRepository.Add(book);
         }
 
-        public IEnumerable<Book> GetBookByParams(Book? book,string? name,int? realeaseYear,int page,int items )
+        public IEnumerable<Book> GetBookByParams(Book? book, string? name, int? realeaseYear, int page, int items)
         {
             return _bookRepository.GetAllBooksWithParams(book, name, realeaseYear, page, items);
         }
@@ -47,7 +46,8 @@ namespace BibliotecaApi.Services
         {
             return _authorRepository.GetById(idAuthor);
         }
-        public Authors UpdateAuthors(Guid idAuthor,Authors author)
+
+        public Authors UpdateAuthors(Guid idAuthor, Authors author)
         {
             return _authorRepository.Update(idAuthor, author);
         }
@@ -60,10 +60,10 @@ namespace BibliotecaApi.Services
         {
             return _authorRepository.RemoveById(idAuthor);
         }
-        public IEnumerable<Authors> GetAuthorsByParams(string? name,string? nacionality,int? age,int page,int items)
-        {
-           return _authorRepository.GetAllAuthorsWithParams(name, nacionality, age, page, items);
-        }
 
+        public IEnumerable<Authors> GetAuthorsByParams(string? name, string? nacionality, int? age, int page, int items)
+        {
+            return _authorRepository.GetAllAuthorsWithParams(name, nacionality, age, page, items);
+        }
     }
 }

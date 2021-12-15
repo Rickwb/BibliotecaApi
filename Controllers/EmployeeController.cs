@@ -16,8 +16,8 @@ namespace BibliotecaApi.Controllers
             _employeeService = employeeService;
         }
 
-        [HttpPost,Route("AddEmployee")]
-        public override IActionResult Add([FromBody]CreateEmployeeDTO createEmplDto)
+        [HttpPost, Route("AddEmployee")]
+        public override IActionResult Add([FromBody] CreateEmployeeDTO createEmplDto)
         {
             createEmplDto.Valid();
             if (!createEmplDto.IsValid)
@@ -29,11 +29,11 @@ namespace BibliotecaApi.Controllers
                 password: createEmplDto.Password,
                 role: createEmplDto.Role
                 );
-           
+
 
             var employee = new Employee
                 (
-                id:Guid.NewGuid(),
+                id: Guid.NewGuid(),
                 name: createEmplDto.Name,
                 document: createEmplDto.Document,
                 cep: createEmplDto.Cep,
@@ -41,44 +41,39 @@ namespace BibliotecaApi.Controllers
                 userId: userAdd.Id
                 );
 
-            return Created("",_employeeService.AddEmployee(employee,userAdd));
+            return Created("", _employeeService.AddEmployee(employee, userAdd));
         }
 
-    
-        [HttpGet,Route("employee/{id}")]
+        [HttpGet, Route("employee/{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_employeeService.GetUserById(id));
         }
 
-     
-        [HttpGet,  Route("GetEmployeesByParams")]
+        [HttpGet, Route("GetEmployeesByParams")]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_employeeService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
 
-      
-
-        [HttpPut,Route("{id}")]
+        [HttpPut, Route("{id}")]
         public override IActionResult Update(Guid id, CreateEmployeeDTO dto)
         {
             dto.Valid();
             if (dto.IsValid) return BadRequest();
 
             var employee = new Employee(
-                id:id,
+                id: id,
                 name: dto.Name,
                 document: dto.Document,
                 cep: dto.Cep,
                 role: dto.Role
                 );
-            
 
-            return Ok(_employeeService.UpdateEmployee(id,employee)) ;
+            return Ok(_employeeService.UpdateEmployee(id, employee));
         }
-        [HttpPut,Route("UpdateUserfromEmplyee")]
-        public  IActionResult UpdateUserFromEmployee(Guid id, CreateEmployeeDTO dto)
+        [HttpPut, Route("UpdateUserfromEmplyee")]
+        public IActionResult UpdateUserFromEmployee(Guid id, CreateEmployeeDTO dto)
         {
             throw new NotImplementedException();
         }

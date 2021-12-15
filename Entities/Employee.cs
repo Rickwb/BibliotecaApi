@@ -13,7 +13,6 @@ namespace BibliotecaApi.Entities
             Role = role;
             UserId = userId;
         }
-
         public Employee(Guid id,string name, string document, string cep, string role)
         {
             Id=id;

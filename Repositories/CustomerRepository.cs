@@ -7,7 +7,6 @@ namespace BibliotecaApi.Repositories
 {
     public class CustomerRepository : BaseRepository<Customer>
     {
-        
 
         public List<Customer> GetAllCustomersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items = 50)
         {
@@ -21,7 +20,6 @@ namespace BibliotecaApi.Repositories
         }
 
     }
-
 
     public static class AAAA
     {

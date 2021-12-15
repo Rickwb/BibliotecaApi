@@ -5,7 +5,7 @@ namespace BibliotecaApi.Entities
 {
     public class Withdraw : BaseEntity
     {
-        public Withdraw(Customer customer,Reservation reservation)
+        public Withdraw(Customer customer, Reservation reservation)
         {
             Id = Guid.NewGuid();
             Customer = customer;
@@ -16,7 +16,7 @@ namespace BibliotecaApi.Entities
 
         }
 
-        public Withdraw(Customer customer,List<Book> books)
+        public Withdraw(Customer customer, List<Book> books)
         {
             Id = Guid.NewGuid();
             Customer = customer;
@@ -25,6 +25,7 @@ namespace BibliotecaApi.Entities
             ExpireDate = DateTime.Now.AddDays(5);
             IsOpen = true;
         }
+
         public Customer Customer { get; set; }
         public Reservation Reservation { get; set; }
         public DateTime WithdrawDate { get; set; }
@@ -32,5 +33,5 @@ namespace BibliotecaApi.Entities
         public DateTime ExpireDate { get; set; }
         public bool IsOpen { get; set; }
         public List<Book> Books { get; set; }
-    } 
+    }
 }

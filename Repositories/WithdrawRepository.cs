@@ -27,7 +27,6 @@ namespace BibliotecaApi.Repositories
             return withdraws.ToList();
         }
 
-
         public bool FinalizaWidthdraw(Guid idWith, out List<Book> booksCopies)
         {
             var withdraw = GetById(idWith);

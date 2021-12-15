@@ -5,13 +5,13 @@ namespace BibliotecaApi.Entities
 {
     public class Reservation : BaseEntity
     {
-        public Reservation(Guid id,Customer client, DateTime startDate, DateTime endDate, List<Book> books)
+        public Reservation(Guid id, Customer client, DateTime startDate, DateTime endDate, List<Book> books)
         {
             Id = id;
-            Client= client;
-            StartDate= startDate;
-            EndDate= endDate;
-            Books= books;
+            Client = client;
+            StartDate = startDate;
+            EndDate = endDate;
+            Books = books;
         }
 
         public Customer Client { get; set; }
@@ -28,19 +28,12 @@ namespace BibliotecaApi.Entities
                 Cancelada = true;
 
             }
-            Cancelada= false;
+            Cancelada = false;
         }
 
         public void FinalizarReserva()
         {
             Completed = true;
         }
-
-        public void GetBooks()
-        {
-
-        }
-
-
     }
 }

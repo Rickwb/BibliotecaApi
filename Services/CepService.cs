@@ -38,14 +38,11 @@ namespace BibliotecaApi.Services
                 if (endereco.Cep is not null)
                 {
                     return endereco;
-                    
                 }
                 else
                 {
                     return null;
                 }
-
-
             }
             catch (InvalidOperationException ex)
             {
@@ -56,6 +53,5 @@ namespace BibliotecaApi.Services
                 throw new Exception("Problema na comunicação entre sistemas");
             }
         }
-
     }
 }

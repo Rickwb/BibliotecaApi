@@ -1,6 +1,6 @@
 ﻿namespace BibliotecaApi.DTOs
 {
-    public class UserLoginDTO:BaseDTO
+    public class UserLoginDTO : BaseDTO
     {
         public string Username { get; set; }
         public string Password { get; set; }

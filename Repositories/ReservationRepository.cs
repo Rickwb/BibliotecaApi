@@ -34,8 +34,8 @@ namespace BibliotecaApi.Repositories
             var reserv = Update(id, reservation);
 
             return reserv != null ? true : false;
-
         }
+
         public bool FinalizarReserva(Guid id,out List<Book> books)
         {
             var reservation = GetById(id);

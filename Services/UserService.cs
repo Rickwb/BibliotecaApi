@@ -8,7 +8,7 @@ namespace BibliotecaApi.Services
     {
         private readonly UserRepository _userRepository;
         private readonly TokenService _tokenService;
-        public UserService(UserRepository userRepository,TokenService tokenService)
+        public UserService(UserRepository userRepository, TokenService tokenService)
         {
             _tokenService = tokenService;
             _userRepository = userRepository;

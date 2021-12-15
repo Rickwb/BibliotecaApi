@@ -28,14 +28,11 @@ namespace BibliotecaApi.Entities
             Cep = cep;
         }
 
-
         public IReadOnlyList<Reservation> Reservations => _reservations;
         public IReadOnlyList<Withdraw> Withdraws => _withdraws;
 
         public decimal Multa { get; set; }
         public Adress Adress { get; set; }
 
-
-        
     }
 }

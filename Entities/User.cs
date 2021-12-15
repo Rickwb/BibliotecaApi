@@ -4,7 +4,7 @@ namespace BibliotecaApi.Entities
 {
     public class User : BaseEntity
     {
-        public User(string username, string password,string role)
+        public User(string username, string password, string role)
         {
             Id = Guid.NewGuid();
             Username = username;

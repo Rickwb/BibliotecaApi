@@ -11,7 +11,6 @@ namespace BibliotecaApi.Repositories
         public UserRepository()
         {
         }
-
         public LoginResult Login(string username, string password)
         {
             try

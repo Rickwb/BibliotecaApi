@@ -148,7 +148,7 @@ namespace BibliotecaApi
                 password: "string",
                 role: "admin"
                 ));
-            var customer=customerRepository.Add(new Entities.Customer(
+            var customer = customerRepository.Add(new Entities.Customer(
                 id: Guid.NewGuid(),
                 name: "Rick",
                 document: "string",
@@ -185,9 +185,6 @@ namespace BibliotecaApi
                 endDate: DateTime.Now.AddDays(5),
                 books: new List<Entities.Book> { book, book2 }
                 ));
-
-
-
 
         }
     }

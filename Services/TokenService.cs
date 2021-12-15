@@ -16,7 +16,6 @@ namespace BibliotecaApi.Services
         {
             _configuration = configuration;
         }
-
         public string GenerateToken(User user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();

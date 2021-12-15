@@ -17,7 +17,5 @@ namespace BibliotecaApi.Repositories
 
             return employee.ToList();
         }
-
     }
-   
 }

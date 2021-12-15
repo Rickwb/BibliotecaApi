@@ -20,7 +20,6 @@ namespace BibliotecaApi.Controllers
             _reservationService = reservationService;
             _customerService = customerService;
             _bookauthorService = bookAuthorService;
-
         }
 
         [HttpPost]
@@ -46,23 +45,25 @@ namespace BibliotecaApi.Controllers
 
             return BadRequest();
         }
+
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalzeReservation(Guid id)
         {
             return Ok(_reservationService.FinalizeReserva(id));
         }
+
         [HttpPost, Route("cancel/{id}")]
         public IActionResult CancelReservation(Guid id)
         {
             return Ok(_reservationService.CancelReservation(id));
         }
 
-
         [HttpGet, Route("{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_reservationService.GetReservationById(id));
         }
+
         [HttpGet, Route("params")]
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
             [FromQuery] string? bookName, [FromQuery] int page, [FromQuery] int items)
@@ -70,6 +71,7 @@ namespace BibliotecaApi.Controllers
             var author = _bookauthorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
+
         [HttpPut, Route("{id}")]
         public override IActionResult Update(Guid id, CreateReservationDTO dto)
         {
@@ -87,7 +89,6 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
-
 
             return Ok(_reservationService.UpdateReservation(id, reservation));
         }

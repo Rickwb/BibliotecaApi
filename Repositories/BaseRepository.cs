@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace BibliotecaApi.Repositories
 {
-    public abstract class BaseRepository<T>  where T: BaseEntity
+    public abstract class BaseRepository<T> where T : BaseEntity
     {
         protected readonly List<T> _repository;
 
@@ -27,7 +27,7 @@ namespace BibliotecaApi.Repositories
 
         public T GetById(Guid id)
         {
-            return (T)_repository.Find(x=>x.Id == id);
+            return (T)_repository.Find(x => x.Id == id);
         }
 
         public bool Remove(T item)
@@ -37,20 +37,19 @@ namespace BibliotecaApi.Repositories
 
         public bool RemoveById(Guid id)
         {
-            var t=_repository.Where(x => x.Id == id).SingleOrDefault();
+            var t = _repository.Where(x => x.Id == id).SingleOrDefault();
             return _repository.Remove(t);
         }
 
-        public T Update(Guid id,T newT)
+        public T Update(Guid id, T newT)
         {
-            var oldT= GetById(id);
-            if (oldT!=null)
+            var oldT = GetById(id);
+            if (oldT != null)
                 oldT = newT;
 
             return newT;
 
         }
 
-       
     }
 }

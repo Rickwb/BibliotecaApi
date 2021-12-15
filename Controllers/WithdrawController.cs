@@ -21,6 +21,7 @@ namespace BibliotecaApi.Controllers
             _reservationService = reservationService;
             _bookAuthorService = bookAuthorService;
         }
+
         [HttpPost]
         public override IActionResult Add(CreateWithdrawDTO dto)
         {
@@ -44,13 +45,14 @@ namespace BibliotecaApi.Controllers
             }
 
             return Created("", _withdrawService.AddWithdraw(withdraw));
-
         }
+
         [HttpGet, Route("{id}")]
         public override IActionResult Get(Guid id)
         {
             return Ok(_withdrawService.GetWidtdrawById(id));
         }
+
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalizeWithdraw(Guid id)
         {
@@ -63,6 +65,7 @@ namespace BibliotecaApi.Controllers
             var author = _bookAuthorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));
         }
+
         [HttpPut, Route("/{id}")]
         public override IActionResult Update(Guid id, CreateWithdrawDTO dto)
         {

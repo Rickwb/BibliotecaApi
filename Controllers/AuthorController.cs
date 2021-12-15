@@ -20,14 +20,14 @@ namespace BibliotecaApi.Controllers
             _bookAuthorService = bookAuthorService;
         }
 
-        [HttpPost, Route("addAuthor"),Authorize(Roles ="admin,employee")]
+        [HttpPost, Route("addAuthor"), Authorize(Roles = "admin,employee")]
         public override IActionResult Add([FromBody] CreateAuthorDTO dtoAuthor)
         {
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
 
             var author = new Authors(
-                id:Guid.NewGuid(),
+                id: Guid.NewGuid(),
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age);
@@ -38,23 +38,22 @@ namespace BibliotecaApi.Controllers
         [HttpGet, Route("getAuthor/{id}")]
         public override IActionResult Get(Guid id) => Ok(_bookAuthorService.GetAuthorById(id));
 
-        [HttpPut,Route("update/{id}"),Authorize(Roles = "admin,employee")]
-        public override IActionResult Update(Guid id,[FromBody]CreateAuthorDTO dtoAuthor)
+        [HttpPut, Route("update/{id}"), Authorize(Roles = "admin,employee")]
+        public override IActionResult Update(Guid id, [FromBody] CreateAuthorDTO dtoAuthor)
         {
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
 
             var author = new Authors(
-                id:id,
+                id: id,
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age,
                 books: dtoAuthor.AuthorBooks);
-            
 
             return Ok(_bookAuthorService.UpdateAuthors(id, author));
         }
-        [HttpDelete,Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]
+        [HttpDelete, Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteAuthor(Guid id)
         {
             bool deletado = _bookAuthorService.DeleteAuthor(id);
@@ -62,8 +61,8 @@ namespace BibliotecaApi.Controllers
 
             return NoContent();
         }
-        [HttpGet,Route("authors")]
-        public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery]int? age, [FromQuery]int page, [FromQuery]int items)
+        [HttpGet, Route("authors")]
+        public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery] int? age, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_bookAuthorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList());
         }

@@ -8,7 +8,6 @@ namespace BibliotecaApi.Repositories
 {
     public class AuthorRepository : BaseRepository<Authors>
     {
-
         public List<Authors> GetAllAuthorsWithParams(string? name, string? nacionality, int? age, int page, int items)
         {
             var author = (IEnumerable<Authors>)_repository
@@ -19,6 +18,5 @@ namespace BibliotecaApi.Repositories
 
             return author.ToList();
         }
-
     }
 }

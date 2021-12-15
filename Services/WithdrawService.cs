@@ -17,7 +17,6 @@ namespace BibliotecaApi.Services
             _withdrawRepository = withdrawRepository;
             _reservationRepository = reservationRepository;
             _bookRepository = bookRepository;
-
         }
 
         public Withdraw GetWidtdrawById(Guid id) => _withdrawRepository.GetById(id);
@@ -28,15 +27,12 @@ namespace BibliotecaApi.Services
         }
         public Withdraw AddWithdraw(Withdraw withdraw)
         {
-
-
             if (ValidWithdraw(withdraw))
             {
                 return _withdrawRepository.Add(withdraw);
             }
 
             throw new Exception("Invalid Withdraw");
-
         }
 
         public bool FinalizarWithdraw(Guid id)
@@ -66,7 +62,6 @@ namespace BibliotecaApi.Services
                 }
             }
             return true;
-
         }
 
         public IEnumerable<Withdraw> GetAll() => _withdrawRepository.GetAll();

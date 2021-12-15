@@ -26,7 +26,6 @@ namespace BibliotecaApi.Services
             return _employeeRepository.Add(employee);
         }
 
-
         public IEnumerable<Employee> GetAllUsersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items)
         {
             return _employeeRepository.GetAllEmployeesWithParams(Name, document, Birthdate, page, items);
