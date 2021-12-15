@@ -4,6 +4,8 @@ using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BibliotecaApi.Controllers
 {
@@ -68,10 +70,11 @@ namespace BibliotecaApi.Controllers
                 cep: clientDTO.Cep
                 );
 
-
-
             return Ok(_clientService.UpdateClient(id, customerAdd));
         }
+
+        [HttpGet, Authorize, Route("userLogged")]
+        public string Autorizado() => $"autenticado {User.Identity.Name}";
 
         [HttpPut, Authorize(Roles = "admin,employee"), Route("clientsUserUpdate/{id}")]
         public IActionResult UpdateUserFromClient(Guid idClient, [FromBody] CreateUserDTO userDTO)

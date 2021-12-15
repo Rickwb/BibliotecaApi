@@ -49,7 +49,8 @@ namespace BibliotecaApi.Controllers
         {
             return Ok(_employeeService.GetUserById(id));
         }
-
+        [HttpGet,Route("Autenticathed")]
+        public string Autenticated() => $"autenticado {User.Identity.Name}";
         [HttpGet, Route("GetEmployeesByParams")]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
@@ -73,9 +74,18 @@ namespace BibliotecaApi.Controllers
             return Ok(_employeeService.UpdateEmployee(id, employee));
         }
         [HttpPut, Route("UpdateUserfromEmplyee")]
-        public IActionResult UpdateUserFromEmployee(Guid id, CreateEmployeeDTO dto)
+        public IActionResult UpdateUserFromEmployee(Guid id, CreateUserDTO userDTO)
         {
-            throw new NotImplementedException();
+            userDTO.Valid();
+            if (!userDTO.IsValid)
+                return BadRequest("Não foi possivel atualizar o seu cadastro");
+
+            var user = new User(
+                username: userDTO.Username,
+                password: userDTO.Password,
+                role: "customer"
+                );
+            return Ok(_employeeService.UpdateUserFromClient(id, user));
         }
     }
 
