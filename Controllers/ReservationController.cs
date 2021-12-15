@@ -30,7 +30,7 @@ namespace BibliotecaApi.Controllers
             if (!dto.IsValid) return BadRequest();
             var customer = _customerService.GetUserById(dto.idCustumer);
 
-            List<Book> Books= new List<Book>();
+            List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
 
             var reservation = new Reservation(
@@ -40,8 +40,11 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
+            var reserv = _reservationService.AddReservation(reservation);
+            if (reserv is not null)
+                return Created("", reserv);
 
-            return Created("", _reservationService.AddReservation(reservation));
+            return BadRequest();
         }
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalzeReservation(Guid id)
@@ -67,12 +70,12 @@ namespace BibliotecaApi.Controllers
             var author = _bookauthorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
-        [HttpPut,Route("{id}")]
+        [HttpPut, Route("{id}")]
         public override IActionResult Update(Guid id, CreateReservationDTO dto)
         {
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
-            var customer=_customerService.GetUserById(dto.idCustumer);
+            var customer = _customerService.GetUserById(dto.idCustumer);
 
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
@@ -84,7 +87,7 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
-           
+
 
             return Ok(_reservationService.UpdateReservation(id, reservation));
         }

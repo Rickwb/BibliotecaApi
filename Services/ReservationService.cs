@@ -13,7 +13,7 @@ namespace BibliotecaApi.Services
         private readonly WithdrawService _withdrawService;
         private readonly BookRepository _bookRepository;
 
-        public ReservationService(ReservationRepository reservationRepository, WithdrawService withdrawService,BookRepository bookRepository)
+        public ReservationService(ReservationRepository reservationRepository, WithdrawService withdrawService, BookRepository bookRepository)
         {
             _reservationRepository = reservationRepository;
             _withdrawService = withdrawService;
@@ -22,9 +22,12 @@ namespace BibliotecaApi.Services
 
         public Reservation AddReservation(Reservation reservation)
         {
-            ValidarReserva(reservation);
-           
-            return _reservationRepository.Add(reservation);
+            if (ValidarReserva(reservation))
+            {
+                return _reservationRepository.Add(reservation);
+
+            };
+            return null;
         }
 
         public Reservation UpdateReservation(Guid idReservation, Reservation reservation)
@@ -36,9 +39,9 @@ namespace BibliotecaApi.Services
         {
             var reservation = _reservationRepository.GetById(idReservation);
             List<Book> books;
-            if (_reservationRepository.CancelarReserva(idReservation,out books)) return false;
+            if (_reservationRepository.CancelarReserva(idReservation, out books)) return false;
 
-            
+
 
             return true;
 
@@ -54,7 +57,7 @@ namespace BibliotecaApi.Services
             _withdrawService.AddWithdraw(withdraw);
 
             List<Book> books = new List<Book>();
-            bool finalized= _reservationRepository.FinalizarReserva(idReservation,out books);
+            bool finalized = _reservationRepository.FinalizarReserva(idReservation, out books);
 
             books.ForEach(book => _bookRepository.Update(book.Id, book));
 
@@ -64,21 +67,12 @@ namespace BibliotecaApi.Services
         public bool ValidarReserva(Reservation reservation)
         {
             var books = reservation.Books;
-            IEnumerable<Reservation> reservations;
-            IEnumerable<Withdraw> withdraws;
+            List<Reservation> reservations = new List<Reservation>();
+            List<Withdraw> withdraws = new List<Withdraw>();
             foreach (var b in books)
             {
-                reservations = _reservationRepository.GetAll().Where(r => r.StartDate == reservation.StartDate && r.Books.Contains(b));
-                withdraws = _withdrawService.GetAll().Where(w => w.WithdrawDate == reservation.StartDate && w.Books.Contains(b));
-                //reservations = GetReservationsByParams(startDate: reservation.StartDate, endDate: null, null, null, 1, 10).Where(x => x.Books.All(y => y.Id == b.Id));
-                //withdraws = _withdrawService.GetWithdrawByParams(isOpen: true,
-                //   startDate: reservation.StartDate,
-                //   endDate: null,
-                //   null,
-                //   null,
-                //   1,
-                //   10
-                //   ).Where(x => x.Books.All(y => y.Id == b.Id));
+                reservations = _reservationRepository.GetAll().Where(r => r.StartDate.Date == reservation.StartDate.Date && r.Books.Contains(b)).ToList();
+                withdraws = _withdrawService.GetAll().Where(w => w.WithdrawDate.Date == reservation.StartDate.Date && w.Books.Contains(b)).ToList(); ;
 
                 if (reservations.Count() + withdraws.Count() > b.NumCopies)
                 {

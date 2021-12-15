@@ -12,7 +12,7 @@ namespace BibliotecaApi.Services
         private readonly WithdrawRepository _withdrawRepository;
         private readonly ReservationRepository _reservationRepository;
         private readonly BookRepository _bookRepository;
-        public WithdrawService(WithdrawRepository withdrawRepository,ReservationRepository reservationRepository,BookRepository bookRepository)
+        public WithdrawService(WithdrawRepository withdrawRepository, ReservationRepository reservationRepository, BookRepository bookRepository)
         {
             _withdrawRepository = withdrawRepository;
             _reservationRepository = reservationRepository;
@@ -42,35 +42,28 @@ namespace BibliotecaApi.Services
         public bool FinalizarWithdraw(Guid id)
         {
             List<Book> books;
-             if(!_withdrawRepository.FinalizaWidthdraw(id,out books)) return false;
+            if (!_withdrawRepository.FinalizaWidthdraw(id, out books)) return false;
 
             books.ForEach(b => _bookRepository.Update(b.Id, b));
 
             return true;
-            
+
         }
 
         public bool ValidWithdraw(Withdraw withdraw)
         {
             var books = withdraw.Books;
-            IEnumerable<Reservation> reservations;
-            IEnumerable<Withdraw> withdraws;
+            List<Reservation> reservations = new List<Reservation>();
+            List<Withdraw> withdraws = new List<Withdraw>();
             foreach (var b in books)
             {
-                reservations = _reservationRepository.GetReservationsWithParams(startDate: withdraw.WithdrawDate, endDate: withdraw.ExpireDate, null, null, 0, 100).Where(x => x.Books.All(y => y.Id == b.Id));
-                withdraws = GetWithdrawByParams(isOpen: true,
-                   startDate: withdraw.WithdrawDate,
-                   endDate: withdraw.ExpireDate,
-                   null,
-                   null,
-                   1,
-                   100
-                   ).Where(x => x.Books.All(y => y.Id == b.Id));
+                reservations = _reservationRepository.GetAll().Where(r => r.StartDate.Date == withdraw.WithdrawDate.Date && r.Books.Contains(b)).ToList();
+                withdraws = _withdrawRepository.GetAll().Where(w => w.WithdrawDate.Date == withdraw.WithdrawDate.Date && w.Books.Contains(b)).ToList(); ;
 
-                if (reservations.Count() + withdraws.Count()> b.NumCopies)
+                if (reservations.Count() + withdraws.Count() > b.NumCopies)
                 {
                     return false;
-                } 
+                }
             }
             return true;
 
