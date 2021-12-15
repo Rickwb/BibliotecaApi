@@ -33,7 +33,6 @@ namespace BibliotecaApi.Services
             if (ValidWithdraw(withdraw))
             {
                 return _withdrawRepository.Add(withdraw);
-
             }
 
             throw new Exception("Invalid Withdraw");
@@ -75,9 +74,8 @@ namespace BibliotecaApi.Services
             }
             return true;
 
-
-
-
         }
+
+        public IEnumerable<Withdraw> GetAll() => _withdrawRepository.GetAll();
     }
 }

@@ -36,11 +36,17 @@ namespace BibliotecaApi.Repositories
             return reserv != null ? true : false;
 
         }
-        public bool FinalizarReserva(Guid id)
+        public bool FinalizarReserva(Guid id,out List<Book> books)
         {
             var reservation = GetById(id);
+             books= new List<Book>();
             if (reservation == null) return false;
-        
+
+            foreach (var b in reservation.Books)
+            {
+                b.ControNumberOfAvailableCopies(false, 1);
+                books.Add(b);
+            }
 
             reservation.FinalizarReserva();
 

@@ -38,7 +38,7 @@ namespace BibliotecaApi.Services
             List<Book> books;
             if (_reservationRepository.CancelarReserva(idReservation,out books)) return false;
 
-            books.ForEach(book => _bookRepository.Update(book.Id, book));
+            
 
             return true;
 
@@ -53,8 +53,12 @@ namespace BibliotecaApi.Services
 
             _withdrawService.AddWithdraw(withdraw);
 
+            List<Book> books = new List<Book>();
+            bool finalized= _reservationRepository.FinalizarReserva(idReservation,out books);
 
-            return _reservationRepository.FinalizarReserva(idReservation);
+            books.ForEach(book => _bookRepository.Update(book.Id, book));
+
+            return finalized;
         }
 
         public bool ValidarReserva(Reservation reservation)
@@ -64,15 +68,17 @@ namespace BibliotecaApi.Services
             IEnumerable<Withdraw> withdraws;
             foreach (var b in books)
             {
-                reservations = GetReservationsByParams(startDate: reservation.StartDate, endDate: null, null, null, 1, 10).Where(x => x.Books.All(y => y.Id == b.Id));
-                withdraws = _withdrawService.GetWithdrawByParams(isOpen: true,
-                   startDate: reservation.StartDate,
-                   endDate: null,
-                   null,
-                   null,
-                   1,
-                   10
-                   ).Where(x => x.Books.All(y => y.Id == b.Id));
+                reservations = _reservationRepository.GetAll().Where(r => r.StartDate == reservation.StartDate && r.Books.Contains(b));
+                withdraws = _withdrawService.GetAll().Where(w => w.WithdrawDate == reservation.StartDate && w.Books.Contains(b));
+                //reservations = GetReservationsByParams(startDate: reservation.StartDate, endDate: null, null, null, 1, 10).Where(x => x.Books.All(y => y.Id == b.Id));
+                //withdraws = _withdrawService.GetWithdrawByParams(isOpen: true,
+                //   startDate: reservation.StartDate,
+                //   endDate: null,
+                //   null,
+                //   null,
+                //   1,
+                //   10
+                //   ).Where(x => x.Books.All(y => y.Id == b.Id));
 
                 if (reservations.Count() + withdraws.Count() > b.NumCopies)
                 {
