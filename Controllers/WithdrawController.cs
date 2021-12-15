@@ -4,6 +4,7 @@ using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 
 namespace BibliotecaApi.Controllers
 {
@@ -29,12 +30,14 @@ namespace BibliotecaApi.Controllers
             if (!dto.IsValid) return BadRequest();
 
             var customer = _customerService.GetUserById(dto.IdCustomer);
+            List<Book> books = new List<Book>();
+            dto.IdBooksNoReservation.ForEach(b => books.Add(_bookAuthorService.GetBookById(b)));
             Withdraw withdraw;
             if (dto.IdReservation == Guid.Empty)
             {
                 withdraw = new Withdraw(
                 customer: customer,
-                books: dto.BooksNoReservation);
+                books: books);
             }
             else
             {

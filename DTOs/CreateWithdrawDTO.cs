@@ -10,7 +10,7 @@ namespace BibliotecaApi.DTOs
         public Guid IdReservation { get; set; }
         public DateTime WithdrawDate { get; set; }
         public DateTime ReturnDate { get; set; }
-        public List<Book> BooksNoReservation { get; set; }
+        public List<Guid> IdBooksNoReservation { get; set; }
         public override void Valid()
         {
             if (IdCustomer == Guid.Empty) IsValid = false;
