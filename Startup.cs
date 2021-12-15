@@ -80,13 +80,7 @@ namespace BibliotecaApi
                 };
             });
 
-
-
-
             services.AddControllers();
-
-
-
 
             services.AddSwaggerGen(c =>
             {
