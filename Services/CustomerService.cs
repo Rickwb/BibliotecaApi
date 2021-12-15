@@ -19,11 +19,16 @@ namespace BibliotecaApi.Services
 
         }
 
-        public Customer AddClient(Customer customer, User user)
+        public CreateResult<Customer> AddClient(Customer customer, User user)
         {
             customer.Adress = _cepService.BuscarEnderecosAsync(customer.Cep).Result;
             _userRepository.Add(user);
-            return _clientRepository.Add(customer);
+            if (_clientRepository.GetAll().SingleOrDefault(d=>d.Document==customer.Document)!=null)
+            {
+                return CreateResult<Customer>.Errors(new SameObjectExeception("Já existe um cliente cadastrado com esse documento"));
+            }
+            _clientRepository.Add(customer);
+            return CreateResult<Customer>.Sucess(customer);
         }
 
         public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page, int items)

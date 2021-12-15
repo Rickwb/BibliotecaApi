@@ -4,6 +4,6 @@ namespace BibliotecaApi.Entities
 {
     public abstract class BaseEntity
     {
-        public Guid Id { get; init; }
+        public  Guid Id { get; init; }
     }
 }

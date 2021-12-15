@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,14 @@ namespace BibliotecaApi.Controllers
                 userId: customerAdd.Id
                 );
 
-            return Ok(_clientService.AddClient(clientAdd, customerAdd));
+            var result = _clientService.AddClient(clientAdd, customerAdd);
+            if (result.Error == false)
+            {
+                var customerResult = new CustomerResultDTO(clientAdd);
+                return Ok(customerResult);
+            }
+            var custmerResult = new CustomerResultDTO(result.Exception);
+            return Ok(custmerResult.GetErros());
         }
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)

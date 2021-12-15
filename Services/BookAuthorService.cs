@@ -1,4 +1,5 @@
-﻿using BibliotecaApi.Entities;
+﻿using BibliotecaApi.DTOs.Results;
+using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
 using System;
 using System.Collections.Generic;
@@ -51,9 +52,21 @@ namespace BibliotecaApi.Services
         {
             return _authorRepository.Update(idAuthor, author);
         }
-        public Authors AddAuthors(Authors author)
+        public CreateResult<Authors> AddAuthors(Authors author)
         {
-            return _authorRepository.Add(author);
+            try
+            {
+                if (author.Age==0)
+                    return CreateResult<Authors>.Errors(new InvalidDataExeception("O autor não pode ser cadastrado com a idade 0"));
+                _authorRepository.Add(author);
+
+                return CreateResult<Authors>.Sucess(author);
+
+            }catch (Exception ex)
+            {
+                return CreateResult<Authors>.Errors(new CreationException("Nao foi possivel cadastrar"));
+            }
+
         }
 
         public bool DeleteAuthor(Guid idAuthor)

@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -41,7 +42,15 @@ namespace BibliotecaApi.Controllers
                 userId: userAdd.Id
                 );
 
-            return Created("", _employeeService.AddEmployee(employee, userAdd));
+            var result = _employeeService.AddEmployee(employee, userAdd);
+
+            if (result.Error == false)
+            {
+                var employeeResult = new EmployeeResultDTO(employee);
+                return Created("", employeeResult);
+            }
+
+            return BadRequest(new EmployeeResultDTO(result.Exception).GetErrors());
         }
 
         [HttpGet, Route("employee/{id}")]
@@ -49,7 +58,7 @@ namespace BibliotecaApi.Controllers
         {
             return Ok(_employeeService.GetUserById(id));
         }
-        [HttpGet,Route("Autenticathed")]
+        [HttpGet, Route("Autenticathed")]
         public string Autenticated() => $"autenticado {User.Identity.Name}";
         [HttpGet, Route("GetEmployeesByParams")]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)

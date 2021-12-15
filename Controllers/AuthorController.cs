@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -31,8 +32,18 @@ namespace BibliotecaApi.Controllers
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age);
+            var result = _bookAuthorService.AddAuthors(author);
+            if (result.Error == false)
+            {
+                var authorResult= new AuthorResultDTO(author);
+                return Ok(authorResult);
 
-            return Ok(_bookAuthorService.AddAuthors(author));
+            }
+            else
+            {
+                var authorResult = new AuthorResultDTO(result.Exception);
+                return BadRequest(authorResult.GetErrors());
+            }
         }
 
         [HttpGet, Route("getAuthor/{id}")]

@@ -19,11 +19,19 @@ namespace BibliotecaApi.Services
             _cepService = cepService;
         }
 
-        public Employee AddEmployee(Employee employee, User user)
+        public CreateResult<Employee> AddEmployee(Employee employee, User user)
         {
             employee.Adress = _cepService.BuscarEnderecosAsync(employee.Cep).Result;
             _userRepository.Add(user);
-            return _employeeRepository.Add(employee);
+            if (string.IsNullOrEmpty(user.Role))
+                return CreateResult<Employee>.Errors(new InvalidDataExeception("O campo role está nulo"));
+            if (user.Role.ToLower() != "employee" && user.Role.ToLower() != "admin")
+                return CreateResult<Employee>.Errors(new InvalidDataExeception("Este cargo não existe"));
+            if (_employeeRepository.GetAll().Where(x => x.Document == employee.Document).SingleOrDefault() != null)
+                return CreateResult<Employee>.Errors(new SameObjectExeception("Este funcionário já está cadastrado"));
+
+            _employeeRepository.Add(employee);
+            return CreateResult<Employee>.Sucess(employee);
         }
 
         public IEnumerable<Employee> GetAllUsersWithParams(string? Name, string? document, DateTime? Birthdate, int page, int items)
