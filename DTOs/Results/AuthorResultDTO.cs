@@ -22,10 +22,6 @@ namespace BibliotecaApi.DTOs.Results
         public string Nacionality { get; set; }
         public int Age { get; set; }
 
-        public List<string> GetErrors()
-        {
-            return Errors;
-        }
-
+        public List<string> GetErrors() => Errors;
     }
 }

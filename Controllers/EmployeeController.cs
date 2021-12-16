@@ -58,8 +58,10 @@ namespace BibliotecaApi.Controllers
         {
             return Ok(_employeeService.GetUserById(id));
         }
+
         [HttpGet, Route("Autenticathed")]
         public string Autenticated() => $"autenticado {User.Identity.Name}";
+
         [HttpGet, Route("GetEmployeesByParams"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
@@ -82,6 +84,7 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_employeeService.UpdateEmployee(id, employee));
         }
+
         [HttpPut, Route("UpdateUserfromEmplyee")]
         public IActionResult UpdateUserFromEmployee(Guid id, CreateUserDTO userDTO)
         {
@@ -94,8 +97,8 @@ namespace BibliotecaApi.Controllers
                 password: userDTO.Password,
                 role: "customer"
                 );
+
             return Ok(_employeeService.UpdateUserFromClient(id, user));
         }
     }
-
 }

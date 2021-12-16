@@ -60,6 +60,7 @@ namespace BibliotecaApi.Controllers
                 title: dto.Title,
                 numCopies: dto.NumCopies,
                 realeaseYear: dto.RealeaseYear);
+
             var result = _bookService.AddBook(book);
 
             if (result.Error == false) return Created("", new BookResultDTO(book));
@@ -76,7 +77,8 @@ namespace BibliotecaApi.Controllers
             return NotFound(deletado);
 
         }
-        [HttpGet, Route("GetBooksFiltered"),ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
+
+        [HttpGet, Route("GetBooksFiltered"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page, [FromQuery] int items)
         {
             var book = _bookService.GetBookById(idBook);

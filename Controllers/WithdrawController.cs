@@ -37,6 +37,7 @@ namespace BibliotecaApi.Controllers
             List<Book> books = new List<Book>();
             dto.IdBooksNoReservation.ForEach(b => books.Add(_bookService.GetBookById(b)));
             Withdraw withdraw;
+
             if (dto.IdReservation == Guid.Empty)
             {
                 withdraw = new Withdraw(
@@ -50,6 +51,7 @@ namespace BibliotecaApi.Controllers
                 customer: customer,
                 reservation: reservation);
             }
+
             var result = _withdrawService.AddWithdraw(withdraw);
             if (result.Error==false)
                 return Created("", new WithdrawResultDTO(withdraw));

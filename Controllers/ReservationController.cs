@@ -30,6 +30,7 @@ namespace BibliotecaApi.Controllers
         {
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
+
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             List<Book> Books = new List<Book>();
@@ -42,6 +43,7 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
+
             var result = _reservationService.AddReservation(reservation);
             if (result.Error==false)
                 return Created("", new ReservationResultDTO(reservation));
@@ -80,6 +82,7 @@ namespace BibliotecaApi.Controllers
         {
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
+
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             List<Book> Books = new List<Book>();
@@ -92,7 +95,6 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
-
 
             return Ok(_reservationService.UpdateReservation(id, reservation));
         }

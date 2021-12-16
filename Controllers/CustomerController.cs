@@ -43,14 +43,17 @@ namespace BibliotecaApi.Controllers
                 );
 
             var result = _customerService.AddClient(customerAdd, userAdd);
+
             if (result.Error == false)
             {
                 var customerResult = new CustomerResultDTO(customerAdd);
                 return Ok(customerResult);
             }
+
             var custmerResult = new CustomerResultDTO(result.Exception);
             return Ok(custmerResult.GetErros());
         }
+
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {

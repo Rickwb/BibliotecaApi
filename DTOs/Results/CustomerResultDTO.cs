@@ -17,14 +17,12 @@ namespace BibliotecaApi.DTOs.Results
         {
             Errors = new List<string>() { exception.Message };
         }
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Document { get; set; }
         public Adress Adress { get; set; }
 
-        public List<string> GetErros()
-        {
-            return Errors;
-        }
+        public List<string> GetErros()=> Errors;
     }
 }
