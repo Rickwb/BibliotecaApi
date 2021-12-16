@@ -14,14 +14,17 @@ namespace BibliotecaApi.Controllers
     {
         private readonly WithdrawService _withdrawService;
         private readonly ReservationService _reservationService;
-        private readonly BookAuthorService _bookAuthorService;
+        private readonly BookService _bookService;
+        private readonly AuthorService _authorService;
         private readonly CustomerService _customerService;
-        public WithdrawController(WithdrawService withdrawService, CustomerService customerService, ReservationService reservationService, BookAuthorService bookAuthorService)
+        public WithdrawController(WithdrawService withdrawService, CustomerService customerService, ReservationService reservationService, BookService bookAuthorService,
+            AuthorService authorService)
         {
             _withdrawService = withdrawService;
             _customerService = customerService;
             _reservationService = reservationService;
-            _bookAuthorService = bookAuthorService;
+            _bookService = bookAuthorService;
+            _authorService = authorService;
         }
 
         [HttpPost]
@@ -32,7 +35,7 @@ namespace BibliotecaApi.Controllers
 
             var customer = _customerService.GetUserById(dto.IdCustomer);
             List<Book> books = new List<Book>();
-            dto.IdBooksNoReservation.ForEach(b => books.Add(_bookAuthorService.GetBookById(b)));
+            dto.IdBooksNoReservation.ForEach(b => books.Add(_bookService.GetBookById(b)));
             Withdraw withdraw;
             if (dto.IdReservation == Guid.Empty)
             {
@@ -69,7 +72,7 @@ namespace BibliotecaApi.Controllers
         [HttpGet]
         public IActionResult GetWithdrawByParams([FromQuery] bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page, [FromQuery] int items)
         {
-            var author = _bookAuthorService.GetAuthorById(idAuthor);
+            var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));
         }
 

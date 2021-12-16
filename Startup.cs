@@ -47,8 +47,10 @@ namespace BibliotecaApi
             services.AddTransient<EmployeeService>();
 
             services.AddSingleton<BookRepository>();
+            services.AddTransient<BookService>();
+
             services.AddSingleton<AuthorRepository>();
-            services.AddTransient<BookAuthorService>();
+            services.AddTransient<AuthorService>();
 
             services.AddSingleton<ReservationRepository>();
             services.AddTransient<ReservationService>();

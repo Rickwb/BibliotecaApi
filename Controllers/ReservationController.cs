@@ -14,13 +14,15 @@ namespace BibliotecaApi.Controllers
     {
         private readonly ReservationService _reservationService;
         private readonly CustomerService _customerService;
-        private readonly BookAuthorService _bookauthorService;
+        private readonly BookService _bookService;
+        private readonly AuthorService _authorService;
 
-        public ReservationController(ReservationService reservationService, CustomerService customerService, BookAuthorService bookAuthorService)
+        public ReservationController(ReservationService reservationService, CustomerService customerService, BookService bookAuthorService, AuthorService authorService)
         {
             _reservationService = reservationService;
             _customerService = customerService;
-            _bookauthorService = bookAuthorService;
+            _bookService = bookAuthorService;
+            _authorService = authorService;
         }
 
         [HttpPost]
@@ -31,7 +33,7 @@ namespace BibliotecaApi.Controllers
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             List<Book> Books = new List<Book>();
-            dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
+            dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
 
             var reservation = new Reservation(
                 id: Guid.NewGuid(),
@@ -69,7 +71,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
             [FromQuery] string? bookName, [FromQuery] int page, [FromQuery] int items)
         {
-            var author = _bookauthorService.GetAuthorById(idAuthor);
+            var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
 
@@ -81,7 +83,7 @@ namespace BibliotecaApi.Controllers
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             List<Book> Books = new List<Book>();
-            dto.IdBooks.ForEach(x => Books.Add(_bookauthorService.GetBookById(x)));
+            dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
 
             var reservation = new Reservation(
                 id: id,
