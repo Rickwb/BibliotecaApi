@@ -18,6 +18,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.ResponseCompression;
 
 namespace BibliotecaApi
 {
@@ -33,8 +34,11 @@ namespace BibliotecaApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddResponseCompression();
-            services.AddMvc()
+            services.AddResponseCompression(options =>
+            {
+                options.Providers.Add<GzipCompressionProvider>();
+            });
+                services.AddMvc()
               .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
               .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
@@ -161,13 +165,13 @@ namespace BibliotecaApi
                 id: Guid.NewGuid(),
                 author,
                 title: "Meditações",
-                description:"hahahahha",
+                description: "hahahahha",
                 numCopies: 1,
                 realeaseYear: 2020));
             var book2 = bookRepository.Add(new Entities.Book(
                 id: Guid.NewGuid(),
                 author,
-                description:"fgsdfgsdfg",
+                description: "fgsdfgsdfg",
                 title: "C# programming",
                 numCopies: 1,
                 realeaseYear: 2020));

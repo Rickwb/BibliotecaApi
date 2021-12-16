@@ -21,7 +21,7 @@ namespace BibliotecaApi.Controllers
             return Ok(_userService.Login(loginDTO.Username, loginDTO.Password));
         }
 
-        [HttpPut, Route("/user/resetPassword")]
+        [HttpPatch, Route("/user/resetPassword")]
         public async Task<IActionResult> ChangePassword(UserLoginDTO loginDTO, [FromQuery] string newPassword)
         {
             if (_userService.ResetPassword(loginDTO.Username, loginDTO.Password, newPassword)) return Ok(true);
