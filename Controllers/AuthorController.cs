@@ -52,6 +52,8 @@ namespace BibliotecaApi.Controllers
         [HttpPut, Route("update/{id}"), Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid id, [FromBody] CreateAuthorDTO dtoAuthor)
         {
+            List<Book> books=new List<Book>();
+             dtoAuthor.AuthorBooks.ForEach(b => books.Add(_bookAuthorService.GetBookById(b)));
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
 
@@ -60,7 +62,7 @@ namespace BibliotecaApi.Controllers
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age,
-                books: dtoAuthor.AuthorBooks);
+                books: books);
 
             return Ok(_bookAuthorService.UpdateAuthors(id, author));
         }
