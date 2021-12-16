@@ -54,11 +54,11 @@ namespace BibliotecaApi.Services
             List<Withdraw> withdraws = new List<Withdraw>();
             foreach (var b in books)
             {
-                reservations = _reservationRepository.GetAll().Where(r => r.StartDate.Date >= withdraw.WithdrawDate.Date && r.EndDate <= withdraw.ReturnDate && r.Books.Contains(b)).ToList();
-                withdraws = _withdrawRepository.GetAll().Where(w => w.WithdrawDate.Date >= withdraw.WithdrawDate.Date && w.ReturnDate <= withdraw.ReturnDate && w.Books.Contains(b)).ToList(); 
+                reservations = _reservationRepository.GetAll().Where(r => r.StartDate.Date >= withdraw.WithdrawDate.Date || r.EndDate <= withdraw.ReturnDate && r.Books.Contains(b)).ToList();
+                withdraws = _withdrawRepository.GetAll().Where(w => w.WithdrawDate.Date >= withdraw.WithdrawDate.Date || w.ReturnDate <= withdraw.ReturnDate && w.Books.Contains(b)).ToList(); 
 
 
-                if (reservations.Count() + withdraws.Count() > b.NumCopies)
+                if (reservations.Count() + withdraws.Count() +1> b.NumCopies)
                 {
                     return false;
                 }
