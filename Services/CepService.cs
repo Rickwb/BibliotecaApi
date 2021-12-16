@@ -19,7 +19,6 @@ namespace BibliotecaApi.Services
                 {
                     Formatting = Formatting.Indented,
                 };
-                ;
 
                 var res = await httpClient.GetAsync(url);
 
@@ -36,13 +35,9 @@ namespace BibliotecaApi.Services
                 string resposta = await res.Content.ReadAsStringAsync();
                 var endereco = JsonConvert.DeserializeObject<Adress>(resposta);
                 if (endereco.Cep is not null)
-                {
                     return endereco;
-                }
                 else
-                {
                     return null;
-                }
             }
             catch (InvalidOperationException ex)
             {

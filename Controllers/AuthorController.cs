@@ -17,10 +17,10 @@ namespace BibliotecaApi.Controllers
         private readonly AuthorService _authorService;
         private readonly BookService _bookService;
 
-        public AuthorController(AuthorService authorService,BookService bookAuthorService)
+        public AuthorController(AuthorService authorService, BookService bookAuthorService)
         {
             _authorService = authorService;
-            _bookService= bookAuthorService;
+            _bookService = bookAuthorService;
         }
 
         [HttpPost, Route("addAuthor"), Authorize(Roles = "admin,employee")]
@@ -34,12 +34,13 @@ namespace BibliotecaApi.Controllers
                 name: dtoAuthor.Name,
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age);
+
             var result = _authorService.AddAuthors(author);
+
             if (result.Error == false)
             {
-                var authorResult= new AuthorResultDTO(author);
+                var authorResult = new AuthorResultDTO(author);
                 return Ok(authorResult);
-
             }
             else
             {
@@ -54,8 +55,9 @@ namespace BibliotecaApi.Controllers
         [HttpPut, Route("update/{id}"), Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid id, [FromBody] CreateAuthorDTO dtoAuthor)
         {
-            List<Book> books=new List<Book>();
-             dtoAuthor.AuthorBooks.ForEach(b => books.Add(_bookService.GetBookById(b)));
+            List<Book> books = new List<Book>();
+            dtoAuthor.AuthorBooks.ForEach(b => books.Add(_bookService.GetBookById(b)));
+
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
 

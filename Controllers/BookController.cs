@@ -31,6 +31,7 @@ namespace BibliotecaApi.Controllers
             createBookDTO.Valid();
             if (!createBookDTO.IsValid)
                 return BadRequest();
+
             var author = _authorService.GetAuthorById(createBookDTO.IdAuthor);
 
             var book = new Book(
@@ -48,8 +49,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Add([FromBody] CreateBookDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid)
-                return BadRequest();
+            if (!dto.IsValid) return BadRequest();
 
             var author = _authorService.GetAuthorById(dto.IdAuthor);
 
@@ -62,14 +62,11 @@ namespace BibliotecaApi.Controllers
                 realeaseYear: dto.RealeaseYear);
             var result = _bookService.AddBook(book);
 
-            if (result.Error == false)
-            {
+            if (result.Error == false) return Created("", new BookResultDTO(book));
 
-                return Created("", new BookResultDTO(book));
-            }
             return BadRequest(new BookResultDTO(result.Exception));
-
         }
+
         [HttpDelete, Route("deleteBook/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteBook(Guid id)
         {
