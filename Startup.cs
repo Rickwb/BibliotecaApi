@@ -157,11 +157,13 @@ namespace BibliotecaApi
                 id: Guid.NewGuid(),
                 author,
                 title: "Meditações",
+                description:"hahahahha",
                 numCopies: 1,
                 realeaseYear: 2020));
             var book2 = bookRepository.Add(new Entities.Book(
                 id: Guid.NewGuid(),
                 author,
+                description:"fgsdfgsdfg",
                 title: "C# programming",
                 numCopies: 1,
                 realeaseYear: 2020));

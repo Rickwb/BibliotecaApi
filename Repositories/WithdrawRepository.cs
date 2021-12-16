@@ -27,7 +27,7 @@ namespace BibliotecaApi.Repositories
             booksCopies = new List<Book>();
             if (withdraw is not null)
             {
-                withdraw.IsOpen = false;
+                withdraw.SetIsOpen(false);
                 withdraw.ReturnDate = DateTime.Now;
                 foreach (var b in withdraw.Books)
                 {

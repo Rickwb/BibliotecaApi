@@ -8,11 +8,15 @@ namespace BibliotecaApi.DTOs.Results
     {
         public BookResultDTO(Book book)
         {
-
+            IdAuthor = book.Author.Id;
+            Title = book.Title;
+            Description = book.Description;
+            RealeaseYear = book.RealeaseYear;
+            NumCopies = book.NumCopies;
         }
         public BookResultDTO(CreationException exception)
         {
-
+            Errors= new List<string> { exception.Message };
         }
         public Guid IdAuthor { get; set; }
         public string Title { get; set; }

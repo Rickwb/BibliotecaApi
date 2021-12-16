@@ -4,12 +4,12 @@ namespace BibliotecaApi.Entities
 {
     public abstract class Person : BaseEntity
     {
-        public string Name { get; set; }
-        public string Document { get; set; }
-        public int Age { get; set; }
-        public DateTime BirthDate { get; set; }
-        public Guid UserId { get; set; }
-        public string Cep { get; set; }
+        public string Name { get; protected set; }
+        public string Document { get; protected set; }
+        public int Age { get; protected set; }
+        public DateTime BirthDate { get; protected set; }
+        public Guid UserId { get; protected set; }
+        public string Cep { get; protected set; }
         public Adress Adress { get; set; }
     }
 }

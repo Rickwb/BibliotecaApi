@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -39,11 +40,11 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
-            var reserv = _reservationService.AddReservation(reservation);
-            if (reserv is not null)
-                return Created("", reserv);
+            var result = _reservationService.AddReservation(reservation);
+            if (result.Error==false)
+                return Created("", new ReservationResultDTO(reservation));
 
-            return BadRequest();
+            return BadRequest(new ReservationResultDTO(result.Exception));
         }
 
         [HttpPost, Route("finalize/{id}")]

@@ -34,5 +34,12 @@ namespace BibliotecaApi.Entities
         public decimal Multa { get; set; }
         public Adress Adress { get; set; }
 
+        public void PropretiesUpdate(string name, string document, string cep)
+        {
+            Name = name;
+            Document=document;
+            Cep=cep;
+        }
+
     }
 }

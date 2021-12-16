@@ -26,5 +26,7 @@ namespace BibliotecaApi.DTOs.Results
         public Guid IdReservation { get; set; }
         public DateTime WithdrawDate { get; set; }
         public DateTime ReturnDate { get; set; }
+
+        public List<string> GetErrors() => Errors;
     }
 }

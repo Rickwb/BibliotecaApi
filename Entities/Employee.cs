@@ -21,6 +21,6 @@ namespace BibliotecaApi.Entities
             Cep = cep;
             Role = role;
         }
-        public string Role { get; set; }
+        public string Role { get; private set; }
     }
 }

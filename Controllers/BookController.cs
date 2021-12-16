@@ -33,6 +33,7 @@ namespace BibliotecaApi.Controllers
             var book = new Book(
                 id: id,
                 author: author,
+                description: createBookDTO.Description,
                 title: createBookDTO.Title,
                 numCopies: createBookDTO.NumCopies,
                 realeaseYear: createBookDTO.RealeaseYear
@@ -52,10 +53,12 @@ namespace BibliotecaApi.Controllers
             var book = new Book(
                 id: Guid.NewGuid(),
                 author: author,
+                description:dto.Description,
                 title: dto.Title,
                 numCopies: dto.NumCopies,
                 realeaseYear: dto.RealeaseYear);
             var result = _bookAuthorService.AddBook(book);
+
             if (result.Error==false)
             {
 

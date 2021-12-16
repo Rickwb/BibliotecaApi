@@ -22,9 +22,9 @@ namespace BibliotecaApi.Entities
             AuthorBooks = books;
         }
 
-        public string Name { get; set; }
-        public string Nacionality { get; set; }
-        public List<Book> AuthorBooks { get; set; }
+        public string Name { get; private set; }
+        public string Nacionality { get; private set; }
+        public List<Book> AuthorBooks { get; private set; }
 
 
 

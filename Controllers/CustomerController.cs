@@ -11,12 +11,12 @@ using System.Security.Claims;
 namespace BibliotecaApi.Controllers
 {
     [ApiController, Authorize, Route("[controller]")]
-    public class ClientController : BaseControl<CreateCustomerDTO, User>
+    public class CustomerController : BaseControl<CreateCustomerDTO, User>
     {
-        private readonly CustomerService _clientService;
-        public ClientController(CustomerService clientService)
+        private readonly CustomerService _customerService;
+        public CustomerController(CustomerService customerService)
         {
-            _clientService = clientService;
+            _customerService = customerService;
         }
         [HttpPost, AllowAnonymous, Route("createClient")]
         public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
@@ -25,7 +25,7 @@ namespace BibliotecaApi.Controllers
             if (!createClientDto.IsValid)
                 return BadRequest("Não foi possivel adicionar o seu cadastro");
 
-            var customerAdd = new User(
+            var userAdd = new User(
                 username: createClientDto.Username,
                 password: createClientDto.Password,
                 role: createClientDto.Role
@@ -34,18 +34,18 @@ namespace BibliotecaApi.Controllers
                 Role = "costumer",
             };
 
-            var clientAdd = new Customer(
+            var customerAdd = new Customer(
                 id: Guid.NewGuid(),
                 name: createClientDto.Name,
                 document: createClientDto.Document,
                 cep: createClientDto.Cep,
-                userId: customerAdd.Id
+                userId: userAdd.Id
                 );
 
-            var result = _clientService.AddClient(clientAdd, customerAdd);
+            var result = _customerService.AddClient(customerAdd, userAdd);
             if (result.Error == false)
             {
-                var customerResult = new CustomerResultDTO(clientAdd);
+                var customerResult = new CustomerResultDTO(customerAdd);
                 return Ok(customerResult);
             }
             var custmerResult = new CustomerResultDTO(result.Exception);
@@ -54,31 +54,31 @@ namespace BibliotecaApi.Controllers
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {
-            return Ok(_clientService.GetUserById(id));
+            return Ok(_customerService.GetUserById(id));
         }
 
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients")]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
-            return Ok(_clientService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
+            return Ok(_customerService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
 
         [HttpPut, Authorize(Roles = "admin,employee"), Route("clientUpdate/{id}")]
-        public override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO clientDTO)
+        public override IActionResult Update(Guid id, [FromBody] CreateCustomerDTO customerDTO)
         {
-            clientDTO.Valid();
-            if (!clientDTO.IsValid)
+            customerDTO.Valid();
+            if (!customerDTO.IsValid)
                 return BadRequest("Não foi possivel atualizar o seu cadastro");
 
 
             var customerAdd = new Customer(
                 id: id,
-                name: clientDTO.Name,
-                document: clientDTO.Document,
-                cep: clientDTO.Cep
+                name: customerDTO.Name,
+                document: customerDTO.Document,
+                cep: customerDTO.Cep
                 );
 
-            return Ok(_clientService.UpdateClient(id, customerAdd));
+            return Ok(_customerService.UpdateClient(id, customerAdd));
         }
 
         [HttpGet, Authorize, Route("userLogged")]
@@ -97,7 +97,7 @@ namespace BibliotecaApi.Controllers
                 role: "customer"
                 );
 
-            return Ok(_clientService.UpdateUserFromClient(idClient, user));
+            return Ok(_customerService.UpdateUserFromClient(idClient, user));
         }
 
     }

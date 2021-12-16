@@ -26,12 +26,14 @@ namespace BibliotecaApi.Entities
             IsOpen = true;
         }
 
-        public Customer Customer { get; set; }
-        public Reservation Reservation { get; set; }
-        public DateTime WithdrawDate { get; set; }
+        public Customer Customer { get; private set; }
+        public Reservation Reservation { get; private set; }
+        public DateTime WithdrawDate { get; private set; }
         public DateTime ReturnDate { get; set; }
-        public DateTime ExpireDate { get; set; }
-        public bool IsOpen { get; set; }
-        public List<Book> Books { get; set; }
+        public DateTime ExpireDate { get; private set; }
+        public bool IsOpen { get; private set; }
+        public List<Book> Books { get; private set; }
+
+        public void SetIsOpen(bool state)=>IsOpen= state;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -46,8 +47,11 @@ namespace BibliotecaApi.Controllers
                 customer: customer,
                 reservation: reservation);
             }
+            var result = _withdrawService.AddWithdraw(withdraw);
+            if (result.Error==false)
+                return Created("", new WithdrawResultDTO(withdraw));
 
-            return Created("", _withdrawService.AddWithdraw(withdraw));
+            return BadRequest(new WithdrawResultDTO(result.Exception));
         }
 
         [HttpGet, Route("{id}")]

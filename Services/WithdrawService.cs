@@ -25,14 +25,15 @@ namespace BibliotecaApi.Services
         {
             return _withdrawRepository.GetAllBooksWithParams(isOpen, startDate, endDate, author, bookName, page, items);
         }
-        public Withdraw AddWithdraw(Withdraw withdraw)
+        public CreateResult<Withdraw> AddWithdraw(Withdraw withdraw)
         {
             if (ValidWithdraw(withdraw))
             {
-                return _withdrawRepository.Add(withdraw);
+                _withdrawRepository.Add(withdraw);
+                return CreateResult<Withdraw>.Sucess(withdraw);
             }
 
-            throw new Exception("Invalid Withdraw");
+            return CreateResult<Withdraw>.Errors(new CreationException("Aluguel Inválido"));
         }
 
         public bool FinalizarWithdraw(Guid id)

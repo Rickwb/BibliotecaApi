@@ -20,12 +20,17 @@ namespace BibliotecaApi.Services
             _bookRepository = bookRepository;
         }
 
-        public Reservation AddReservation(Reservation reservation)
+        public CreateResult<Reservation> AddReservation(Reservation reservation)
         {
             if (ValidarReserva(reservation))
             {
-                return _reservationRepository.Add(reservation);
+                if (reservation.Client.Multa != 0)
+                    return CreateResult<Reservation>.Errors(new InvalidDataExeception("O cliente não pode reservar tendo multas"));
+
+                _reservationRepository.Add(reservation);
+                return CreateResult<Reservation>.Sucess(reservation);
             };
+
             
             return null;
         }

@@ -14,12 +14,12 @@ namespace BibliotecaApi.Entities
             Books = books;
         }
 
-        public Customer Client { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
+        public Customer Client { get; private set; }
+        public DateTime StartDate { get; private set; }
+        public DateTime EndDate { get; private set; }
         private bool Completed { get; set; }
         private bool Cancelada { get; set; }
-        public List<Book> Books { get; set; }
+        public List<Book> Books { get; private set; }
 
         public void CancelarReserva()
         {
