@@ -57,7 +57,7 @@ namespace BibliotecaApi.Controllers
             return Ok(_customerService.GetUserById(id));
         }
 
-        [HttpGet, Authorize(Roles = "admin,employee"), Route("clients")]
+        [HttpGet, Authorize(Roles = "admin,employee"), Route("clients"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_customerService.GetAllUsersWithParams(Name, document, Birthdate, page, items));

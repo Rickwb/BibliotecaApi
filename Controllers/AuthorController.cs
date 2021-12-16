@@ -76,7 +76,7 @@ namespace BibliotecaApi.Controllers
 
             return NoContent();
         }
-        [HttpGet, Route("authors")]
+        [HttpGet, Route("authors"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery] int? age, [FromQuery] int page, [FromQuery] int items)
         {
             return Ok(_authorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList());

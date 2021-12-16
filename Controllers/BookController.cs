@@ -79,7 +79,7 @@ namespace BibliotecaApi.Controllers
             return NotFound(deletado);
 
         }
-        [HttpGet, Route("GetBooksFiltered")]
+        [HttpGet, Route("GetBooksFiltered"),ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page, [FromQuery] int items)
         {
             var book = _bookService.GetBookById(idBook);
