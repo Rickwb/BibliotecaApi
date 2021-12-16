@@ -34,6 +34,7 @@ namespace BibliotecaApi.Services
 
                 string resposta = await res.Content.ReadAsStringAsync();
                 var endereco = JsonConvert.DeserializeObject<Adress>(resposta);
+
                 if (endereco.Cep is not null)
                     return endereco;
                 else
