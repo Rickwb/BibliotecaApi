@@ -19,9 +19,15 @@ namespace BibliotecaApi.Services
             _bookRepository = bookRepository;
         }
 
-        public Book AddBook(Book book)
+        public CreateResult<Book> AddBook(Book book)
         {
-            return _bookRepository.Add(book);
+            if (book.Author == null)
+                return CreateResult<Book>.Errors(new InvalidDataExeception("O livro não pode ser cadastrado sem autor"));
+            if (_bookRepository.GetAll().Contains(book))
+                return CreateResult<Book>.Errors(new SameObjectExeception("O Livro já existe no cadastro, adicione uma copia "));
+
+             _bookRepository.Add(book);
+            return CreateResult<Book>.Sucess(book);
         }
 
         public IEnumerable<Book> GetBookByParams(Book? book, string? name, int? realeaseYear, int page, int items)

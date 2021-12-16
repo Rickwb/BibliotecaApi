@@ -20,12 +20,12 @@ namespace BibliotecaApi.Entities
                 CreatedObj = obj
             };
         }
-        public static CreateResult<T> Errors(CreationException exeption)
+        public static CreateResult<T> Errors(CreationException exception)
         {
             return new CreateResult<T>()
             {
                 Error = true,
-                Exception = exeption,
+                Exception = exception,
                 CreatedObj = null
             };
         }

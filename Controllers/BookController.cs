@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.DTOs;
+using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -54,8 +55,13 @@ namespace BibliotecaApi.Controllers
                 title: dto.Title,
                 numCopies: dto.NumCopies,
                 realeaseYear: dto.RealeaseYear);
+            var result = _bookAuthorService.AddBook(book);
+            if (result.Error==false)
+            {
 
-            return Ok(_bookAuthorService.AddBook(book));
+                return Created("", new BookResultDTO(book));
+            }
+            return BadRequest(new BookResultDTO(result.Exception));
 
         }
         [HttpDelete, Route("deleteBook/{id}"), Authorize(Roles = "admin,employee")]
