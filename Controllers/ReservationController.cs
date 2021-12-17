@@ -71,7 +71,7 @@ namespace BibliotecaApi.Controllers
 
         [HttpGet, Route("params"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
-            [FromQuery] string? bookName, [FromQuery] int page, [FromQuery] int items)
+            [FromQuery] string? bookName, [FromQuery] int page=1, [FromQuery] int items=5)
         {
             var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));

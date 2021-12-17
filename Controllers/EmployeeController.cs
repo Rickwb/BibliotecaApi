@@ -61,7 +61,7 @@ namespace BibliotecaApi.Controllers
         public string Autenticated() => $"autenticado {User.Identity.Name}";
 
         [HttpGet, Route("GetEmployeesByParams"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page=1, [FromQuery] int items=5)
         {
             return Ok(_employeeService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }

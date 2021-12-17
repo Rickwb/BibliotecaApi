@@ -72,7 +72,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetWithdrawByParams([FromQuery] bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetWithdrawByParams([FromQuery] bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page=1, [FromQuery] int items=5)
         {
             var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));

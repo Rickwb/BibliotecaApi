@@ -80,7 +80,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, Route("GetBooksFiltered"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page, [FromQuery] int items)
+        public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page=1, [FromQuery] int items=5)
         {
             var book = _bookService.GetBookById(idBook);
             return Ok(_bookService.GetBookByParams(book, name, realeaseYear, page, items));
