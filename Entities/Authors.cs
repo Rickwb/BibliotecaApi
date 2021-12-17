@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace BibliotecaApi.Entities
 {
-    public class Authors : Person
+    public class Authors :BaseEntity
     {
         public Authors(Guid id, string name, string nacionality, int age)
         {
@@ -23,6 +23,7 @@ namespace BibliotecaApi.Entities
         }
 
         public string Name { get; private set; }
+        public int Age { get; private set; }
         public string Nacionality { get; private set; }
         public List<Book> AuthorBooks { get; private set; }
 
