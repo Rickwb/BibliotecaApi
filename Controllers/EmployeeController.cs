@@ -24,13 +24,11 @@ namespace BibliotecaApi.Controllers
             if (!createEmplDto.IsValid)
                 return BadRequest("Dados do funcionario estão inválidos");
 
-
             var userAdd = new User(
                 username: createEmplDto.Username,
                 password: createEmplDto.Password,
                 role: createEmplDto.Role
                 );
-
 
             var employee = new Employee
                 (

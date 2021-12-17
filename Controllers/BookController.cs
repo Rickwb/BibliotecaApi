@@ -16,6 +16,7 @@ namespace BibliotecaApi.Controllers
     {
         private readonly BookService _bookService;
         private readonly AuthorService _authorService;
+
         public BookController(BookService bookAuthorService, AuthorService authorService)
         {
             _bookService = bookAuthorService;
@@ -45,6 +46,7 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_bookService.UpdateBook(id, book));
         }
+
         [HttpPost, Route("addBook"), Authorize(Roles = "admin,employee")]
         public override IActionResult Add([FromBody] CreateBookDTO dto)
         {
@@ -75,7 +77,6 @@ namespace BibliotecaApi.Controllers
             if (!deletado) return BadRequest();
 
             return NotFound(deletado);
-
         }
 
         [HttpGet, Route("GetBooksFiltered"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]

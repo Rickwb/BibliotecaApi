@@ -6,7 +6,6 @@ namespace BibliotecaApi.DTOs.Results
 {
     public class WithdrawResultDTO:CreateResultDTO<Withdraw>
     {
-
         public WithdrawResultDTO(Withdraw withdraw)
         {
             CustomerResult = new CustomerResultDTO(withdraw.Customer);
@@ -19,8 +18,6 @@ namespace BibliotecaApi.DTOs.Results
         {
             Errors = new List<string>() { exception.Message };
         }
-
-
 
         public CustomerResultDTO CustomerResult { get; set; }
         public Guid IdReservation { get; set; }

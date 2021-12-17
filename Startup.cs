@@ -150,6 +150,7 @@ namespace BibliotecaApi
                 password: "string",
                 role: "admin"
                 ));
+
             var customer = customerRepository.Add(new Entities.Customer(
                 id: Guid.NewGuid(),
                 name: "Rick",

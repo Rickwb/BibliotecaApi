@@ -70,6 +70,7 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_authorService.UpdateAuthors(id, author));
         }
+
         [HttpDelete, Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteAuthor(Guid id)
         {

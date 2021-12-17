@@ -26,8 +26,5 @@ namespace BibliotecaApi.Entities
         public string Nacionality { get; private set; }
         public List<Book> AuthorBooks { get; private set; }
 
-
-
-
     }
 }

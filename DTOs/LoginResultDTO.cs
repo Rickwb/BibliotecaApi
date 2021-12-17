@@ -8,7 +8,6 @@ namespace BibliotecaApi.DTOs
         public string[] Errors { get; set; }
         public UserLoginResultDTO User { get; set; }
     }
-
     public class UserLoginResultDTO
     {
         public Guid Id { get; set; }

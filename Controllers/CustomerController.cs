@@ -18,6 +18,7 @@ namespace BibliotecaApi.Controllers
         {
             _customerService = customerService;
         }
+
         [HttpPost, AllowAnonymous, Route("createClient")]
         public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
         {
@@ -102,7 +103,6 @@ namespace BibliotecaApi.Controllers
 
             return Ok(_customerService.UpdateUserFromClient(idClient, user));
         }
-
     }
 }
 
