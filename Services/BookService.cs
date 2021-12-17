@@ -30,7 +30,7 @@ namespace BibliotecaApi.Services
             return CreateResult<Book>.Sucess(book);
         }
 
-        public IEnumerable<Book> GetBookByParams(Book? book, string? name, int? realeaseYear, int page, int items)
+        public IEnumerable<Book> GetBookByParams(Book? book, string? name, int? realeaseYear, int page=1, int items=5)
         {
             return _bookRepository.GetAllBooksWithParams(book, name, realeaseYear, page, items);
         }

@@ -12,8 +12,9 @@ namespace BibliotecaApi.DTOs
         public string Password { get; set; }
         public override void Valid()
         {
-            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document) || String.IsNullOrEmpty(Cep) || String.IsNullOrEmpty(Role)) IsValid = false;
             IsValid = true;
+
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document) || String.IsNullOrEmpty(Cep) || String.IsNullOrEmpty(Role)) IsValid = false;
         }
     }
 }

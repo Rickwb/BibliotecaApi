@@ -13,10 +13,10 @@ namespace BibliotecaApi.DTOs
         public List<Guid> IdBooksNoReservation { get; set; }
         public override void Valid()
         {
+            IsValid = true;
+
             if (IdCustomer == Guid.Empty) IsValid = false;
             if (WithdrawDate==DateTime.MinValue) IsValid = false;
-
-            IsValid = true;
         }
 
 

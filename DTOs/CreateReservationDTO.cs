@@ -15,11 +15,12 @@ namespace BibliotecaApi.DTOs
 
         public override void Valid()
         {
+            IsValid= true;
+
             if (idCustumer==Guid.Empty)IsValid= false;
             if(StartDate==DateTime.MinValue)IsValid= false;
             if (IdBooks.Count == 0) IsValid = false;
 
-            IsValid= true;
         }
     }
 }

@@ -31,7 +31,7 @@ namespace BibliotecaApi.Services
             return CreateResult<Customer>.Sucess(customer);
         }
 
-        public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page, int items)
+        public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page=1, int items=5)
         {
             return _customerRepository.GetAllCustomersWithParams(Name, document, Birthdate, page, items);
         }

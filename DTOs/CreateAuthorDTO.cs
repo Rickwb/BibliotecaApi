@@ -14,10 +14,13 @@ namespace BibliotecaApi.DTOs
         public List<Guid> AuthorBooks { get; set; }
         public override void Valid()
         {
+            IsValid = true;
+
             if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty("Nacionality"))
                 IsValid = false;
+            if(Age ==0)
+                IsValid = false;
 
-            IsValid = true;
         }
     }
 }

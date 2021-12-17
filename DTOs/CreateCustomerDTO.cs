@@ -12,9 +12,10 @@ namespace BibliotecaApi.DTOs
         public string Role { get; set; }
         public override void Valid()
         {
+            IsValid = true;
+
             if(String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document) || String.IsNullOrEmpty(Cep)) IsValid = false;
 
-            IsValid = true;
         }
     }
 }

@@ -7,8 +7,9 @@
         public string Role { get; set; }
         public override void Valid()
         {
-            if (string.IsNullOrEmpty(Username))IsValid = false;
             IsValid = true;
+
+            if (string.IsNullOrEmpty(Username))IsValid = false;
         }
     }
 }
