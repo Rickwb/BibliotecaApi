@@ -12,7 +12,7 @@ namespace BibliotecaApi.DTOs.Results
             IdAuthor = book.Author.Id;
             Title = book.Title;
             Description = book.Description;
-            RealeaseYear = book.RealeaseYear;
+            RealeaseYear = book.RealeaseYear.ToString().PadLeft(4,'0');
             NumCopies = book.NumCopies;
         }
         public BookResultDTO(CreationException exception)
@@ -23,7 +23,7 @@ namespace BibliotecaApi.DTOs.Results
         public Guid IdAuthor { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int RealeaseYear { get; set; }
+        public string RealeaseYear { get; set; }
         public int NumCopies { get; set; }
 
         public List<string> GetErrors() => Errors;

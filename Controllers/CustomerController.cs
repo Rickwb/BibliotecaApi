@@ -40,8 +40,9 @@ namespace BibliotecaApi.Controllers
                 name: createClientDto.Name,
                 document: createClientDto.Document,
                 cep: createClientDto.Cep,
-                userId: userAdd.Id
-                );
+                userId: userAdd.Id,
+                birthdate: createClientDto.Birtdate
+                ) ;
 
             var result = _customerService.AddClient(customerAdd, userAdd);
 

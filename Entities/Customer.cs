@@ -9,7 +9,7 @@ namespace BibliotecaApi.Entities
         private List<Withdraw> _withdraws;
 
         //Create Constructor
-        public Customer(Guid id,string name, string document, string cep, Guid userId)
+        public Customer(Guid id,string name, string document, string cep, Guid userId,DateTime birthdate)
         {
             Id = id;
             UserId = userId;
@@ -18,6 +18,7 @@ namespace BibliotecaApi.Entities
             Name = name;
             Document = document;
             Cep = cep;
+            BirthDate = birthdate;
         }
         //Update Constructor
         public Customer(Guid id,string name, string document, string cep)

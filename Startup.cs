@@ -38,9 +38,9 @@ namespace BibliotecaApi
             {
                 options.Providers.Add<GzipCompressionProvider>();
             });
-                services.AddMvc()
-              .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-              .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+            services.AddMvc()
+          .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
+          .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
 
             services.AddSingleton<UserRepository>();
             services.AddTransient<UserService>();
@@ -155,7 +155,8 @@ namespace BibliotecaApi
                 id: Guid.NewGuid(),
                 name: "Rick",
                 document: "string",
-                cep: "89110110"));
+                cep: "89110110"
+                ));
             var author = authorRepository.Add(new Entities.Authors(
                 id: Guid.NewGuid(),
                 name: "Machado",

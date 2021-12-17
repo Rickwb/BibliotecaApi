@@ -20,9 +20,9 @@ namespace BibliotecaApi.DTOs
 
             if (IdAuthor == Guid.Empty) IsValid = false;
 
-            if (String.IsNullOrEmpty(Title) || NumCopies == 0) IsValid = false;
+            if (String.IsNullOrEmpty(Title) || NumCopies <= 0) IsValid = false;
 
-            if (RealeaseYear > DateTime.Now.Year) IsValid = false;
+            if (RealeaseYear > DateTime.Now.Year|| RealeaseYear<=0) IsValid = false;
 
         }
     }
