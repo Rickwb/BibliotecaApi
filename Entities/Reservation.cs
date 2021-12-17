@@ -35,5 +35,8 @@ namespace BibliotecaApi.Entities
         {
             Completed = true;
         }
+
+        public bool GetCompletedValue() => Completed;
+        public bool GetCanceledValue() => Completed;
     }
 }

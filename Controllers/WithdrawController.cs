@@ -32,28 +32,26 @@ namespace BibliotecaApi.Controllers
         {
             dto.Valid();
             if (!dto.IsValid) return BadRequest();
-
+            Reservation reservation;
             var customer = _customerService.GetUserById(dto.IdCustomer);
             List<Book> books = new List<Book>();
-            dto.IdBooksNoReservation.ForEach(b => books.Add(_bookService.GetBookById(b)));
             Withdraw withdraw;
 
             if (dto.IdReservation == Guid.Empty)
             {
+                dto.IdBooksNoReservation.ForEach(b => books.Add(_bookService.GetBookById(b)));
                 withdraw = new Withdraw(
                 customer: customer,
                 books: books);
             }
             else
             {
-                var reservation = _reservationService.GetReservationById(dto.IdReservation);
-                withdraw = new Withdraw(
-                customer: customer,
-                reservation: reservation);
+                    reservation = _reservationService.GetReservationById(dto.IdReservation);
+                _reservationService.FinalizeReserva(dto.IdReservation, out withdraw);
+                
             }
-
             var result = _withdrawService.AddWithdraw(withdraw);
-            if (result.Error==false)
+            if (result.Error == false)
                 return Created("", new WithdrawResultDTO(withdraw));
 
             return BadRequest(new WithdrawResultDTO(result.Exception));
@@ -69,7 +67,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult FinalizeWithdraw(Guid id)
         {
             var withdraw = _withdrawService.FinalizarWithdraw(id);
-            if (withdraw==null)
+            if (withdraw == null)
             {
                 return BadRequest();
             }
@@ -78,7 +76,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetWithdrawByParams([FromQuery] bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page=1, [FromQuery] int items=5)
+        public IActionResult GetWithdrawByParams([FromQuery] bool? isOpen, [FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor, [FromQuery] string bookName, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
             var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_withdrawService.GetWithdrawByParams(isOpen, startDate, endDate, author, bookName, page, items));

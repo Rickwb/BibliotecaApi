@@ -46,6 +46,8 @@ namespace BibliotecaApi.Services
 
         public Employee UpdateEmployee(Guid idEmployee, Employee employee)
         {
+            
+            employee.Adress = _cepService.BuscarEnderecosAsync(employee.Cep).Result;
             return _employeeRepository.Update(idEmployee, employee);
         }
 

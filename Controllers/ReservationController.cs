@@ -54,7 +54,8 @@ namespace BibliotecaApi.Controllers
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalzeReservation(Guid id)
         {
-            return Ok(_reservationService.FinalizeReserva(id));
+            Withdraw withdraw;
+            return Ok(_reservationService.FinalizeReserva(id,out withdraw));
         }
 
         [HttpPost, Route("cancel/{id}")]

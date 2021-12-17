@@ -13,7 +13,7 @@ namespace BibliotecaApi.Repositories
                 .WhereIfNotNull(startDate, x => x.WithdrawDate.ToString("dd/MM/yyyy") == startDate?.ToString("dd/MM/yyyy"))
                 .WhereIfNotNull(endDate, x => x.ReturnDate.ToString("dd/MM/yyyy") == endDate?.ToString("dd/MM/yyyy"))
                 .WhereIfNotNull(bookName, x => !x.Books.Any(y => y.Title == bookName))
-                .WhereIfNotNull(isOpen, x => x.IsOpen)
+                .WhereIfNotNull(isOpen, x => x.IsOpen==isOpen)
                 .Skip((page - 1) * items).Take(items);
 
 

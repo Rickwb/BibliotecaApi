@@ -37,6 +37,7 @@ namespace BibliotecaApi.Entities
                 throw new Exception("Não foi possivel pois foi execido o numero de copies");
             }
 
+
         }
 
     }

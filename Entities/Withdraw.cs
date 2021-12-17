@@ -10,6 +10,7 @@ namespace BibliotecaApi.Entities
             Id = Guid.NewGuid();
             Customer = customer;
             Books = reservation.Books;
+            Reservation = reservation;
             WithdrawDate = DateTime.Now;
             ExpireDate = DateTime.Now.AddDays(5);
             IsOpen = true;

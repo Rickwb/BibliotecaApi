@@ -74,12 +74,15 @@ namespace BibliotecaApi.Controllers
             if (!customerDTO.IsValid)
                 return BadRequest("Não foi possivel atualizar o seu cadastro");
 
-
+            var oldcustomer=_customerService.GetUserById(id);
             var customerAdd = new Customer(
                 id: id,
                 name: customerDTO.Name,
                 document: customerDTO.Document,
-                cep: customerDTO.Cep
+                cep: customerDTO.Cep,
+                birthdate: oldcustomer.BirthDate,
+                reservations: oldcustomer.Reservations.ToList(),
+                withdraws: oldcustomer.Withdraws.ToList()
                 );
 
             return Ok(_customerService.UpdateClient(id, customerAdd));

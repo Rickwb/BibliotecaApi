@@ -71,15 +71,17 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Update(Guid id, CreateEmployeeDTO dto)
         {
             dto.Valid();
-            if (dto.IsValid) return BadRequest();
+            if (!dto.IsValid) return BadRequest();
 
+            var oldEmployee = _employeeService.GetUserById(id);
             var employee = new Employee(
                 id: id,
                 name: dto.Name,
                 document: dto.Document,
                 age: dto.Age,
                 cep: dto.Cep,
-                role: dto.Role
+                role: dto.Role,
+                userId:oldEmployee.UserId
                 );
 
             return Ok(_employeeService.UpdateEmployee(id, employee));

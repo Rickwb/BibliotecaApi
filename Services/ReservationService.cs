@@ -49,11 +49,11 @@ namespace BibliotecaApi.Services
 
             return reservation;
         }
-        public Reservation FinalizeReserva(Guid idReservation)
+        public Reservation FinalizeReserva(Guid idReservation,out Withdraw withdraw)
         {
             var reserv = _reservationRepository.GetById(idReservation);
 
-            var withdraw = new Withdraw(reserv.Client
+             withdraw = new Withdraw(reserv.Client
                 , reservation: reserv);
 
             if (!_withdrawService.ValidWithdraw(withdraw)) return null;
@@ -76,10 +76,14 @@ namespace BibliotecaApi.Services
             foreach (var b in books)
             {
                 reservations = _reservationRepository.GetAll().Where(r => (r.StartDate.Date >= reservation.StartDate.Date && r.StartDate.Date<=reservation.EndDate.Date) 
-                || (r.EndDate.Date<=reservation.EndDate.Date && r.EndDate.Date>=reservation.StartDate.Date)).Where(x => x.Books.Any(y => y.Id == b.Id)).ToList();
+                || (r.EndDate.Date<=reservation.EndDate.Date && r.EndDate.Date>=reservation.StartDate.Date))
+                    .Where(x => x.Books.Any(y => y.Id == b.Id))
+                    .Where(r=>r.GetCanceledValue()==false && r.GetCompletedValue()==false).ToList();
 
                 withdraws = _withdrawService.GetAll().Where(w => (w.WithdrawDate.Date >= reservation.StartDate.Date && w.WithdrawDate.Date<=reservation.EndDate.Date)
-                || (w.ReturnDate<=reservation.EndDate && w.ReturnDate.Date>=reservation.StartDate.Date)).Where(x => x.Books.Any(y => y.Id == b.Id)).ToList(); ;
+                || (w.ReturnDate<=reservation.EndDate && w.ReturnDate.Date>=reservation.StartDate.Date))
+                    .Where(x => x.Books.Any(y => y.Id == b.Id))
+                    .Where(x=>x.IsOpen).ToList(); ;
 
                 if (reservations.Count() +1 + withdraws.Count() > b.NumCopies)
                 {

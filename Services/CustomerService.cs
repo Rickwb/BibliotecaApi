@@ -45,8 +45,10 @@ namespace BibliotecaApi.Services
         public Customer UpdateClient(Guid id, Customer custom)
         {
             var customer = _customerRepository.GetById(id);
+            var Adress = _cepService.BuscarEnderecosAsync(customer.Cep).Result;
 
-            customer.PropretiesUpdate(custom.Name, custom.Document, custom.Cep);
+            customer.PropretiesUpdate(custom.Name, custom.Document, custom.Cep,Adress);
+
 
             return _customerRepository.Update(id, customer);
         }

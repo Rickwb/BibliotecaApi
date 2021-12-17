@@ -27,18 +27,29 @@ namespace BibliotecaApi.Entities
             Document = document;
             Cep = cep;
         }
+        public Customer(Guid id,string name,string document,string cep,DateTime birthdate,List<Reservation> reservations,List<Withdraw> withdraws)
+        {
+            Id = id;
+            _reservations ??= reservations;
+            _withdraws ??= withdraws;
+            Name = name;
+            Document = document;
+            Cep = cep;
+            BirthDate = birthdate;
+        }
 
         public IReadOnlyList<Reservation> Reservations => _reservations;
         public IReadOnlyList<Withdraw> Withdraws => _withdraws;
 
-        public decimal Multa { get; set; }
+        private decimal Multa { get; set; }
         public Adress Adress { get; set; }
 
-        public void PropretiesUpdate(string name, string document, string cep)
+        public void PropretiesUpdate(string name, string document, string cep,Adress adress)
         {
             Name = name;
             Document=document;
             Cep=cep;
+            Adress = adress;
         }
 
     }
