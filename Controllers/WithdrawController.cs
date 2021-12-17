@@ -68,7 +68,13 @@ namespace BibliotecaApi.Controllers
         [HttpPost, Route("finalize/{id}")]
         public IActionResult FinalizeWithdraw(Guid id)
         {
-            return Ok(_withdrawService.FinalizarWithdraw(id));
+            var withdraw = _withdrawService.FinalizarWithdraw(id);
+            if (withdraw==null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(withdraw);
         }
 
         [HttpGet, ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]

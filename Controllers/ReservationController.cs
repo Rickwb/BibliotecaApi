@@ -45,7 +45,7 @@ namespace BibliotecaApi.Controllers
                 );
 
             var result = _reservationService.AddReservation(reservation);
-            if (result.Error==false)
+            if (result.Error == false)
                 return Created("", new ReservationResultDTO(reservation));
 
             return BadRequest(new ReservationResultDTO(result.Exception));
@@ -60,7 +60,10 @@ namespace BibliotecaApi.Controllers
         [HttpPost, Route("cancel/{id}")]
         public IActionResult CancelReservation(Guid id)
         {
-            return Ok(_reservationService.CancelReservation(id));
+            var reserva = _reservationService.CancelReservation(id);
+            if (reserva != null)
+                return Ok(reserva);
+            return BadRequest();
         }
 
         [HttpGet, Route("{id}")]
@@ -71,7 +74,7 @@ namespace BibliotecaApi.Controllers
 
         [HttpGet, Route("params"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
-            [FromQuery] string? bookName, [FromQuery] int page=1, [FromQuery] int items=5)
+            [FromQuery] string? bookName, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
             var author = _authorService.GetAuthorById(idAuthor);
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
@@ -80,8 +83,8 @@ namespace BibliotecaApi.Controllers
         [HttpPut, Route("{id}")]
         public override IActionResult Update(Guid id, CreateReservationDTO dto)
         {
-            dto.Valid();
-            if (!dto.IsValid) return BadRequest();
+            dto.ValidUpdate();
+            if (!dto.UpdateValid) return BadRequest();
 
             var customer = _customerService.GetUserById(dto.idCustumer);
 

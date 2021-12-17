@@ -19,11 +19,11 @@ namespace BibliotecaApi.Repositories
             return reservations.ToList();
         }
 
-        public bool CancelarReserva(Guid id,out List<Book> booksCopies)
+        public Reservation CancelarReserva(Guid id,out List<Book> booksCopies)
         {
             var reservation = GetById(id);
             booksCopies = new List<Book>();
-            if (reservation == null) return false;
+            if (reservation == null) return null;
 
             reservation.CancelarReserva();
             foreach (var b in reservation.Books)
@@ -33,7 +33,7 @@ namespace BibliotecaApi.Repositories
             }
             var reserv = Update(id, reservation);
 
-            return reserv != null ? true : false;
+            return reserv != null ? reserv : null;
         }
 
         public bool FinalizarReserva(Guid id,out List<Book> books)

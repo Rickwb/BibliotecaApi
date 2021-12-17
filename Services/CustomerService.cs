@@ -36,10 +36,6 @@ namespace BibliotecaApi.Services
             return _customerRepository.GetAllCustomersWithParams(Name, document, Birthdate, page, items);
         }
 
-        //public User GetLoggedUser()
-        //{
-
-        //}
 
         public Customer GetUserById(Guid id)
         {

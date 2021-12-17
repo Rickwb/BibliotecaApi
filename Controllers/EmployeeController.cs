@@ -35,6 +35,7 @@ namespace BibliotecaApi.Controllers
                 id: Guid.NewGuid(),
                 name: createEmplDto.Name,
                 document: createEmplDto.Document,
+                age: createEmplDto.Age,
                 cep: createEmplDto.Cep,
                 role: createEmplDto.Role,
                 userId: userAdd.Id
@@ -76,6 +77,7 @@ namespace BibliotecaApi.Controllers
                 id: id,
                 name: dto.Name,
                 document: dto.Document,
+                age: dto.Age,
                 cep: dto.Cep,
                 role: dto.Role
                 );

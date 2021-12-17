@@ -4,12 +4,15 @@ using System.Collections.Generic;
 
 namespace BibliotecaApi.DTOs.Results
 {
-    public class WithdrawResultDTO:CreateResultDTO<Withdraw>
+    public class WithdrawResultDTO : CreateResultDTO<Withdraw>
     {
         public WithdrawResultDTO(Withdraw withdraw)
         {
             CustomerResult = new CustomerResultDTO(withdraw.Customer);
-            IdReservation = withdraw.Reservation.Id;
+            if (withdraw.Reservation != null)
+            {
+                IdReservation = withdraw.Reservation.Id;
+            }
             WithdrawDate = withdraw.WithdrawDate;
             ReturnDate = withdraw.WithdrawDate;
         }

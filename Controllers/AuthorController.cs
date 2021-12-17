@@ -56,7 +56,10 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Update(Guid id, [FromBody] CreateAuthorDTO dtoAuthor)
         {
             List<Book> books = new List<Book>();
-            dtoAuthor.AuthorBooks.ForEach(b => books.Add(_bookService.GetBookById(b)));
+            if (dtoAuthor.AuthorBooks != null)
+            {
+                dtoAuthor.AuthorBooks.ForEach(b => books.Add(_bookService.GetBookById(b)));
+            }
 
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
@@ -80,7 +83,7 @@ namespace BibliotecaApi.Controllers
             return NoContent();
         }
         [HttpGet, Route("authors"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery] int? age, [FromQuery] int page=1, [FromQuery] int items=5)
+        public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery] int? age, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
             return Ok(_authorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList());
         }

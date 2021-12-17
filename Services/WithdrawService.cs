@@ -36,14 +36,15 @@ namespace BibliotecaApi.Services
             return CreateResult<Withdraw>.Errors(new CreationException("Aluguel Inválido"));
         }
 
-        public bool FinalizarWithdraw(Guid id)
+        public Withdraw FinalizarWithdraw(Guid id)
         {
+            var withdraw = _withdrawRepository.GetById(id);
             List<Book> books;
-            if (!_withdrawRepository.FinalizaWidthdraw(id, out books)) return false;
+            if (!_withdrawRepository.FinalizaWidthdraw(id, out books)) return null;
 
             books.ForEach(b => _bookRepository.Update(b.Id, b));
 
-            return true;
+            return withdraw;
 
         }
 
@@ -54,8 +55,8 @@ namespace BibliotecaApi.Services
             List<Withdraw> withdraws = new List<Withdraw>();
             foreach (var b in books)
             {
-                reservations = _reservationRepository.GetAll().Where(r => (r.StartDate.Date >= withdraw.WithdrawDate.Date && r.StartDate.Date <= withdraw.ReturnDate.Date) || (r.EndDate <= withdraw.ReturnDate.Date && r.EndDate >= withdraw.WithdrawDate.Date) && r.Books.Contains(b)).ToList();
-                withdraws = _withdrawRepository.GetAll().Where(w => (w.WithdrawDate.Date >= withdraw.WithdrawDate.Date && w.WithdrawDate.Date <= withdraw.ReturnDate.Date) || (w.ReturnDate <= withdraw.ReturnDate && w.ReturnDate.Date >= withdraw.WithdrawDate.Date) && w.Books.Contains(b)).ToList();
+                reservations = _reservationRepository.GetAll().Where(r => (r.StartDate.Date >= withdraw.WithdrawDate.Date && r.StartDate.Date <= withdraw.ReturnDate.Date) || (r.EndDate <= withdraw.ReturnDate.Date && r.EndDate >= withdraw.WithdrawDate.Date)).Where(x => x.Books.Any(y => y.Id == b.Id)).ToList();
+                withdraws = _withdrawRepository.GetAll().Where(w => (w.WithdrawDate.Date >= withdraw.WithdrawDate.Date && w.WithdrawDate.Date <= withdraw.ReturnDate.Date) || (w.ReturnDate <= withdraw.ReturnDate && w.ReturnDate.Date >= withdraw.WithdrawDate.Date)).Where(x => x.Books.Any(y => y.Id == b.Id)).ToList();
 
 
                 if (reservations.Count() + withdraws.Count() + 1 > b.NumCopies)

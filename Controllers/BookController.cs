@@ -76,7 +76,7 @@ namespace BibliotecaApi.Controllers
             bool deletado = _bookService.DeleteBook(id);
             if (!deletado) return BadRequest();
 
-            return NotFound(deletado);
+            return NotFound();
         }
 
         [HttpGet, Route("GetBooksFiltered"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
