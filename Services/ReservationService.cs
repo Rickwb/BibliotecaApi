@@ -22,7 +22,9 @@ namespace BibliotecaApi.Services
 
         public CreateResult<Reservation> AddReservation(Reservation reservation)
         {
-            if (ValidarReserva(reservation))
+            bool valid;
+            reservation = ValidarReserva(reservation, out valid);
+            if (valid)
             {
                 //if (reservation.Client.Multa != 0)
                 //    return CreateResult<Reservation>.Errors(new InvalidDataExeception("O cliente não pode reservar tendo multas"));
@@ -37,7 +39,8 @@ namespace BibliotecaApi.Services
 
         public Reservation UpdateReservation(Guid idReservation, Reservation reservation)
         {
-            ValidarReserva(reservation);
+            bool valid;
+            reservation =ValidarReserva(reservation,out valid);
             return _reservationRepository.Update(idReservation, reservation);
         }
 
@@ -56,7 +59,8 @@ namespace BibliotecaApi.Services
              withdraw = new Withdraw(reserv.Client
                 , reservation: reserv);
 
-            if (!_withdrawService.ValidWithdraw(withdraw)) return null;
+            withdraw=_withdrawService.ValidWithdraw(withdraw, out bool validWithdraw);
+            if (!validWithdraw) return null;
 
             _withdrawService.AddWithdraw(withdraw);
 
@@ -68,7 +72,7 @@ namespace BibliotecaApi.Services
             return reserv;
         }
 
-        public bool ValidarReserva(Reservation reservation)
+        public Reservation ValidarReserva(Reservation reservation, out bool valid)
         {
             var books = reservation.Books;
             List<Reservation> reservations = new List<Reservation>();
@@ -87,11 +91,12 @@ namespace BibliotecaApi.Services
 
                 if (reservations.Count() +1 + withdraws.Count() > b.NumCopies)
                 {
-                    return false;
+                    valid = false;
+                    return null;
                 }
             }
-
-            return true;
+            valid = true;
+            return reservation;
         }
 
         public IEnumerable<Reservation> GetReservationsLoggedUser()

@@ -27,7 +27,9 @@ namespace BibliotecaApi.Services
         }
         public CreateResult<Withdraw> AddWithdraw(Withdraw withdraw)
         {
-            if (ValidWithdraw(withdraw))
+            bool valid;
+            withdraw = ValidWithdraw(withdraw,out valid);
+            if (valid)
             {
                 _withdrawRepository.Add(withdraw);
                 return CreateResult<Withdraw>.Sucess(withdraw);
@@ -48,7 +50,7 @@ namespace BibliotecaApi.Services
 
         }
 
-        public bool ValidWithdraw(Withdraw withdraw)
+        public Withdraw ValidWithdraw(Withdraw withdraw,out bool valid)
         {
             var books = withdraw.Books;
             List<Reservation> reservations = new List<Reservation>();
@@ -66,10 +68,12 @@ namespace BibliotecaApi.Services
 
                 if (reservations.Count() + withdraws.Count() + 1 > b.NumCopies)
                 {
-                    return false;
+                    valid = false;
+                    return withdraw;
                 }
             }
-            return true;
+            valid = true;
+            return withdraw;
         }
 
         public IEnumerable<Withdraw> GetAll() => _withdrawRepository.GetAll();

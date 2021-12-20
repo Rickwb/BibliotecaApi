@@ -48,7 +48,7 @@ namespace BibliotecaApi.Controllers
             if (result.Error == false)
                 return Created("", new ReservationResultDTO(reservation));
 
-            return BadRequest(new ReservationResultDTO(result.Exception));
+            return BadRequest(new ReservationResultDTO(result.Exception).GetErrors());
         }
 
         [HttpPost, Route("finalize/{id}")]
@@ -77,7 +77,12 @@ namespace BibliotecaApi.Controllers
         public IActionResult GetReservationByParams([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate, [FromQuery] Guid idAuthor,
             [FromQuery] string? bookName, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
-            var author = _authorService.GetAuthorById(idAuthor);
+            Authors author;
+            if(idAuthor!=Guid.Empty)
+                author = _authorService.GetAuthorById(idAuthor);
+            else
+                author = null;
+
             return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
         }
 

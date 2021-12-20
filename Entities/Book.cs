@@ -25,12 +25,12 @@ namespace BibliotecaApi.Entities
 
         public void ControNumberOfAvailableCopies(bool retirada, int qtdCopies)
         {
-            if (qtdCopies <= NumCopiesAvailable)
+            if (qtdCopies <= NumCopies)
             {
                 if (retirada)
-                    NumCopiesAvailable -= qtdCopies;
+                    NumCopies -= qtdCopies;
                 else
-                    NumCopiesAvailable += qtdCopies;
+                    NumCopies += qtdCopies;
             }
             else
             {
