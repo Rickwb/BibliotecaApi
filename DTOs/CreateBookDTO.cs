@@ -24,6 +24,7 @@ namespace BibliotecaApi.DTOs
 
             if (RealeaseYear > DateTime.Now.Year|| RealeaseYear<=0) IsValid = false;
 
+
         }
     }
 }

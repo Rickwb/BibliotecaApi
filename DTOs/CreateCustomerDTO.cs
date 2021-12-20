@@ -21,6 +21,8 @@ namespace BibliotecaApi.DTOs
 
             if (Role.ToLower() == "admin" || Role.ToLower() == "employee") IsValid = false;
 
+            if (Birtdate.Year > 2010) IsValid = false;
+
 
         }
     }
