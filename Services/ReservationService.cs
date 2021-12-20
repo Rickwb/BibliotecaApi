@@ -92,7 +92,7 @@ namespace BibliotecaApi.Services
                 withdraws = _withdrawService.GetAll().Where(w => (w.WithdrawDate.Date >= reservation.StartDate.Date && w.WithdrawDate.Date <= reservation.EndDate.Date)
                 || (w.ReturnDate <= reservation.EndDate && w.ReturnDate.Date >= reservation.StartDate.Date))
                     .Where(x => x.Books.Any(y => y.Id == b.Id))
-                    .Where(x => x.IsOpen).ToList(); ;
+                    .Where(x => x.IsOpen).ToList();
 
                 if (reservations.Count() + 1 + withdraws.Count() > b.NumCopies)
                 {
