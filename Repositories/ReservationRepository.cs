@@ -48,12 +48,6 @@ namespace BibliotecaApi.Repositories
             books = new List<Book>();
             if (reservation == null) return false;
 
-            foreach (var b in reservation.Books)
-            {
-                b.ControNumberOfAvailableCopies(false, 1);
-                books.Add(b);
-            }
-
             reservation.FinalizarReserva();
 
             var reserv = Update(id, reservation);

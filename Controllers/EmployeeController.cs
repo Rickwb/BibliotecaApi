@@ -38,6 +38,7 @@ namespace BibliotecaApi.Controllers
                 age: createEmplDto.Age,
                 cep: createEmplDto.Cep,
                 role: createEmplDto.Role,
+                birthDate: createEmplDto.BirthDate,
                 userId: userAdd.Id
                 );
 
@@ -81,6 +82,7 @@ namespace BibliotecaApi.Controllers
                 age: dto.Age,
                 cep: dto.Cep,
                 role: dto.Role,
+                birthDate:dto.BirthDate,
                 userId:oldEmployee.UserId
                 );
 
@@ -97,8 +99,8 @@ namespace BibliotecaApi.Controllers
             var user = new User(
                 username: userDTO.Username,
                 password: userDTO.Password,
-                role: "customer"
-                );
+                role: userDTO.Role
+                ) ;
 
             return Ok(_employeeService.UpdateUserFromClient(id, user));
         }
