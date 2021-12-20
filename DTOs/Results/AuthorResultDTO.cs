@@ -12,6 +12,11 @@ namespace BibliotecaApi.DTOs.Results
             Name = author.Name;
             Nacionality = author.Nacionality;
             Age = author.Age;
+            if (author.AuthorBooks == null)
+                AuthorBooks ??= new List<Book>();
+            else 
+                AuthorBooks= author.AuthorBooks;
+
         }
         public AuthorResultDTO(CreationException exception)
         {
@@ -21,6 +26,7 @@ namespace BibliotecaApi.DTOs.Results
         public string Name { get; set; }
         public string Nacionality { get; set; }
         public int Age { get; set; }
+        public List<Book> AuthorBooks { get; private set; }
 
         public List<string> GetErrors() => Errors;
     }

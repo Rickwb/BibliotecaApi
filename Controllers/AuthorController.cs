@@ -28,12 +28,29 @@ namespace BibliotecaApi.Controllers
         {
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
+            
+            Authors author;
+            if (dtoAuthor.AuthorBooks == null)
+            {
+                author = new Authors(
+                   id: Guid.NewGuid(),
+                   name: dtoAuthor.Name,
+                   nacionality: dtoAuthor.Nacionality,
+                   age: dtoAuthor.Age);
+            }
+            else
+            {
+                List<Book> books = new List<Book>();
+                dtoAuthor.AuthorBooks.ForEach(i => books.Add(_bookService.GetBookById(i)));
+                author = new Authors(
+                   id: Guid.NewGuid(),
+                   name: dtoAuthor.Name,
+                   nacionality: dtoAuthor.Nacionality,
+                   age: dtoAuthor.Age,
+                   books:books );
+            }
 
-            var author = new Authors(
-                id: Guid.NewGuid(),
-                name: dtoAuthor.Name,
-                nacionality: dtoAuthor.Nacionality,
-                age: dtoAuthor.Age);
+
 
             var result = _authorService.AddAuthors(author);
 
