@@ -40,7 +40,11 @@ namespace BibliotecaApi
             });
             services.AddMvc()
           .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-          .AddNewtonsoftJson(c => c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
+          .AddNewtonsoftJson(c => 
+          { 
+              c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+              c.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; 
+          });
 
             services.AddSingleton<UserRepository>();
             services.AddTransient<UserService>();

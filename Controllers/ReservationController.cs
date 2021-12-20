@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BibliotecaApi.Controllers
 {
@@ -55,7 +57,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult FinalzeReservation(Guid id)
         {
             Withdraw withdraw;
-            return Ok(_reservationService.FinalizeReserva(id,out withdraw));
+            return Ok(_reservationService.FinalizeReserva(id, out withdraw));
         }
 
         [HttpPost, Route("cancel/{id}")]
@@ -78,7 +80,7 @@ namespace BibliotecaApi.Controllers
             [FromQuery] string? bookName, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
             Authors author;
-            if(idAuthor!=Guid.Empty)
+            if (idAuthor != Guid.Empty)
                 author = _authorService.GetAuthorById(idAuthor);
             else
                 author = null;
@@ -98,7 +100,7 @@ namespace BibliotecaApi.Controllers
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
 
             var reservation = new Reservation(
-                id: id,
+                id: Guid.Parse(User.Claims.First(x => x.Type == ClaimTypes.Sid).Value),
                 client: customer,
                 startDate: dto.StartDate,
                 endDate: dto.EndDate,
@@ -106,6 +108,23 @@ namespace BibliotecaApi.Controllers
                 );
 
             return Ok(_reservationService.UpdateReservation(id, reservation));
+        }
+        [HttpGet, Route("LoggedUser")]
+        public IActionResult GetReservationsByLoggedUser()
+        {
+            Guid idLogged = Guid.Parse(User.Claims.First(x => x.Type == ClaimTypes.Sid).Value);
+            var reservations = _reservationService.GetAllReservations().Where(x => x.Client.UserId == idLogged);
+            if (reservations is not null)
+            {
+                List<ReservationResultDTO> reservationResultDTOs = new List<ReservationResultDTO>();
+                foreach (var reserv in reservations)
+                {
+                    var newResult = new ReservationResultDTO(reserv);
+                }   
+                return Ok(reservationResultDTOs);
+
+            }
+            return NotFound();
         }
     }
 }

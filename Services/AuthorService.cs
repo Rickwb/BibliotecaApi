@@ -8,9 +8,11 @@ namespace BibliotecaApi.Services
     public class AuthorService
     {
         private readonly AuthorRepository _authorRepository;
+        private readonly BookRepository _bookRepository;
 
-        public AuthorService(AuthorRepository authorRepository)
+        public AuthorService(AuthorRepository authorRepository,BookRepository bookRepository)
         {
+            _bookRepository = bookRepository;
             _authorRepository = authorRepository;
         }
 
@@ -44,6 +46,11 @@ namespace BibliotecaApi.Services
 
         public bool DeleteAuthor(Guid idAuthor)
         {
+            var author = _authorRepository.GetById(idAuthor);
+            if (author.AuthorBooks == null)
+            {
+                author.AuthorBooks.ForEach(book => _bookRepository.RemoveById(book.Id));
+            }
             return _authorRepository.RemoveById(idAuthor);
         }
 

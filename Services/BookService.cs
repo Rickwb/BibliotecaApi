@@ -27,6 +27,9 @@ namespace BibliotecaApi.Services
                 return CreateResult<Book>.Errors(new SameObjectExeception("O Livro já existe no cadastro, adicione uma copia "));
 
             _bookRepository.Add(book);
+            var author=_authorRepository.GetById(book.Author.Id);
+            author.AuthorBooks.Add(book);
+            _authorRepository.Update(author.Id, author);
             return CreateResult<Book>.Sucess(book);
         }
 
@@ -39,6 +42,13 @@ namespace BibliotecaApi.Services
 
         public Book UpdateBook(Guid idBook, Book book)
         {
+            var author = _authorRepository.GetById(book.Author.Id);
+            var oldBook=author.AuthorBooks.Find(x => x.Id == idBook);
+
+            var Index=author.AuthorBooks.IndexOf(oldBook);
+            author.AuthorBooks[Index] = book;
+            _authorRepository.Update(author.Id, author);
+
             return _bookRepository.Update(idBook, book);
         }
 

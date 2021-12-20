@@ -1,4 +1,5 @@
 ﻿using BibliotecaApi.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 
@@ -13,9 +14,13 @@ namespace BibliotecaApi.DTOs.Results
             Nacionality = author.Nacionality;
             Age = author.Age;
             if (author.AuthorBooks == null)
+            {
                 AuthorBooks ??= new List<Book>();
-            else 
-                AuthorBooks= author.AuthorBooks;
+            }
+            else
+            {
+                AuthorBooks = author.AuthorBooks;
+            }
 
         }
         public AuthorResultDTO(CreationException exception)

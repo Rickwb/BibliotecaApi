@@ -16,7 +16,7 @@ namespace BibliotecaApi.DTOs
         {
             IsValid = true;
 
-            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty("Nacionality"))
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Nacionality))
                 IsValid = false;
             if(Age <=0)
                 IsValid = false;

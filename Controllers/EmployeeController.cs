@@ -5,6 +5,8 @@ using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace BibliotecaApi.Controllers
 {
@@ -60,7 +62,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, Route("Autenticathed")]
-        public string Autenticated() => $"autenticado {User.Identity.Name}";
+        public string Autenticated() => $"{User.Identity.Name} | {User.Claims.First(c => c.Type == ClaimTypes.Sid)} está autenticado.";
 
         [HttpGet, Route("GetEmployeesByParams"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page=1, [FromQuery] int items=5)

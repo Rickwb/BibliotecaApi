@@ -117,5 +117,8 @@ namespace BibliotecaApi.Services
         {
             return _reservationRepository.GetReservationsWithParams(startDate, endDate, author, bookName, page, items);
         }
+
+        public IEnumerable<Reservation> GetAllReservations() => _reservationRepository.GetAll();
+
     }
 }
