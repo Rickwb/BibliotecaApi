@@ -43,13 +43,12 @@ namespace BibliotecaApi.Repositories
 
         public T Update(Guid id, T newT)
         {
-            var oldT = GetById(id);
-            if (oldT != null)
-                oldT = newT;
+            var index = _repository.FindIndex(x => x.Id == id);
 
+            if (index != -1)
+                _repository[index] = newT;
+           
             return newT;
-
         }
-
     }
 }
