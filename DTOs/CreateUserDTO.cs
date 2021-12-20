@@ -9,7 +9,7 @@
         {
             IsValid = true;
 
-            if (string.IsNullOrEmpty(Username))IsValid = false;
+            if (string.IsNullOrEmpty(Username)||string.IsNullOrEmpty(Password)||string.IsNullOrEmpty(Role))IsValid = false;
         }
     }
 }
