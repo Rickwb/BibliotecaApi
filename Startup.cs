@@ -158,6 +158,7 @@ namespace BibliotecaApi
             var customer = customerRepository.Add(new Entities.Customer(
                 id: Guid.NewGuid(),
                 name: "Rick",
+                age: 21,
                 document: "string",
                 cep: "89110110"
                 ));

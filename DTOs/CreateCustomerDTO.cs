@@ -6,6 +6,7 @@ namespace BibliotecaApi.DTOs
     {
         public string Name { get; set; }
         public string Document { get; set; }
+        public int Age { get; set; }
         public string Cep { get; set; }
         public DateTime Birtdate { get; set; }
         public CreateAdressDTO Adress { get; set; }

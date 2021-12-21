@@ -15,6 +15,17 @@ namespace BibliotecaApi.Entities
             BirthDate = birthDate;
             UserId = userId;
         }
+        public Employee(Guid id, string name, string document, int age, Adress adress, string role, DateTime birthDate, Guid userId)
+        {
+            Id = id;
+            Name = name;
+            Document = document;
+            Age = age;
+            Adress = adress;
+            Role = role;
+            BirthDate = birthDate;
+            UserId = userId;
+        }
         public Employee(Guid id,string name, string document,int age, string cep, string role)
         {
             Id=id;

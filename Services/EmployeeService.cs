@@ -21,7 +21,15 @@ namespace BibliotecaApi.Services
 
         public CreateResult<Employee> AddEmployee(Employee employee, User user)
         {
-            employee.Adress = _cepService.BuscarEnderecosAsync(employee.Cep).Result;
+            if (employee.Cep is not null)
+            {
+                employee.Adress = _cepService.BuscarEnderecosAsync(employee.Cep).Result;
+
+                if (employee.Adress == null)
+                {
+                    return CreateResult<Employee>.Errors(new CreationException("Não foi possivel validar o cep, adicione o seu endereço manualmente"));
+                }
+            }
             _userRepository.Add(user);
             if (string.IsNullOrEmpty(user.Role))
                 return CreateResult<Employee>.Errors(new InvalidDataExeception("O campo role está nulo"));
@@ -59,7 +67,7 @@ namespace BibliotecaApi.Services
         {
             Guid userId = _employeeRepository.GetById(idEmployee).UserId;
             var oldUser = _userRepository.GetById(userId);
-            var updatedUser= _userRepository.Update(userId, user);
+            var updatedUser = _userRepository.Update(userId, user);
             if (updatedUser is not null)
                 return CreateResult<User>.Sucess(updatedUser);
             return CreateResult<User>.Errors(new CreationException("O usuario não pode ser alterado"));

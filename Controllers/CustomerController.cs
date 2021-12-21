@@ -39,7 +39,7 @@ namespace BibliotecaApi.Controllers
                 Role = "costumer",
             };
             Customer customerAdd;
-            if (String.IsNullOrWhiteSpace(createClientDto.Cep)|| createClientDto.Cep=="string")
+            if (String.IsNullOrWhiteSpace(createClientDto.Cep) || createClientDto.Cep == "string")
             {
                 var adressAdd = new Adress
                     (
@@ -59,6 +59,7 @@ namespace BibliotecaApi.Controllers
                 id: Guid.NewGuid(),
                 name: createClientDto.Name,
                 document: createClientDto.Document,
+                age: createClientDto.Age,
                 adress: adressAdd,
                 userId: userAdd.Id,
                 birthdate: createClientDto.Birtdate
@@ -70,6 +71,7 @@ namespace BibliotecaApi.Controllers
                 customerAdd = new Customer(
                 id: Guid.NewGuid(),
                 name: createClientDto.Name,
+                age: createClientDto.Age,
                 document: createClientDto.Document,
                 cep: createClientDto.Cep,
                 userId: userAdd.Id,
@@ -118,6 +120,7 @@ namespace BibliotecaApi.Controllers
                 name: customerDTO.Name,
                 document: customerDTO.Document,
                 cep: customerDTO.Cep,
+                age: customerDTO.Age,
                 birthdate: oldcustomer.BirthDate,
                 reservations: oldcustomer.Reservations.ToList(),
                 withdraws: oldcustomer.Withdraws.ToList()
@@ -127,7 +130,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, Authorize, Route("userLogged")]
-        public string Autorizado() => $"autenticado {User.Identity.Name}";
+        public string Autorizado() => $"{User.Identity.Name} | {User.Claims.First(c => c.Type == ClaimTypes.Sid)} está autenticado.";
 
         [HttpPut, Authorize(Roles = "admin,employee"), Route("clientsUserUpdate/{id}")]
         public IActionResult UpdateUserFromClient(Guid idClient, [FromBody] CreateUserDTO userDTO)

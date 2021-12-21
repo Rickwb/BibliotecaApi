@@ -26,13 +26,44 @@ namespace BibliotecaApi.Controllers
             if (!createEmplDto.IsValid)
                 return BadRequest(new AuthorResultDTO(new InvalidDataExeception("Dados invalidos para o cadastro")));
 
+
             var userAdd = new User(
                 username: createEmplDto.Username,
                 password: createEmplDto.Password,
                 role: createEmplDto.Role
                 );
+            Employee employee;
+            if (String.IsNullOrEmpty(createEmplDto.Cep) || createEmplDto.Cep == "strig")
+            {
+                var adressAdd = new Adress
+                   (
+                   cep: createEmplDto.Adress.Cep,
+                   logradouro: createEmplDto.Adress.Logradouro,
+                   complemento: createEmplDto.Adress.Complemento,
+                   bairro: createEmplDto.Adress.Bairro,
+                   localidade: createEmplDto.Adress.Localidade,
+                   uf: createEmplDto.Adress.Uf,
+                   ibge: createEmplDto.Adress.Ibge,
+                   gia: createEmplDto.Adress.Gia,
+                   ddd: createEmplDto.Adress.Ddd,
+                   siafi: createEmplDto.Adress.Siafi
+                   );
+                employee = new Employee
+               (
+               id: Guid.NewGuid(),
+               name: createEmplDto.Name,
+               document: createEmplDto.Document,
+               age: createEmplDto.Age,
+               adress: adressAdd,
+               role: createEmplDto.Role,
+               birthDate: createEmplDto.BirthDate,
+               userId: userAdd.Id
+               );
+            }
+            else
+            {
 
-            var employee = new Employee
+                employee = new Employee
                 (
                 id: Guid.NewGuid(),
                 name: createEmplDto.Name,
@@ -43,6 +74,7 @@ namespace BibliotecaApi.Controllers
                 birthDate: createEmplDto.BirthDate,
                 userId: userAdd.Id
                 );
+            }
 
             var result = _employeeService.AddEmployee(employee, userAdd);
 

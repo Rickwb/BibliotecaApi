@@ -12,6 +12,18 @@ namespace BibliotecaApi.DTOs.Results
             Name = customer.Name;
             Document = customer.Document;
             Adress = customer.Adress;
+            Reservations = new List<ReservationResultDTO>();
+            if (customer.Reservations is not null || customer.Reservations.Count!=0)
+            {
+                customer.GetReservationsCustomer().ForEach(r => Reservations.Add(new ReservationResultDTO(r)));
+            }
+            Withdraws = new List<WithdrawResultDTO>();
+            if (customer.Withdraws is not null || customer.Withdraws.Count != 0)
+            {
+                customer.GetWithdrawsCustomer().ForEach(w => Withdraws.Add(new WithdrawResultDTO(w)));
+            }
+
+
         }
         public CustomerResultDTO(CreationException exception)
         {
@@ -22,6 +34,8 @@ namespace BibliotecaApi.DTOs.Results
         public string Name { get; set; }
         public string Document { get; set; }
         public Adress Adress { get; set; }
+        public List<ReservationResultDTO> Reservations { get; set; }
+        public List<WithdrawResultDTO> Withdraws { get; set; }
 
         public List<string> GetErros()=> Errors;
     }
