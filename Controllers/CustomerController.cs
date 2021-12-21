@@ -5,6 +5,7 @@ using BibliotecaApi.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
@@ -24,7 +25,7 @@ namespace BibliotecaApi.Controllers
         [HttpPost, AllowAnonymous, Route("createClient")]
         public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
         {
-            
+
             createClientDto.Valid();
             if (!createClientDto.IsValid)
                 return BadRequest(new CustomerResultDTO(new CreationException("não foi possivel adicionar o seu cadastro")).GetErros());
@@ -45,7 +46,7 @@ namespace BibliotecaApi.Controllers
                 cep: createClientDto.Cep,
                 userId: userAdd.Id,
                 birthdate: createClientDto.Birtdate
-                ) ;
+                );
 
             var result = _customerService.AddClient(customerAdd, userAdd);
 
@@ -62,13 +63,17 @@ namespace BibliotecaApi.Controllers
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
         public override IActionResult Get(Guid id)
         {
-            return Ok(_customerService.GetUserById(id));
+            return Ok(new CustomerResultDTO(_customerService.GetUserById(id)));
         }
 
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page=1, [FromQuery] int items=5)
+        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
-            return Ok(_customerService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
+            List<CustomerResultDTO> results = new List<CustomerResultDTO>();
+            var customers = _customerService.GetAllUsersWithParams(Name, document, Birthdate, page, items);
+
+            customers.ForEach(customer => results.Add(new CustomerResultDTO(customer)));
+            return Ok(results);
         }
 
         [HttpPut, Authorize(Roles = "admin,employee"), Route("clientUpdate/{id}")]
@@ -78,7 +83,7 @@ namespace BibliotecaApi.Controllers
             if (!customerDTO.IsValid)
                 return BadRequest("Não foi possivel atualizar o seu cadastro");
 
-            var oldcustomer=_customerService.GetUserById(id);
+            var oldcustomer = _customerService.GetUserById(id);
             var customerAdd = new Customer(
                 id: id,
                 name: customerDTO.Name,
