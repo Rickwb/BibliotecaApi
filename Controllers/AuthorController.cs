@@ -51,8 +51,6 @@ namespace BibliotecaApi.Controllers
                    books: books);
             }
 
-
-
             var result = _authorService.AddAuthors(author);
 
             if (result.Error == false)
@@ -68,7 +66,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, Route("getAuthor/{id}")]
-        public override IActionResult Get(Guid id) => Ok(_authorService.GetAuthorById(id));
+        public override IActionResult Get(Guid id) => Ok(new AuthorResultDTO(_authorService.GetAuthorById(id)));
 
         [HttpPut, Route("update/{id}"), Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid id, [FromBody] CreateAuthorDTO dtoAuthor)
@@ -105,7 +103,11 @@ namespace BibliotecaApi.Controllers
         [HttpGet, Route("authors"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
         public IActionResult GetAuthorsByParams([FromQuery] string? name, [FromQuery] string? nacionality, [FromQuery] int? age, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
-            return Ok(_authorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList());
+            List<AuthorResultDTO> authorResultDTOs = new List<AuthorResultDTO>();
+            var authors = _authorService.GetAuthorsByParams(name, nacionality, age, page, items).ToList();
+            authors.ForEach(x => authorResultDTOs.Add(new AuthorResultDTO(x)));
+
+            return Ok(authorResultDTOs);
         }
     }
 }
