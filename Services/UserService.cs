@@ -1,6 +1,7 @@
 ﻿using BibliotecaApi.DTOs;
 using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
+using System;
 
 namespace BibliotecaApi.Services
 {
@@ -46,5 +47,7 @@ namespace BibliotecaApi.Services
         {
             return _userRepository.ResetPassword(username, oldPassword, newPassword);
         }
+
+        public User GetUserById(Guid id)=> _userRepository.GetById(id);
     }
 }

@@ -11,7 +11,8 @@ namespace BibliotecaApi.DTOs.Results
             ReservationId = reservation.Id;
             StartDate = reservation.StartDate;
             EndDate = reservation.EndDate;
-            Books= reservation.Books;
+            Books = new List<BookResultDTO>();
+            reservation.Books.ForEach(book => Books.Add(new BookResultDTO(book)));
         }
         public ReservationResultDTO(CreationException exception)
         {
@@ -21,7 +22,7 @@ namespace BibliotecaApi.DTOs.Results
         public Guid ReservationId { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
-        public List<Book> Books { get; set; }
+        public List<BookResultDTO> Books { get; set; }
 
         public List<string> GetErrors() => Errors;
 

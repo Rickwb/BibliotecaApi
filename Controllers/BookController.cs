@@ -43,8 +43,8 @@ namespace BibliotecaApi.Controllers
                 numCopies: createBookDTO.NumCopies,
                 realeaseYear: createBookDTO.RealeaseYear
                 );
-
-            return Ok(_bookService.UpdateBook(id, book));
+            var booknew = _bookService.UpdateBook(id, book);
+            return Ok(new BookResultDTO(booknew));
         }
 
         [HttpPost, Route("addBook"), Authorize(Roles = "admin,employee")]
@@ -83,7 +83,12 @@ namespace BibliotecaApi.Controllers
         public IActionResult GetBooksByParams([FromQuery] Guid idBook, [FromQuery] string? name, [FromQuery] int? realeaseYear, [FromQuery] int page=1, [FromQuery] int items=5)
         {
             var book = _bookService.GetBookById(idBook);
-            return Ok(_bookService.GetBookByParams(book, name, realeaseYear, page, items));
+
+            List<BookResultDTO> booksresult = new List<BookResultDTO>();
+            var booksParams=_bookService.GetBookByParams(book, name, realeaseYear, page, items);
+            booksParams.ToList().ForEach(book => booksresult.Add(new BookResultDTO(book)));
+
+            return Ok(booksresult);
         }
     }
 }

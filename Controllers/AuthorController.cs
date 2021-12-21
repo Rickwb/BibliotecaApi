@@ -26,9 +26,10 @@ namespace BibliotecaApi.Controllers
         [HttpPost, Route("addAuthor"), Authorize(Roles = "admin,employee")]
         public override IActionResult Add([FromBody] CreateAuthorDTO dtoAuthor)
         {
+
             dtoAuthor.Valid();
             if (!dtoAuthor.IsValid) return BadRequest();
-            
+
             Authors author;
             if (dtoAuthor.AuthorBooks == null)
             {
@@ -47,7 +48,7 @@ namespace BibliotecaApi.Controllers
                    name: dtoAuthor.Name,
                    nacionality: dtoAuthor.Nacionality,
                    age: dtoAuthor.Age,
-                   books:books );
+                   books: books);
             }
 
 
@@ -87,8 +88,10 @@ namespace BibliotecaApi.Controllers
                 nacionality: dtoAuthor.Nacionality,
                 age: dtoAuthor.Age,
                 books: books);
-
-            return Ok(_authorService.UpdateAuthors(id, author));
+            var result=_authorService.UpdateAuthors(id, author);
+            if (result.Error == false)
+                return BadRequest(result.Exception);
+            return Ok(result.CreatedObj);
         }
 
         [HttpDelete, Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]

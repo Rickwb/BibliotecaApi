@@ -24,9 +24,10 @@ namespace BibliotecaApi.Controllers
         [HttpPost, AllowAnonymous, Route("createClient")]
         public override IActionResult Add([FromBody] CreateCustomerDTO createClientDto)
         {
+            
             createClientDto.Valid();
             if (!createClientDto.IsValid)
-                return BadRequest("Não foi possivel adicionar o seu cadastro");
+                return BadRequest(new CustomerResultDTO(new CreationException("não foi possivel adicionar o seu cadastro")).GetErros());
 
             var userAdd = new User(
                 username: createClientDto.Username,

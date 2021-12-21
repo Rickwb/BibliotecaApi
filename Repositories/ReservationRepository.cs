@@ -51,6 +51,8 @@ namespace BibliotecaApi.Repositories
             reservation.FinalizarReserva();
 
             var reserv = Update(id, reservation);
+            reservation.Books.ForEach(x => x.ControNumberOfAvailableCopies(true, 1));
+            books= reservation.Books;
 
             return reserv != null ? true : false;
 

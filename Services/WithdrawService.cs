@@ -38,15 +38,15 @@ namespace BibliotecaApi.Services
             return CreateResult<Withdraw>.Errors(new CreationException("Aluguel Inválido"));
         }
 
-        public Withdraw FinalizarWithdraw(Guid id)
+        public CreateResult<Withdraw> FinalizarWithdraw(Guid id)
         {
             var withdraw = _withdrawRepository.GetById(id);
             List<Book> books;
-            if (!_withdrawRepository.FinalizaWidthdraw(id, out books)) return null;
+            if (!_withdrawRepository.FinalizaWidthdraw(id, out books)) return CreateResult<Withdraw>.Errors(new CreationException("Não foi possivel finalizar o aluguel"));
 
             books.ForEach(b => _bookRepository.Update(b.Id, b));
 
-            return withdraw;
+            return CreateResult<Withdraw>.Sucess(withdraw);
 
         }
 

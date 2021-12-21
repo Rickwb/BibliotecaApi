@@ -42,22 +42,27 @@ namespace BibliotecaApi.Services
             return CreateResult<Reservation>.Errors(new CreationException("Não foi possivel cadastrar"));
         }
 
-        public Reservation UpdateReservation(Guid idReservation, Reservation reservation)
+        public CreateResult<Reservation> UpdateReservation(Guid idReservation, Reservation reservation)
         {
             bool valid;
             reservation = ValidarReserva(reservation, out valid);
-            return _reservationRepository.Update(idReservation, reservation);
+
+            var reservaUpdate=_reservationRepository.Update(idReservation, reservation);
+            if (reservaUpdate!=null)
+                return CreateResult<Reservation>.Sucess(reservation);
+            return CreateResult<Reservation>.Errors(new CreationException("não foi possível atualizar"));
         }
 
-        public Reservation CancelReservation(Guid idReservation)
+        public CreateResult<Reservation> CancelReservation(Guid idReservation)
         {
+
             var reservation = _reservationRepository.GetById(idReservation);
             List<Book> books;
-            if (_reservationRepository.CancelarReserva(idReservation, out books) == null) return null;
+            if (_reservationRepository.CancelarReserva(idReservation, out books) == null) return CreateResult<Reservation>.Errors(new CreationException("Not canceled reservation"));
 
-            return reservation;
+            return CreateResult<Reservation>.Sucess(reservation);
         }
-        public Reservation FinalizeReserva(Guid idReservation, out Withdraw withdraw)
+        public CreateResult<Reservation> FinalizeReserva(Guid idReservation, out Withdraw withdraw)
         {
             var reserv = _reservationRepository.GetById(idReservation);
 
@@ -74,7 +79,7 @@ namespace BibliotecaApi.Services
 
             books.ForEach(book => _bookRepository.Update(book.Id, book));
 
-            return reserv;
+            return CreateResult<Reservation>.Sucess(reserv);
         }
 
         public Reservation ValidarReserva(Reservation reservation, out bool valid)

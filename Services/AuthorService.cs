@@ -10,7 +10,7 @@ namespace BibliotecaApi.Services
         private readonly AuthorRepository _authorRepository;
         private readonly BookRepository _bookRepository;
 
-        public AuthorService(AuthorRepository authorRepository,BookRepository bookRepository)
+        public AuthorService(AuthorRepository authorRepository, BookRepository bookRepository)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
@@ -22,9 +22,14 @@ namespace BibliotecaApi.Services
             return _authorRepository.GetById(idAuthor);
         }
 
-        public Authors UpdateAuthors(Guid idAuthor, Authors author)
+        public CreateResult<Authors> UpdateAuthors(Guid idAuthor, Authors author)
         {
-            return _authorRepository.Update(idAuthor, author);
+            var authornew=_authorRepository.Update(idAuthor, author);
+            if (authornew == null)
+                return CreateResult<Authors>.Errors(new CreationException("O autor não pode ser atualizado"));
+
+            return CreateResult<Authors>.Sucess(authornew);
+
         }
         public CreateResult<Authors> AddAuthors(Authors author)
         {
@@ -47,14 +52,19 @@ namespace BibliotecaApi.Services
         public bool DeleteAuthor(Guid idAuthor)
         {
             var author = _authorRepository.GetById(idAuthor);
-            if (author.AuthorBooks == null)
+            if (author is not null)
             {
-                author.AuthorBooks.ForEach(book => _bookRepository.RemoveById(book.Id));
+                if (author.AuthorBooks != null)
+                {
+                    author.AuthorBooks.ForEach(book => _bookRepository.RemoveById(book.Id)
+                    );
+                }
+                return _authorRepository.RemoveById(idAuthor);
             }
-            return _authorRepository.RemoveById(idAuthor);
+            return false;
         }
 
-        public IEnumerable<Authors> GetAuthorsByParams(string? name, string? nacionality, int? age, int page=1, int items=5)
+        public IEnumerable<Authors> GetAuthorsByParams(string? name, string? nacionality, int? age, int page = 1, int items = 5)
         {
             return _authorRepository.GetAllAuthorsWithParams(name, nacionality, age, page, items);
         }

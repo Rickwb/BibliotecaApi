@@ -35,6 +35,9 @@ namespace BibliotecaApi.Controllers
 
             var customer = _customerService.GetUserById(dto.idCustumer);
 
+            if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
+                if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")));
+
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
 
@@ -57,16 +60,32 @@ namespace BibliotecaApi.Controllers
         public IActionResult FinalzeReservation(Guid id)
         {
             Withdraw withdraw;
-            return Ok(_reservationService.FinalizeReserva(id, out withdraw));
+            var reservation = _reservationService.GetReservationById(id);
+            if (reservation.GetCanceledValue())
+                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
+
+            if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
+                if (ValidarCustomer(reservation.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")));
+
+            var result = _reservationService.FinalizeReserva(id, out withdraw);
+
+            if (result.Error == false)
+                return Ok(result.CreatedObj);
+            return BadRequest(new ReservationResultDTO(result.Exception));
         }
 
         [HttpPost, Route("cancel/{id}")]
         public IActionResult CancelReservation(Guid id)
         {
-            var reserva = _reservationService.CancelReservation(id);
-            if (reserva != null)
-                return Ok(reserva);
-            return BadRequest();
+            var reserva = _reservationService.GetReservationById(id);
+            if (reserva.GetCanceledValue())
+                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
+            if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
+                if (ValidarCustomer(reserva.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")));
+            var result = _reservationService.CancelReservation(id);
+            if (result.Error == false)
+                return Ok(new ReservationResultDTO(result.CreatedObj));
+            return BadRequest(new ReservationResultDTO(result.Exception));
         }
 
         [HttpGet, Route("{id}")]
@@ -84,8 +103,10 @@ namespace BibliotecaApi.Controllers
                 author = _authorService.GetAuthorById(idAuthor);
             else
                 author = null;
-
-            return Ok(_reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items));
+            List<ReservationResultDTO> results = new List<ReservationResultDTO>();
+            var reservations = _reservationService.GetReservationsByParams(startDate, endDate, author, bookName, page, items);
+            reservations.ToList().ForEach(reservation => results.Add(new ReservationResultDTO(reservation)));
+            return Ok(results);
         }
 
         [HttpPut, Route("{id}")]
@@ -95,6 +116,10 @@ namespace BibliotecaApi.Controllers
             if (!dto.UpdateValid) return BadRequest();
 
             var customer = _customerService.GetUserById(dto.idCustumer);
+
+            if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
+                if (ValidarCustomer(customer.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")));
+
 
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
@@ -120,7 +145,7 @@ namespace BibliotecaApi.Controllers
                 foreach (var reserv in reservations)
                 {
                     var newResult = new ReservationResultDTO(reserv);
-                }   
+                }
                 return Ok(reservationResultDTOs);
 
             }

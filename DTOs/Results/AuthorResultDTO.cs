@@ -15,11 +15,11 @@ namespace BibliotecaApi.DTOs.Results
             Age = author.Age;
             if (author.AuthorBooks == null)
             {
-                AuthorBooks ??= new List<Book>();
+                AuthorBooks ??= new List<BookResultDTO>();
             }
             else
             {
-                AuthorBooks = author.AuthorBooks;
+                author.AuthorBooks.ForEach(x=>AuthorBooks.Add(new BookResultDTO(x)));
             }
 
         }
@@ -31,7 +31,7 @@ namespace BibliotecaApi.DTOs.Results
         public string Name { get; set; }
         public string Nacionality { get; set; }
         public int Age { get; set; }
-        public List<Book> AuthorBooks { get; private set; }
+        public List<BookResultDTO> AuthorBooks { get; private set; }
 
         public List<string> GetErrors() => Errors;
     }
