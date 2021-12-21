@@ -13,14 +13,9 @@ namespace BibliotecaApi.DTOs.Results
             Name = author.Name;
             Nacionality = author.Nacionality;
             Age = author.Age;
-            if (author.AuthorBooks == null)
-            {
                 AuthorBooks ??= new List<BookResultDTO>();
-            }
-            else
-            {
+            if (author.AuthorBooks != null)
                 author.AuthorBooks.ForEach(x=>AuthorBooks.Add(new BookResultDTO(x)));
-            }
 
         }
         public AuthorResultDTO(CreationException exception)

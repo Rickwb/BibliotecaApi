@@ -31,7 +31,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Add(CreateReservationDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid) return BadRequest();
+            if (!dto.IsValid) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("Dados Invalidos")));
 
             var customer = _customerService.GetUserById(dto.idCustumer);
 
@@ -113,7 +113,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Update(Guid id, CreateReservationDTO dto)
         {
             dto.ValidUpdate();
-            if (!dto.UpdateValid) return BadRequest();
+            if (!dto.UpdateValid) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("Dados Invalidos")));
 
             var customer = _customerService.GetUserById(dto.idCustumer);
 

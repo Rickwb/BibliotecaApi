@@ -31,7 +31,7 @@ namespace BibliotecaApi.Controllers
         {
             createBookDTO.Valid();
             if (!createBookDTO.IsValid)
-                return BadRequest();
+                return BadRequest(new BookResultDTO(new InvalidDataExeception("Dados Invalidos")));
 
             var author = _authorService.GetAuthorById(createBookDTO.IdAuthor);
 
@@ -74,7 +74,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult DeleteBook(Guid id)
         {
             bool deletado = _bookService.DeleteBook(id);
-            if (!deletado) return BadRequest();
+            if (!deletado) return BadRequest(new InvalidDataExeception("Dados Invalidos"));
 
             return NotFound();
         }

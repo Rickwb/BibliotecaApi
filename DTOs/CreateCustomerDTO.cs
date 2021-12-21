@@ -16,9 +16,9 @@ namespace BibliotecaApi.DTOs
         {
             IsValid = true;
 
-            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document) || String.IsNullOrEmpty(Cep)) IsValid = false;
+            if (String.IsNullOrEmpty(Name) || String.IsNullOrEmpty(Document)) IsValid = false;
 
-            if (String.IsNullOrEmpty(Cep) || Cep.Length != 8) IsValid = false;
+            if ((String.IsNullOrEmpty(Cep) && String.IsNullOrEmpty(Adress.Cep)) || (Cep.Length != 8 && Adress.Cep.Length != 8)) IsValid = false;
 
             if (Role.ToLower() == "admin" || Role.ToLower() == "employee") IsValid = false;
 

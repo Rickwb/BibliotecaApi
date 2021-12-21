@@ -24,7 +24,7 @@ namespace BibliotecaApi.Controllers
         {
             createEmplDto.Valid();
             if (!createEmplDto.IsValid)
-                return BadRequest("Dados do funcionario estão inválidos");
+                return BadRequest(new AuthorResultDTO(new InvalidDataExeception("Dados invalidos para o cadastro")));
 
             var userAdd = new User(
                 username: createEmplDto.Username,
@@ -74,7 +74,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Update(Guid id, CreateEmployeeDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid) return BadRequest();
+            if (!dto.IsValid) return BadRequest(new AuthorResultDTO(new InvalidDataExeception("Dados invalidos para o cadastro")));
 
             var oldEmployee = _employeeService.GetUserById(id);
             var employee = new Employee(
@@ -97,7 +97,7 @@ namespace BibliotecaApi.Controllers
         {
             userDTO.Valid();
             if (!userDTO.IsValid)
-                return BadRequest("Não foi possivel atualizar o seu cadastro");
+                return BadRequest(new UserResultDTO(new InvalidDataExeception("Dados invalidos para o cadastro")));
 
             var user = new User(
                 username: userDTO.Username,

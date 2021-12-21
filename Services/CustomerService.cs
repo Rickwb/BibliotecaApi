@@ -21,9 +21,16 @@ namespace BibliotecaApi.Services
 
         public CreateResult<Customer> AddClient(Customer customer, User user)
         {
-            customer.Adress = _cepService.BuscarEnderecosAsync(customer.Cep).Result;
+            if (customer.Cep is not null)
+            {
+                customer.Adress = _cepService.BuscarEnderecosAsync(customer.Cep).Result;
+                if (customer.Adress == null)
+                {
+                    return CreateResult<Customer>.Errors(new CreationException("Não foi possivel validar o cep, adicione o seu endereço manualmente"));
+                }
+            }
             _userRepository.Add(user);
-            if (_customerRepository.GetAll().SingleOrDefault(d=>d.Document==customer.Document)!=null)
+            if (_customerRepository.GetAll().SingleOrDefault(d => d.Document == customer.Document) != null)
             {
                 return CreateResult<Customer>.Errors(new SameObjectExeception("Já existe um cliente cadastrado com esse documento"));
             }
@@ -31,7 +38,7 @@ namespace BibliotecaApi.Services
             return CreateResult<Customer>.Sucess(customer);
         }
 
-        public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page=1, int items=5)
+        public List<Customer> GetAllUsersWithParams(string Name, string document, DateTime? Birthdate, int page = 1, int items = 5)
         {
             return _customerRepository.GetAllCustomersWithParams(Name, document, Birthdate, page, items);
         }
@@ -47,7 +54,7 @@ namespace BibliotecaApi.Services
             var customer = _customerRepository.GetById(id);
             var Adress = _cepService.BuscarEnderecosAsync(customer.Cep).Result;
 
-            customer.PropretiesUpdate(custom.Name, custom.Document, custom.Cep,Adress);
+            customer.PropretiesUpdate(custom.Name, custom.Document, custom.Cep, Adress);
 
 
             return _customerRepository.Update(id, customer);

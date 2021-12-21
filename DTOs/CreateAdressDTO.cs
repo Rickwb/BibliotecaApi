@@ -7,6 +7,7 @@ namespace BibliotecaApi.DTOs
 {
     public class CreateAdressDTO : BaseDTO
     {
+        public string Cep { get; set; }
         public string Logradouro { get; set; }
         public string Complemento { get; set; }
         public string Bairro { get; set; }
@@ -19,6 +20,7 @@ namespace BibliotecaApi.DTOs
 
         public override void Valid()
         {
+            if (Cep.Length != 8) IsValid = false;
             if (Uf.Length != 2 || String.IsNullOrWhiteSpace(Uf)) IsValid = false;
             if (Logradouro.Length > 100 || String.IsNullOrWhiteSpace(Logradouro)) IsValid = false;
             if (String.IsNullOrWhiteSpace(Bairro)) IsValid = false;

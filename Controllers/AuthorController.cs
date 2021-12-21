@@ -87,9 +87,9 @@ namespace BibliotecaApi.Controllers
                 age: dtoAuthor.Age,
                 books: books);
             var result=_authorService.UpdateAuthors(id, author);
-            if (result.Error == false)
+            if (result.Error == true)
                 return BadRequest(result.Exception);
-            return Ok(result.CreatedObj);
+            return Ok(new AuthorResultDTO(result.CreatedObj));
         }
 
         [HttpDelete, Route("deleteAuthor/{id}"), Authorize(Roles = "admin,employee")]

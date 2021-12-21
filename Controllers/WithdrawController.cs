@@ -33,7 +33,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Add(CreateWithdrawDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid) return BadRequest();
+            if (!dto.IsValid) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("dados inválidos")));
 
             var customer = _customerService.GetUserById(dto.IdCustomer);
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")

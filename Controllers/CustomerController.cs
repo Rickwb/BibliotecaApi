@@ -38,8 +38,36 @@ namespace BibliotecaApi.Controllers
             {
                 Role = "costumer",
             };
+            Customer customerAdd;
+            if (String.IsNullOrWhiteSpace(createClientDto.Cep)|| createClientDto.Cep=="string")
+            {
+                var adressAdd = new Adress
+                    (
+                    cep: createClientDto.Adress.Cep,
+                    logradouro: createClientDto.Adress.Logradouro,
+                    complemento: createClientDto.Adress.Complemento,
+                    bairro: createClientDto.Adress.Bairro,
+                    localidade: createClientDto.Adress.Localidade,
+                    uf: createClientDto.Adress.Uf,
+                    ibge: createClientDto.Adress.Ibge,
+                    gia: createClientDto.Adress.Gia,
+                    ddd: createClientDto.Adress.Ddd,
+                    siafi: createClientDto.Adress.Siafi
+                    );
 
-            var customerAdd = new Customer(
+                customerAdd = new Customer(
+                id: Guid.NewGuid(),
+                name: createClientDto.Name,
+                document: createClientDto.Document,
+                adress: adressAdd,
+                userId: userAdd.Id,
+                birthdate: createClientDto.Birtdate
+                );
+            }
+            else
+            {
+
+                customerAdd = new Customer(
                 id: Guid.NewGuid(),
                 name: createClientDto.Name,
                 document: createClientDto.Document,
@@ -47,6 +75,7 @@ namespace BibliotecaApi.Controllers
                 userId: userAdd.Id,
                 birthdate: createClientDto.Birtdate
                 );
+            }
 
             var result = _customerService.AddClient(customerAdd, userAdd);
 
