@@ -24,7 +24,7 @@ namespace BibliotecaApi.Controllers
         }
 
         [HttpGet, Route("getBook/{id}")]
-        public override IActionResult Get(Guid id) => Ok(_bookService.GetBookById(id));
+        public override IActionResult Get(Guid id) => Ok(new BookResultDTO(_bookService.GetBookById(id)));
 
         [HttpPut, Route("updateBook/{id}"), Authorize(Roles = "admin,employee")]
         public override IActionResult Update(Guid id, [FromBody] CreateBookDTO createBookDTO)
@@ -84,11 +84,11 @@ namespace BibliotecaApi.Controllers
         {
             var book = _bookService.GetBookById(idBook);
 
-            List<BookResultDTO> booksresult = new List<BookResultDTO>();
+            List<BookResultDTO> booksresults = new List<BookResultDTO>();
             var booksParams=_bookService.GetBookByParams(book, name, realeaseYear, page, items);
-            booksParams.ToList().ForEach(book => booksresult.Add(new BookResultDTO(book)));
+            booksParams.ToList().ForEach(book => booksresults.Add(new BookResultDTO(book)));
 
-            return Ok(booksresult);
+            return Ok(booksresults);
         }
     }
 }
