@@ -20,6 +20,17 @@ namespace BibliotecaApi.Entities
             Cep = cep;
             BirthDate = birthdate;
         }
+        public Customer(Guid id, string name, string document, Guid userId, DateTime birthdate,Adress adress)
+        {
+            Id = id;
+            UserId = userId;
+            _reservations ??= new List<Reservation>();
+            _withdraws ??= new List<Withdraw>();
+            Name = name;
+            Document = document;
+            Adress = adress;
+            BirthDate = birthdate;
+        }
         //Update Constructor
         public Customer(Guid id,string name, string document, string cep)
         {
