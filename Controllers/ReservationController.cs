@@ -61,7 +61,7 @@ namespace BibliotecaApi.Controllers
         {
             Withdraw withdraw;
             var reservation = _reservationService.GetReservationById(id);
-            if (reservation.GetCanceledValue())
+            if (reservation.GetCompletedValue())
                 return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
 
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
@@ -131,8 +131,10 @@ namespace BibliotecaApi.Controllers
                 endDate: dto.EndDate,
                 books: Books
                 );
-
-            return Ok(_reservationService.UpdateReservation(id, reservation));
+            var result = _reservationService.UpdateReservation(id, reservation);
+            if (result.Error==false)
+                return Ok(new ReservationResultDTO(result.CreatedObj));
+            return BadRequest(new ReservationResultDTO(result.Exception).GetErrors());
         }
         [HttpGet, Route("LoggedUser")]
         public IActionResult GetReservationsByLoggedUser()

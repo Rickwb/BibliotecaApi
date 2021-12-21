@@ -65,7 +65,7 @@ namespace BibliotecaApi.Controllers
         public string Autenticated() => $"{User.Identity.Name} | {User.Claims.First(c => c.Type == ClaimTypes.Sid)} está autenticado.";
 
         [HttpGet, Route("GetEmployeesByParams"), ResponseCache(VaryByHeader = "User-Agent", Duration = 30)]
-        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page=1, [FromQuery] int items=5)
+        public IActionResult GetAllByParams([FromQuery] string? Name, [FromQuery] string? document, [FromQuery] DateTime? Birthdate, [FromQuery] int page = 1, [FromQuery] int items = 5)
         {
             return Ok(_employeeService.GetAllUsersWithParams(Name, document, Birthdate, page, items));
         }
@@ -84,11 +84,12 @@ namespace BibliotecaApi.Controllers
                 age: dto.Age,
                 cep: dto.Cep,
                 role: dto.Role,
-                birthDate:dto.BirthDate,
-                userId:oldEmployee.UserId
+                birthDate: dto.BirthDate,
+                userId: oldEmployee.UserId
                 );
+            var employer = _employeeService.UpdateEmployee(id, employee);
 
-            return Ok(_employeeService.UpdateEmployee(id, employee));
+            return employer.Error == false ? Ok(new EmployeeResultDTO(employer.CreatedObj)) : BadRequest(new EmployeeResultDTO(new InvalidDataExeception("Não foi possivel cadastrar")));
         }
 
         [HttpPut, Route("UpdateUserfromEmplyee")]
@@ -102,9 +103,10 @@ namespace BibliotecaApi.Controllers
                 username: userDTO.Username,
                 password: userDTO.Password,
                 role: userDTO.Role
-                ) ;
+                );
+            var result = _employeeService.UpdateUserFromClient(id, user);
 
-            return Ok(_employeeService.UpdateUserFromClient(id, user));
+            return result.Error == false ? Ok(new UserResultDTO(result.CreatedObj)) : BadRequest(new UserResultDTO(new CreationException("Não foi possivel atualizar o usuario")));
         }
     }
 }

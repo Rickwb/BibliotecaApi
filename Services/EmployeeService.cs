@@ -44,19 +44,25 @@ namespace BibliotecaApi.Services
             return _employeeRepository.GetById(id);
         }
 
-        public Employee UpdateEmployee(Guid idEmployee, Employee employee)
+        public CreateResult<Employee> UpdateEmployee(Guid idEmployee, Employee employee)
         {
-            
+
             employee.Adress = _cepService.BuscarEnderecosAsync(employee.Cep).Result;
-            return _employeeRepository.Update(idEmployee, employee);
+            var updatedEmployee = _employeeRepository.Update(idEmployee, employee);
+            if (updatedEmployee is not null)
+                return CreateResult<Employee>.Sucess(updatedEmployee);
+
+            return CreateResult<Employee>.Errors(new CreationException("Não foi possivel atualizar"));
         }
 
-        public User UpdateUserFromClient(Guid idEmployee, User user)
+        public CreateResult<User> UpdateUserFromClient(Guid idEmployee, User user)
         {
             Guid userId = _employeeRepository.GetById(idEmployee).UserId;
             var oldUser = _userRepository.GetById(userId);
-
-            return _userRepository.Update(userId, user);
+            var updatedUser= _userRepository.Update(userId, user);
+            if (updatedUser is not null)
+                return CreateResult<User>.Sucess(updatedUser);
+            return CreateResult<User>.Errors(new CreationException("O usuario não pode ser alterado"));
         }
     }
 }
