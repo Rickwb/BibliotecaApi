@@ -28,7 +28,7 @@ namespace BibliotecaApi.Controllers
 
             createClientDto.Valid();
             if (!createClientDto.IsValid)
-                return BadRequest(new CustomerResultDTO(new CreationException("não foi possivel adicionar o seu cadastro")).GetErros());
+                return BadRequest(new CustomerResultDTO(new CreationException("não foi possivel adicionar o seu cadastro")).GetErrors());
 
             var userAdd = new User(
                 username: createClientDto.Username,
@@ -88,7 +88,7 @@ namespace BibliotecaApi.Controllers
             }
 
             var custmerResult = new CustomerResultDTO(result.Exception);
-            return Ok(custmerResult.GetErros());
+            return Ok(custmerResult.GetErrors());
         }
 
         [HttpGet, Authorize(Roles = "admin,employee"), Route("clients/{id}")]
@@ -112,7 +112,7 @@ namespace BibliotecaApi.Controllers
         {
             customerDTO.Valid();
             if (!customerDTO.IsValid)
-                return BadRequest("Não foi possivel atualizar o seu cadastro");
+                return BadRequest(new CustomerResultDTO(new InvalidDataExeception("Não foi possivel atualizar o seu cadastro")).GetErrors());
 
             var oldcustomer = _customerService.GetUserById(id);
             var customerAdd = new Customer(

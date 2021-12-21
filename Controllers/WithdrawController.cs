@@ -33,11 +33,11 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Add(CreateWithdrawDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("dados inválidos")));
+            if (!dto.IsValid) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("dados inválidos")).GetErrors());
 
             var customer = _customerService.GetUserById(dto.IdCustomer);
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(customer.UserId)) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")));
+                if (ValidarCustomer(customer.UserId)) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")).GetErrors());
 
             Reservation reservation;
             List<Book> books = new List<Book>();
@@ -74,7 +74,7 @@ namespace BibliotecaApi.Controllers
         {
             var customer = _withdrawService.GetWidtdrawById(id).Customer;
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(customer.UserId)) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")));
+                if (ValidarCustomer(customer.UserId)) return BadRequest(new WithdrawResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")).GetErrors());
             var resultwithdraw = _withdrawService.FinalizarWithdraw(id);
             if (resultwithdraw.Error == true)
             {

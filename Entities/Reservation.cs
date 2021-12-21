@@ -12,6 +12,9 @@ namespace BibliotecaApi.Entities
             StartDate = startDate;
             EndDate = endDate;
             Books = books;
+            Cancelada = false;
+            Completed=false ;
+
         }
 
         public Customer Client { get; private set; }
@@ -28,7 +31,11 @@ namespace BibliotecaApi.Entities
                 Cancelada = true;
 
             }
-            Cancelada = false;
+            else
+            {
+
+                Cancelada = false;
+            }
         }
 
         public void FinalizarReserva()

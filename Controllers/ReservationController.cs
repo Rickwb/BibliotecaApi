@@ -36,7 +36,7 @@ namespace BibliotecaApi.Controllers
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")));
+                if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")).GetErrors());
 
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
@@ -62,10 +62,10 @@ namespace BibliotecaApi.Controllers
             Withdraw withdraw;
             var reservation = _reservationService.GetReservationById(id);
             if (reservation.GetCompletedValue())
-                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
+                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")).GetErrors());
 
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(reservation.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")));
+                if (ValidarCustomer(reservation.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")).GetErrors());
 
             var result = _reservationService.FinalizeReserva(id, out withdraw);
 
@@ -81,7 +81,7 @@ namespace BibliotecaApi.Controllers
             if (reserva.GetCanceledValue())
                 return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(reserva.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")));
+                if (ValidarCustomer(reserva.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")).GetErrors());
             var result = _reservationService.CancelReservation(id);
             if (result.Error == false)
                 return Ok(new ReservationResultDTO(result.CreatedObj));
@@ -118,7 +118,7 @@ namespace BibliotecaApi.Controllers
             var customer = _customerService.GetUserById(dto.idCustumer);
 
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(customer.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")));
+                if (ValidarCustomer(customer.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode alterar a reserva de outro cliente")).GetErrors());
 
 
             List<Book> Books = new List<Book>();

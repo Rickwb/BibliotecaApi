@@ -37,6 +37,6 @@ namespace BibliotecaApi.DTOs.Results
         public List<ReservationResultDTO> Reservations { get; set; }
         public List<WithdrawResultDTO> Withdraws { get; set; }
 
-        public List<string> GetErros()=> Errors;
+        public List<string> GetErrors()=> Errors;
     }
 }

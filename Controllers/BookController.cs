@@ -51,7 +51,7 @@ namespace BibliotecaApi.Controllers
         public override IActionResult Add([FromBody] CreateBookDTO dto)
         {
             dto.Valid();
-            if (!dto.IsValid) return BadRequest();
+            if (!dto.IsValid) return BadRequest(new BookResultDTO(new InvalidDataExeception("Dados Inválidos")).GetErrors());
 
             var author = _authorService.GetAuthorById(dto.IdAuthor);
 
@@ -67,14 +67,14 @@ namespace BibliotecaApi.Controllers
 
             if (result.Error == false) return Created("", new BookResultDTO(book));
 
-            return BadRequest(new BookResultDTO(result.Exception));
+            return BadRequest(new BookResultDTO(result.Exception).GetErrors());
         }
 
         [HttpDelete, Route("deleteBook/{id}"), Authorize(Roles = "admin,employee")]
         public IActionResult DeleteBook(Guid id)
         {
             bool deletado = _bookService.DeleteBook(id);
-            if (!deletado) return BadRequest(new InvalidDataExeception("Dados Invalidos"));
+            if (!deletado) return BadRequest(new BookResultDTO(new InvalidDataExeception("Dados Invalidos")).GetErrors());
 
             return NotFound();
         }

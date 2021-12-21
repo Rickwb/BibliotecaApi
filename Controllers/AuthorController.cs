@@ -78,7 +78,7 @@ namespace BibliotecaApi.Controllers
             }
 
             dtoAuthor.Valid();
-            if (!dtoAuthor.IsValid) return BadRequest();
+            if (!dtoAuthor.IsValid) return BadRequest(new AuthorResultDTO(new InvalidDataExeception("Dados invalidos")).GetErrors());
 
             var author = new Authors(
                 id: id,
@@ -96,7 +96,7 @@ namespace BibliotecaApi.Controllers
         public IActionResult DeleteAuthor(Guid id)
         {
             bool deletado = _authorService.DeleteAuthor(id);
-            if (!deletado) return BadRequest();
+            if (!deletado) return BadRequest(new AuthorResultDTO(new CreationException("Autor não foi deletado")).GetErrors());
 
             return NoContent();
         }
