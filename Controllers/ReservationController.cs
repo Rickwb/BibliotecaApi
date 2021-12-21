@@ -79,13 +79,13 @@ namespace BibliotecaApi.Controllers
         {
             var reserva = _reservationService.GetReservationById(id);
             if (reserva.GetCanceledValue())
-                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")));
+                return BadRequest(new ReservationResultDTO(new InvalidDataExeception("esta reserva já foi finalizada")).GetErrors());
             if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
                 if (ValidarCustomer(reserva.Client.UserId)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O clietne atual não pode acessar ")).GetErrors());
             var result = _reservationService.CancelReservation(id);
             if (result.Error == false)
                 return Ok(new ReservationResultDTO(result.CreatedObj));
-            return BadRequest(new ReservationResultDTO(result.Exception));
+            return BadRequest(new ReservationResultDTO(result.Exception).GetErrors());
         }
 
         [HttpGet, Route("{id}")]
@@ -124,8 +124,10 @@ namespace BibliotecaApi.Controllers
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
 
+
+
             var reservation = new Reservation(
-                id: Guid.Parse(User.Claims.First(x => x.Type == ClaimTypes.Sid).Value),
+                id: id,
                 client: customer,
                 startDate: dto.StartDate,
                 endDate: dto.EndDate,
