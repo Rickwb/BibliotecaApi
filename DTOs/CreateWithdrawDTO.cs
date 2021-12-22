@@ -17,6 +17,9 @@ namespace BibliotecaApi.DTOs
 
             if (IdCustomer == Guid.Empty) IsValid = false;
             if (WithdrawDate==DateTime.MinValue || WithdrawDate.Date<DateTime.Today.Date) IsValid = false;
+            if (ReturnDate != DateTime.MinValue)
+                if (WithdrawDate < ReturnDate) IsValid = false;
+
 
         }
 

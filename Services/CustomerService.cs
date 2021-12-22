@@ -66,5 +66,6 @@ namespace BibliotecaApi.Services
 
             return _userRepository.Update(userId, user);
         }
+        public IEnumerable<Customer> GetAllCustomers() => _customerRepository.GetAll();
     }
 }

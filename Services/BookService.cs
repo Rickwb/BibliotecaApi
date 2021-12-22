@@ -23,7 +23,7 @@ namespace BibliotecaApi.Services
         {
             if (book.Author == null)
                 return CreateResult<Book>.Errors(new InvalidDataExeception("O livro não pode ser cadastrado sem autor"));
-            if (_bookRepository.GetAll().Contains(book))
+            if (_bookRepository.GetAll().Where(b=>b.Title==book.Title).Where(b=>b.Description==book.Description).Count()!=0)
                 return CreateResult<Book>.Errors(new SameObjectExeception("O Livro já existe no cadastro, adicione uma copia "));
 
             _bookRepository.Add(book);

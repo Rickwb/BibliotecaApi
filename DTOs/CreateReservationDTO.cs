@@ -20,6 +20,7 @@ namespace BibliotecaApi.DTOs
             IsValid = true;
 
             if (idCustumer == Guid.Empty) IsValid = false;
+            if (StartDate < EndDate) IsValid = false;
             if (StartDate == DateTime.MinValue) IsValid = false;
             if (StartDate.Date < DateTime.Today.Date) IsValid = false;
             if (EndDate == DateTime.MinValue || EndDate.Date < DateTime.Today.Date) IsValid = false;
@@ -31,6 +32,7 @@ namespace BibliotecaApi.DTOs
             UpdateValid = true;
 
             if (idCustumer == Guid.Empty) UpdateValid = false;
+            if (StartDate < EndDate) UpdateValid = false;
             if (StartDate == DateTime.MinValue) UpdateValid = false;
             if (EndDate == DateTime.MinValue || EndDate.Date < DateTime.Today.Date) UpdateValid = false;
             if (IdBooks.Count == 0) UpdateValid = false;

@@ -33,10 +33,13 @@ namespace BibliotecaApi.Controllers
             dto.Valid();
             if (!dto.IsValid) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("Dados Invalidos")));
 
-            var customer = _customerService.GetUserById(dto.idCustumer);
+            var LogeedUserId = User.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
+            var customer = _customerService.GetAllCustomers().Where(x=>x.UserId.ToString()==LogeedUserId).SingleOrDefault();
 
-            if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer")
-                if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")).GetErrors());
+            ////if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer
+            // if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")).GetErrors());
+            if (customer is null) return BadRequest(new ReservationResultDTO(new CreationException("Cliente invalido")));
+                    
 
             List<Book> Books = new List<Book>();
             dto.IdBooks.ForEach(x => Books.Add(_bookService.GetBookById(x)));
@@ -71,7 +74,7 @@ namespace BibliotecaApi.Controllers
 
             if (result.Error == false)
                 return Ok(result.CreatedObj);
-            return BadRequest(new ReservationResultDTO(result.Exception));
+            return BadRequest(new ReservationResultDTO(result.Exception).GetErrors());
         }
 
         [HttpPost, Route("cancel/{id}")]

@@ -24,6 +24,7 @@ namespace BibliotecaApi.Services
         {
             var Allbooks = _reservationRepository.GetAll().ToList();
             bool hasAlready = Allbooks.Find(x => x.Client.Id == reservation.Client.Id && x.Books.Any(b => reservation.Books.Contains(b))) == null ? false : true;
+            //.Where(r => (r.StartDate.Date >= reservation.StartDate.Date && r.StartDate.Date <= reservation.EndDate.Date) 
             if (hasAlready)
                 return CreateResult<Reservation>.Errors(new SameObjectExeception("Este cliente já tem uma reserva para com este(es) livro(os)"));
 
