@@ -22,9 +22,10 @@ namespace BibliotecaApi.Services
 
         public CreateResult<Reservation> AddReservation(Reservation reservation)
         {
-            var Allbooks = _reservationRepository.GetAll().ToList();
-            bool hasAlready = Allbooks.Find(x => x.Client.Id == reservation.Client.Id && x.Books.Any(b => reservation.Books.Contains(b))) == null ? false : true;
-            //.Where(r => (r.StartDate.Date >= reservation.StartDate.Date && r.StartDate.Date <= reservation.EndDate.Date) 
+            var reservs = _reservationRepository.GetAll().ToList();
+            reservs=reservs.FindAll(x => x.Client.Id == reservation.Client.Id && x.Books.Any(b => reservation.Books.Contains(b)));
+            reservs = reservs.Where(r => (r.StartDate.Date >= reservation.StartDate.Date && r.StartDate.Date <= reservation.EndDate.Date)).ToList();
+            bool hasAlready = reservs == null ? false : true;
             if (hasAlready)
                 return CreateResult<Reservation>.Errors(new SameObjectExeception("Este cliente já tem uma reserva para com este(es) livro(os)"));
 
@@ -65,7 +66,11 @@ namespace BibliotecaApi.Services
         }
         public CreateResult<Reservation> FinalizeReserva(Guid idReservation, out Withdraw withdraw)
         {
+            withdraw=null;
             var reserv = _reservationRepository.GetById(idReservation);
+
+            if (reserv.GetCompletedValue())
+                return CreateResult<Reservation>.Errors(new SameObjectExeception("Esta reserva ja foi finalizada"));
 
             withdraw = new Withdraw(reserv.Client
                , reservation: reserv);

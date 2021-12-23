@@ -52,7 +52,7 @@ namespace BibliotecaApi.Controllers
             }
             else
             {
-                    reservation = _reservationService.GetReservationById(dto.IdReservation);
+                 reservation = _reservationService.GetReservationById(dto.IdReservation);
                 _reservationService.FinalizeReserva(dto.IdReservation, out withdraw);
                 
             }
