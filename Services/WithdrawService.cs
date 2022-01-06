@@ -1,5 +1,5 @@
-﻿using BibliotecaApi.Entities;
-using BibliotecaApi.Repositories;
+﻿using BibliotecaApi.Repositories;
+using Domain.Enities;
 using System;
 using System.Collections;
 using System.Collections.Generic;

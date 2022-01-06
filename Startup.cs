@@ -19,6 +19,9 @@ using System.Threading.Tasks;
 using Newtonsoft;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.ResponseCompression;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using EFContext;
+using Microsoft.EntityFrameworkCore;
 
 namespace BibliotecaApi
 {
@@ -40,11 +43,21 @@ namespace BibliotecaApi
             });
             services.AddMvc()
           .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-          .AddNewtonsoftJson(c => 
-          { 
+          .AddNewtonsoftJson(c =>
+          {
               c.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-              c.SerializerSettings.NullValueHandling = NullValueHandling.Ignore; 
+              c.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
           });
+
+            services.AddDbContext<BibliotecaContext>(
+            configuration =>
+             {
+                 configuration.UseOracle(Configuration.GetConnectionString("C1"),
+                     opt =>
+                     {
+                         opt.MigrationsAssembly(typeof(EFContext.BibliotecaContext).Assembly.GetName().Name);
+                     });
+             });
 
             services.AddSingleton<UserRepository>();
             services.AddTransient<UserService>();
@@ -149,53 +162,7 @@ namespace BibliotecaApi
                 endpoints.MapControllers();
             });
 
-            userRepository.Add(new Entities.User(
-                username: "admin1",
-                password: "string",
-                role: "admin"
-                ));
 
-            var customer = customerRepository.Add(new Entities.Customer(
-                id: Guid.NewGuid(),
-                name: "Rick",
-                age: 21,
-                document: "string",
-                cep: "89110110"
-                ));
-            var author = authorRepository.Add(new Entities.Authors(
-                id: Guid.NewGuid(),
-                name: "Machado",
-                nacionality: "Brasileira",
-                age: 21
-                ));
-            var book = bookRepository.Add(new Entities.Book(
-                id: Guid.NewGuid(),
-                author,
-                title: "Meditações",
-                description: "hahahahha",
-                numCopies: 1,
-                realeaseYear: 2020));
-            var book2 = bookRepository.Add(new Entities.Book(
-                id: Guid.NewGuid(),
-                author,
-                description: "fgsdfgsdfg",
-                title: "C# programming",
-                numCopies: 1,
-                realeaseYear: 2020));
-            var reservation = reservationRepository.Add(new Entities.Reservation(
-                id: Guid.NewGuid(),
-                client: customer,
-                startDate: DateTime.Now,
-                endDate: DateTime.Now.AddDays(5),
-                books: new List<Entities.Book> { book, book2 }
-                ));
-            var reservation2 = reservationRepository.Add(new Entities.Reservation(
-                id: Guid.NewGuid(),
-                client: customer,
-                startDate: DateTime.Now,
-                endDate: DateTime.Now.AddDays(5),
-                books: new List<Entities.Book> { book, book2 }
-                ));
 
         }
     }

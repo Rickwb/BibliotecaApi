@@ -1,6 +1,6 @@
 ﻿using BibliotecaApi.DTOs;
-using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
+using Domain.Enities;
 using System;
 
 namespace BibliotecaApi.Services

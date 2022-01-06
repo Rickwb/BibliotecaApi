@@ -1,11 +1,12 @@
-﻿using BibliotecaApi.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Domain;
+using Domain.Enities;
 
 namespace BibliotecaApi.Repositories
 {
-    public abstract class BaseRepository<T> where T : BaseEntity
+    public abstract class BaseRepository<T> :IRepositoryBase<Guid, BaseEntity<Guid>> where T : BaseEntity<Guid>
     {
         protected readonly List<T> _repository;
 
@@ -20,6 +21,21 @@ namespace BibliotecaApi.Repositories
             return variavel;
         }
 
+        public void Delete(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public BaseEntity<Guid> Find(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<BaseEntity<Guid>> FindAll(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<T> GetAll()
         {
             return _repository;
@@ -27,7 +43,12 @@ namespace BibliotecaApi.Repositories
 
         public T GetById(Guid id)
         {
-            return (T)_repository.Find(x => x.Id == id);
+            return _repository.Find(x => x.Id == id);
+        }
+
+        public bool Insert(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Remove(T item)
@@ -49,6 +70,11 @@ namespace BibliotecaApi.Repositories
                 _repository[index] = newT;
            
             return newT;
+        }
+
+        public bool Update(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,12 +1,12 @@
 ﻿using BibliotecaApi.DTOs;
-using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
+using Domain.Enities;
 using System;
 using System.Collections.Generic;
 
 namespace BibliotecaApi.Services
 {
-    public abstract class BaseService<_baseEntity> where _baseEntity : BaseEntity
+    public abstract class BaseService<_baseEntity> where _baseEntity : BaseEntity<Guid>
     {
         private readonly BaseRepository<_baseEntity> _repository;
         public BaseService(BaseRepository<_baseEntity> repository)
@@ -24,17 +24,17 @@ namespace BibliotecaApi.Services
             return _repository.GetById(id);
         }
 
-        public void Add(BaseEntity entity)
+        public void Add(BaseEntity<Guid> entity)
         {
             _repository.Add((_baseEntity)entity);
         }
 
-        public _baseEntity Update(Guid id, BaseEntity entity)
+        public _baseEntity Update(Guid id, BaseEntity<Guid> entity)
         {
             return _repository.Update(id, (_baseEntity)entity);
         }
 
-        public bool Remove(Entities.BaseEntity baseEntity)
+        public bool Remove(BaseEntity<Guid> baseEntity)
         {
             return _repository.Remove((_baseEntity)baseEntity);
         }

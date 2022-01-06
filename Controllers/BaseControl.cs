@@ -1,7 +1,7 @@
 ﻿using BibliotecaApi.DTOs;
 using BibliotecaApi.DTOs.Results;
-using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
+using Domain.Enities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
@@ -10,7 +10,7 @@ using System.Security.Claims;
 namespace BibliotecaApi.Controllers
 {
     [ApiController]
-    public abstract class BaseControl<_DTO,_Entity> : ControllerBase where _DTO : BaseDTO where _Entity : BaseEntity  
+    public abstract class BaseControl<_DTO,_Entity> : ControllerBase where _DTO : BaseDTO where _Entity : BaseEntity<Guid>  
     {
         private UserService _userService;
 

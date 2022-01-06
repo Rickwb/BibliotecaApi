@@ -1,6 +1,6 @@
 ﻿using BibliotecaApi.DTOs.Results;
-using BibliotecaApi.Entities;
 using BibliotecaApi.Repositories;
+using Domain.Enities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

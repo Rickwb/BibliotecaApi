@@ -1,4 +1,4 @@
-﻿using BibliotecaApi.Entities;
+﻿using Domain.Enities;
 using System.Collections.Generic;
 
 namespace BibliotecaApi.DTOs.Results

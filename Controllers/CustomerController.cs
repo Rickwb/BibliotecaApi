@@ -1,7 +1,7 @@
 ﻿using BibliotecaApi.DTOs;
 using BibliotecaApi.DTOs.Results;
-using BibliotecaApi.Entities;
 using BibliotecaApi.Services;
+using Domain.Enities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
