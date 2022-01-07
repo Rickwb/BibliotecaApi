@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DapperContext.Repositories;
 using Domain;
 using Domain.Enities;
+using EFContext;
 
 namespace BibliotecaApi.Repositories
 {
-    public abstract class BaseRepository<T> :IRepositoryBase<Guid, BaseEntity<Guid>> where T : BaseEntity<Guid>
+    public abstract class BaseRepository<T> :IRepositoryBase<Guid, BaseEntity<Guid>>,IRepositoryDPBase<Guid,BaseEntity<Guid>> where T : BaseEntity<Guid>
     {
         protected readonly List<T> _repository;
 
@@ -23,7 +25,7 @@ namespace BibliotecaApi.Repositories
 
         public void Delete(BaseEntity<Guid> entity)
         {
-            throw new NotImplementedException();
+            
         }
 
         public BaseEntity<Guid> Find(BaseEntity<Guid> entity)
@@ -73,6 +75,11 @@ namespace BibliotecaApi.Repositories
         }
 
         public bool Update(BaseEntity<Guid> entity)
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerable<BaseEntity<Guid>> IRepositoryDPBase<Guid, BaseEntity<Guid>>.GetAll()
         {
             throw new NotImplementedException();
         }
