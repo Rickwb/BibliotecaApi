@@ -17,11 +17,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft;
+using Domain.Enities;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using EFContext;
 using Microsoft.EntityFrameworkCore;
+using EFContext.Repositories;
+using DapperContext.Repositories;
 
 namespace BibliotecaApi
 {
@@ -83,6 +86,11 @@ namespace BibliotecaApi
             services.AddTransient<TokenService>();
 
             services.AddTransient<CepService>();
+
+            services.AddScoped<AuthorRepositoryEF>();
+            services.AddScoped<BookRepositoryEF>();
+            services.AddScoped<AuthorRepositoryDP>();
+            services.AddScoped<ReservationRepositoryEF>();
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("ApiSecret"));
 
@@ -162,8 +170,52 @@ namespace BibliotecaApi
                 endpoints.MapControllers();
             });
 
-
-
+            userRepository.Add(new User(
+              username: "admin1",
+              password: "string",
+              role: "admin"
+              ));
+            var customer = customerRepository.Add(new Customer(
+                id: Guid.NewGuid(),
+                name: "Rick",
+                document: "string",
+                age: 15,
+                cep: "89110110"
+                ));
+            var author = authorRepository.Add(new Authors(
+                id: Guid.NewGuid(),
+                name: "Machado",
+                nacionality: "Brasileira",
+                age: 21
+                ));
+            var book = bookRepository.Add(new Book(
+                id: Guid.NewGuid(),
+                author,
+                title: "Meditações",
+                description: "hahahahha",
+                numCopies: 1,
+                realeaseYear: 2020));
+            var book2 = bookRepository.Add(new Book(
+                id: Guid.NewGuid(),
+                author,
+                description: "fgsdfgsdfg",
+                title: "C# programming",
+                numCopies: 1,
+                realeaseYear: 2020));
+            var reservation = reservationRepository.Add(new Reservation(
+                id: Guid.NewGuid(),
+                client: customer,
+                startDate: DateTime.Now,
+                endDate: DateTime.Now.AddDays(5),
+                books: new List<Book> { book, book2 }
+                ));
+            var reservation2 = reservationRepository.Add(new Reservation(
+                id: Guid.NewGuid(),
+                client: customer,
+                startDate: DateTime.Now,
+                endDate: DateTime.Now.AddDays(5),
+                books: new List<Book> { book, book2 }
+                ));
         }
     }
 }

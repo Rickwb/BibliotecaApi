@@ -1,5 +1,7 @@
 ﻿using BibliotecaApi.Repositories;
+using DapperContext.Repositories;
 using Domain.Enities;
+using EFContext.Repositories;
 using System;
 using System.Collections.Generic;
 
@@ -9,11 +11,17 @@ namespace BibliotecaApi.Services
     {
         private readonly AuthorRepository _authorRepository;
         private readonly BookRepository _bookRepository;
-
-        public AuthorService(AuthorRepository authorRepository, BookRepository bookRepository)
+        private readonly AuthorRepositoryEF _authorRepositoryEF;
+        private readonly BookRepositoryEF _bookRepositoryEF;
+        private readonly AuthorRepositoryDP _authorRepositoryDP;
+        public AuthorService(AuthorRepository authorRepository, BookRepository bookRepository,AuthorRepositoryEF authorRepositoryEF, AuthorRepositoryDP authorRepositoryDP,BookRepositoryEF bookRepositoryEF)
         {
             _bookRepository = bookRepository;
             _authorRepository = authorRepository;
+            _authorRepositoryEF = authorRepositoryEF;
+            _authorRepositoryEF = authorRepositoryEF;
+            _authorRepositoryDP = authorRepositoryDP;
+            _bookRepositoryEF = bookRepositoryEF;
         }
 
 
@@ -24,11 +32,16 @@ namespace BibliotecaApi.Services
 
         public CreateResult<Authors> UpdateAuthors(Guid idAuthor, Authors author)
         {
-            var authornew=_authorRepository.Update(idAuthor, author);
-            if (authornew == null)
+
+            var authorResult = _authorRepositoryDP.GetById(idAuthor.ToByteArray(), "\"BaseEntity<Guid>\"");
+            if (authorResult == null)
+                return CreateResult<Authors>.Errors(new CreationException("Not found for update"));
+
+            var authornew = _authorRepositoryEF.Update(author);
+            if (!authornew)
                 return CreateResult<Authors>.Errors(new CreationException("O autor não pode ser atualizado"));
 
-            return CreateResult<Authors>.Sucess(authornew);
+            return CreateResult<Authors>.Sucess(author);
 
         }
         public CreateResult<Authors> AddAuthors(Authors author)
@@ -37,7 +50,7 @@ namespace BibliotecaApi.Services
             {
                 if (author.Age == 0)
                     return CreateResult<Authors>.Errors(new InvalidDataExeception("O autor não pode ser cadastrado com a idade 0"));
-                _authorRepository.Add(author);
+                _authorRepositoryEF.Insert(author);
 
                 return CreateResult<Authors>.Sucess(author);
 
@@ -51,10 +64,10 @@ namespace BibliotecaApi.Services
 
         public bool DeleteAuthor(Guid idAuthor)
         {
-            var author = _authorRepository.GetById(idAuthor);
+            var author = _authorRepositoryDP.GetById(idAuthor,"BaseEnitt");
             if (author is not null)
             {
-                if (author.AuthorBooks != null)
+                if (author != null)
                 {
                     author.AuthorBooks.ForEach(book => _bookRepository.RemoveById(book.Id)
                     );

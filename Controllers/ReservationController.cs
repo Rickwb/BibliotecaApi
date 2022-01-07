@@ -38,7 +38,7 @@ namespace BibliotecaApi.Controllers
 
             ////if (User.Claims.First(c => c.Type == ClaimTypes.Role).Value.ToLower() == "customer
             // if (ValidarCustomer(customer.Id)) return BadRequest(new ReservationResultDTO(new InvalidDataExeception("O cliente não pode cadastrar reservas para outras pessoas")).GetErrors());
-            if (customer is null) return BadRequest(new ReservationResultDTO(new CreationException("Cliente invalido")));
+            //if (customer is null) return BadRequest(new ReservationResultDTO(new CreationException("Cliente invalido")));
                     
 
             List<Book> Books = new List<Book>();

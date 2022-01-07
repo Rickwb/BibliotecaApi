@@ -8,7 +8,7 @@ using EFContext;
 
 namespace BibliotecaApi.Repositories
 {
-    public abstract class BaseRepository<T> :IRepositoryBase<Guid, BaseEntity<Guid>>,IRepositoryDPBase<Guid,BaseEntity<Guid>> where T : BaseEntity<Guid>
+    public abstract class BaseRepository<T> :IRepositoryBase<Guid, BaseEntity<Guid>>, IRepositoryDPBase<Guid, BaseEntity<Guid>> where T : BaseEntity<Guid>
     {
         protected readonly List<T> _repository;
 
@@ -38,14 +38,29 @@ namespace BibliotecaApi.Repositories
             throw new NotImplementedException();
         }
 
+        public IEnumerable<BaseEntity<Guid>> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<T> GetAll()
         {
             return _repository;
         }
 
+        public IEnumerable<BaseEntity<Guid>> GetAll(string tablename)
+        {
+            throw new NotImplementedException();
+        }
+
         public T GetById(Guid id)
         {
             return _repository.Find(x => x.Id == id);
+        }
+
+        public BaseEntity<Guid> GetById(Guid Id, string tablename)
+        {
+            throw new NotImplementedException();
         }
 
         public bool Insert(BaseEntity<Guid> entity)
@@ -79,9 +94,6 @@ namespace BibliotecaApi.Repositories
             throw new NotImplementedException();
         }
 
-        IEnumerable<BaseEntity<Guid>> IRepositoryDPBase<Guid, BaseEntity<Guid>>.GetAll()
-        {
-            throw new NotImplementedException();
-        }
+     
     }
 }

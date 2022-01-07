@@ -1,5 +1,6 @@
 ﻿using BibliotecaApi.Repositories;
 using Domain.Enities;
+using EFContext.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +11,21 @@ namespace BibliotecaApi.Services
     {
 
         private readonly ReservationRepository _reservationRepository;
+        private readonly ReservationRepositoryEF _reservationRepositoryEF;
         private readonly WithdrawService _withdrawService;
         private readonly BookRepository _bookRepository;
 
-        public ReservationService(ReservationRepository reservationRepository, WithdrawService withdrawService, BookRepository bookRepository)
+        public ReservationService(ReservationRepository reservationRepository, WithdrawService withdrawService, BookRepository bookRepository, ReservationRepositoryEF reservationRepositoryEF)
         {
             _reservationRepository = reservationRepository;
             _withdrawService = withdrawService;
             _bookRepository = bookRepository;
+            _reservationRepositoryEF = reservationRepositoryEF;
         }
 
         public CreateResult<Reservation> AddReservation(Reservation reservation)
         {
+            _reservationRepositoryEF.Insert(reservation);
             var reservs = _reservationRepository.GetAll().ToList();
             reservs=reservs.FindAll(x => x.Client.Id == reservation.Client.Id && x.Books.Any(b => reservation.Books.Contains(b)));
             reservs = reservs.Where(r => (r.StartDate.Date >= reservation.StartDate.Date && r.StartDate.Date <= reservation.EndDate.Date)).ToList();
@@ -36,7 +40,7 @@ namespace BibliotecaApi.Services
                 //if (reservation.Client.Multa != 0)
                 //    return CreateResult<Reservation>.Errors(new InvalidDataExeception("O cliente não pode reservar tendo multas"));
 
-                _reservationRepository.Add(reservation);
+                _reservationRepositoryEF.Insert(reservation);
                 return CreateResult<Reservation>.Sucess(reservation);
             };
 

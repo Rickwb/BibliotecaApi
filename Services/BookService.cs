@@ -1,6 +1,8 @@
 ﻿using BibliotecaApi.DTOs.Results;
 using BibliotecaApi.Repositories;
+using DapperContext.Repositories;
 using Domain.Enities;
+using EFContext.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,24 +14,30 @@ namespace BibliotecaApi.Services
     {
         private readonly BookRepository _bookRepository;
         private readonly AuthorRepository _authorRepository;
+        private readonly AuthorRepositoryEF _authorRepositoryEF;
+        private readonly BookRepositoryEF _bookRepositoryEF;
+        private readonly AuthorRepositoryDP _authorRepositoryDP;
 
-        public BookService(AuthorRepository authorRepository, BookRepository bookRepository)
+        public BookService(AuthorRepository authorRepository, BookRepository bookRepository, AuthorRepositoryEF authorRepositoryEF, AuthorRepositoryDP authorRepositoryDP, BookRepositoryEF bookRepositoryEF)
         {
             _authorRepository = authorRepository;
             _bookRepository = bookRepository;
+            _authorRepositoryDP=authorRepositoryDP;
+            _authorRepositoryEF= authorRepositoryEF;
+            _bookRepositoryEF= bookRepositoryEF;
         }
 
         public CreateResult<Book> AddBook(Book book)
         {
             if (book.Author == null)
                 return CreateResult<Book>.Errors(new InvalidDataExeception("O livro não pode ser cadastrado sem autor"));
-            if (_bookRepository.GetAll().Where(b=>b.Title==book.Title).Where(b=>b.Description==book.Description).Count()!=0)
-                return CreateResult<Book>.Errors(new SameObjectExeception("O Livro já existe no cadastro, adicione uma copia "));
+           // if (_bookRepository.GetAll().Where(b=>b.Title==book.Title).Where(b=>b.Description==book.Description).Count()!=0)
+             //   return CreateResult<Book>.Errors(new SameObjectExeception("O Livro já existe no cadastro, adicione uma copia "));
 
-            _bookRepository.Add(book);
-            var author=_authorRepository.GetById(book.Author.Id);
-            author.AuthorBooks.Add(book);
-            _authorRepository.Update(author.Id, author);
+            var result=_bookRepositoryEF.Insert(book);
+            //var author=_authorRepository.GetById(book.Author.Id);
+            //author.AuthorBooks.Add(book);
+            // _authorRepository.Update(author.Id, author);
             return CreateResult<Book>.Sucess(book);
         }
 
